@@ -4,16 +4,29 @@
         <select
             class="select select-bordered w-full transition-all"
             :class="[
-                error ? 'select-error focus:select-error' : 'focus:select-primary focus:border-primary',
-                selectClass
+                error
+                    ? 'select-error focus:select-error'
+                    : 'focus:select-primary focus:border-primary',
+                selectClass,
             ]"
             :value="modelValue"
             :required="required"
-            @change="$emit('update:modelValue', ($event.target as HTMLSelectElement).value)"
+            @change="
+                $emit(
+                    'update:modelValue',
+                    ($event.target as HTMLSelectElement).value,
+                )
+            "
             v-bind="$attrs"
         >
-            <option v-if="placeholder" value="" disabled selected>{{ placeholder }}</option>
-            <option v-for="(opt, index) in options" :key="index" :value="opt.value ?? opt">
+            <option v-if="placeholder" value="" disabled selected>
+                {{ placeholder }}
+            </option>
+            <option
+                v-for="(opt, index) in options"
+                :key="index"
+                :value="opt.value ?? opt"
+            >
                 {{ opt.label ?? opt }}
             </option>
         </select>
@@ -22,8 +35,8 @@
 </template>
 
 <script setup lang="ts">
-import InputLabel from './InputLabel.vue';
-import InputError from './InputError.vue';
+import InputLabel from "./InputLabel.vue";
+import InputError from "./InputError.vue";
 
 defineProps<{
     modelValue: string | number | null;
@@ -35,7 +48,7 @@ defineProps<{
     required?: boolean;
 }>();
 
-defineEmits(['update:modelValue']);
+defineEmits(["update:modelValue"]);
 </script>
 
 <script lang="ts">
