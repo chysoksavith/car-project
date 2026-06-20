@@ -5,3 +5,9 @@ declare module '*.vue' {
   const component: DefineComponent<{}, {}, any>
   export default component
 }
+
+// Ziggy global route() helper
+import type { Config, Router } from 'ziggy-js';
+declare global {
+  function route(name?: string, params?: any, absolute?: boolean, config?: Config): string;
+}

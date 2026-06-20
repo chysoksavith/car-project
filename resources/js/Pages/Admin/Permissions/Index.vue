@@ -102,8 +102,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import { useForm } from "@inertiajs/vue3";
 import DashboardLayout from "@/Layouts/DashboardLayout.vue";
 import DataTable from "@/Components/DataTable.vue";
 import TableActionButtons from "@/Components/TableActionButtons.vue";
@@ -111,11 +109,7 @@ import PageHeader from "@/Components/PageHeader.vue";
 import Button from "@/Components/Button.vue";
 import Modal from "@/Components/Modal.vue";
 import TextInput from "@/Components/Form/TextInput.vue";
-
-interface Permission {
-    id: number;
-    name: string;
-}
+import { usePermission } from "@/Composables/usePermission";
 
 // ── Props (data from the controller) ─────────────────────────────────────
 const props = defineProps<{
@@ -129,59 +123,18 @@ const columns = [
     { key: "actions", label: "Actions", class: "w-24 text-right" },
 ];
 
-// ── Local state ───────────────────────────────────────────────────────────
-const modalRef = ref<HTMLDialogElement | null>(null);
-const deleteModalRef = ref<HTMLDialogElement | null>(null);
-const editingPerm = ref<Permission | null>(null);
-const deletingPerm = ref<Permission | null>(null);
-
-// ── Forms ─────────────────────────────────────────────────────────────────
-const form = useForm({ name: "" });
-const deleteForm = useForm({});
-
-// ── Modal helpers ─────────────────────────────────────────────────────────
-function openCreate() {
-    editingPerm.value = null;
-    form.reset();
-    form.clearErrors();
-    modalRef.value?.showModal();
-}
-
-function openEdit(perm: Permission) {
-    editingPerm.value = perm;
-    form.name = perm.name;
-    form.clearErrors();
-    modalRef.value?.showModal();
-}
-
-function confirmDelete(perm: Permission) {
-    deletingPerm.value = perm;
-    deleteModalRef.value?.showModal();
-}
-
-// ── CRUD ──────────────────────────────────────────────────────────────────
-function save() {
-    if (editingPerm.value) {
-        form.put(route("admin.permissions.update", editingPerm.value.id), {
-            onSuccess: () => modalRef.value?.close(),
-        });
-    } else {
-        form.post(route("admin.permissions.store"), {
-            onSuccess: () => {
-                form.reset();
-                modalRef.value?.close();
-            },
-        });
-    }
-}
-
-function deletePerm() {
-    if (!deletingPerm.value) return;
-    deleteForm.delete(
-        route("admin.permissions.destroy", deletingPerm.value.id),
-        {
-            onSuccess: () => deleteModalRef.value?.close(),
-        },
-    );
-}
+// ── Composables ───────────────────────────────────────────────────────────
+const {
+    modalRef,
+    deleteModalRef,
+    editingPerm,
+    deletingPerm,
+    form,
+    deleteForm,
+    openCreate,
+    openEdit,
+    confirmDelete,
+    save,
+    deletePerm,
+} = usePermission();
 </script>

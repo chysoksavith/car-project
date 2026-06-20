@@ -40,32 +40,8 @@
             </div>
         </div>
 
-        <!-- Right: Notifications + User dropdown -->
+        <!-- Right: User dropdown -->
         <div class="flex items-center gap-1">
-            <!-- Notifications -->
-            <div class="dropdown dropdown-end">
-                <div
-                    tabindex="0"
-                    role="button"
-                    class="btn btn-ghost btn-circle"
-                    title="Notifications"
-                >
-                    <div class="indicator">
-                        <i class="fa-regular fa-bell text-xl"></i>
-                        <span
-                            class="badge badge-xs badge-error indicator-item"
-                        ></span>
-                    </div>
-                </div>
-                <ul
-                    tabindex="0"
-                    class="dropdown-content z-[1] menu p-2 shadow-lg bg-base-100 rounded-box w-64 border border-base-200 mt-4"
-                >
-                    <li class="menu-title">Notifications</li>
-                    <li><a>New message from Sarah</a></li>
-                    <li><a>Server backup completed</a></li>
-                </ul>
-            </div>
 
             <!-- ─── User Dropdown ─────────────────────────────────── -->
             <div class="dropdown dropdown-end" ref="userDropdownRef">
@@ -99,7 +75,7 @@
                 <!-- Dropdown Panel -->
                 <div
                     tabindex="0"
-                    class="dropdown-content z-[1] mt-3 w-64 bg-base-100 rounded-2xl shadow-xl border border-base-200 overflow-hidden"
+                    class="dropdown-content z-[1] mt-3 w-72 min-w-full bg-base-100 rounded-2xl shadow-xl border border-base-200 overflow-hidden"
                 >
                     <!-- User Info Header -->
                     <div
@@ -129,11 +105,11 @@
                     </div>
 
                     <!-- Menu Items -->
-                    <ul class="menu menu-sm p-2 gap-0.5">
+                    <ul class="menu menu-sm p-2 gap-0.5 w-full">
                         <li>
                             <a
                                 href="#"
-                                class="flex items-center gap-3 rounded-lg py-2 px-3 hover:bg-base-200 transition-colors"
+                                class="flex items-center gap-3 rounded-lg py-2 px-3 w-full hover:bg-base-200 transition-colors"
                             >
                                 <i
                                     class="fa-regular fa-user text-base-content/60 w-4 text-center"
@@ -144,7 +120,7 @@
                         <li>
                             <a
                                 href="#"
-                                class="flex items-center gap-3 rounded-lg py-2 px-3 hover:bg-base-200 transition-colors"
+                                class="flex items-center gap-3 rounded-lg py-2 px-3 w-full hover:bg-base-200 transition-colors"
                             >
                                 <i
                                     class="fa-solid fa-gear text-base-content/60 w-4 text-center"

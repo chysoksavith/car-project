@@ -4,8 +4,8 @@
         <Link
             v-if="!item.children"
             :href="item.href || '#'"
-            class="group font-medium transition-colors"
-            :class="{ 'active bg-primary/10 text-primary': isItemActive }"
+            class="sidebar-link group font-medium transition-colors"
+            :class="{ 'sidebar-active bg-primary/10 text-primary': isItemActive }"
         >
             <component
                 :is="item.icon"
@@ -30,7 +30,7 @@
         <!-- If has submenu -->
         <details v-else :open="isOpen" @toggle="onToggle" class="group">
             <summary
-                class="font-medium"
+                class="sidebar-summary font-medium"
                 :class="{ 'bg-primary/5 text-primary': isAnyChildActive }"
             >
                 <component
@@ -49,10 +49,10 @@
                 <li v-for="child in item.children" :key="child.name">
                     <Link
                         :href="child.href || '#'"
-                        class="text-sm transition-colors"
+                        class="sidebar-link text-sm transition-colors"
                         :class="
                             isActivePath(child.href)
-                                ? 'active bg-primary/10 text-primary font-semibold'
+                                ? 'sidebar-active bg-primary/10 text-primary font-semibold'
                                 : 'text-base-content/70 hover:text-base-content'
                         "
                     >
@@ -118,3 +118,40 @@ const onToggle = (e: Event) => {
     isOpen.value = details.open;
 };
 </script>
+
+<style scoped>
+/*
+ * DaisyUI v5 applies a dark/black background to:
+ *   - summary:focus  (browser default focus ring + DaisyUI's oklch(--b3))
+ *   - .menu li > a.active  (DaisyUI default uses oklch(--n) = neutral ≈ dark)
+ *
+ * We override both to transparent and rely solely on our own Tailwind
+ * utility classes (bg-primary/10, hover:bg-base-200) for visual feedback.
+ */
+
+/* Remove DaisyUI's dark "active" background from links */
+.sidebar-link:focus,
+.sidebar-link:active,
+.sidebar-link.active {
+    background-color: transparent !important;
+    color: inherit;
+}
+
+/* Our custom active state keeps the primary tint */
+.sidebar-active {
+    /* intentionally left to Tailwind classes: bg-primary/10 text-primary */
+}
+
+/* Remove the black flash on summary click */
+.sidebar-summary:focus,
+.sidebar-summary:focus-visible,
+.sidebar-summary:active {
+    background-color: transparent !important;
+    outline: none;
+}
+
+/* Remove browser default summary marker arrow (DaisyUI uses its own) */
+.sidebar-summary::-webkit-details-marker {
+    display: none;
+}
+</style>

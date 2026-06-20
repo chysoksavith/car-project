@@ -58,7 +58,7 @@
         <!-- ── Create / Edit Modal ─────────────────────────────────────── -->
         <Modal
             ref="modalRef"
-            maxWidth="2xl"
+            maxWidth="4xl"
             :title="editingRole ? 'Edit Role' : 'Create Role'"
         >
             <div class="flex flex-col gap-6">
@@ -72,26 +72,43 @@
                 />
 
                 <!-- Permissions (Grouped) -->
-                <div class="form-control">
-                    <div class="label">
-                        <span class="label-text font-medium">Permissions</span>
+                <div class="flex flex-col gap-2">
+                    <div class="flex items-center justify-between">
+                        <span class="font-semibold text-base-content">Permissions</span>
+                        <label class="flex items-center gap-2 cursor-pointer hover:opacity-80">
+                            <input
+                                type="checkbox"
+                                v-model="isAllSelected"
+                                class="checkbox checkbox-primary checkbox-sm"
+                            />
+                            <span class="text-sm font-medium">Select All Permissions</span>
+                        </label>
                     </div>
 
                     <div
-                        class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[60vh] overflow-y-auto pr-2"
+                        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[60vh] overflow-y-auto pr-2 mt-2"
                     >
                         <div
                             v-for="(perms, groupName) in groupedPermissions"
                             :key="groupName"
-                            class="card bg-base-200/50 border border-base-300"
+                            class="card bg-base-100 shadow-sm border border-base-200 transition-all hover:border-primary/30"
                         >
-                            <div class="card-body p-4">
-                                <h4
-                                    class="font-bold text-sm uppercase text-base-content/70 mb-3 border-b border-base-300 pb-2"
-                                >
-                                    {{ groupName }}
-                                </h4>
-                                <div class="flex flex-col gap-2">
+                            <div class="card-body p-4 gap-0">
+                                <div class="flex items-center justify-between mb-3 border-b border-base-200 pb-2">
+                                    <h4 class="font-bold text-sm uppercase text-base-content/80">
+                                        {{ groupName }}
+                                    </h4>
+                                    <label class="flex items-center gap-2 cursor-pointer group">
+                                        <span class="text-xs text-base-content/60 group-hover:text-base-content transition-colors">All</span>
+                                        <input
+                                            type="checkbox"
+                                            :checked="isGroupSelected(groupName as string)"
+                                            @change="toggleGroup(groupName as string, $event)"
+                                            class="checkbox checkbox-sm checkbox-primary rounded"
+                                        />
+                                    </label>
+                                </div>
+                                <div class="flex flex-col gap-2.5 mt-1">
                                     <label
                                         v-for="perm in perms"
                                         :key="perm.id"
@@ -101,10 +118,10 @@
                                             type="checkbox"
                                             :value="perm.name"
                                             v-model="form.permissions"
-                                            class="checkbox checkbox-primary checkbox-sm"
+                                            class="checkbox checkbox-primary checkbox-sm rounded-md"
                                         />
                                         <span
-                                            class="text-sm font-mono group-hover:text-primary transition-colors"
+                                            class="text-sm font-mono text-base-content/80 group-hover:text-primary transition-colors"
                                             >{{
                                                 perm.name.replace(
                                                     groupName + ".",
@@ -171,8 +188,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from "vue";
-import { useForm } from "@inertiajs/vue3";
+import { computed } from "vue";
 import DashboardLayout from "@/Layouts/DashboardLayout.vue";
 import DataTable from "@/Components/DataTable.vue";
 import TableActionButtons from "@/Components/TableActionButtons.vue";
@@ -180,17 +196,8 @@ import PageHeader from "@/Components/PageHeader.vue";
 import Button from "@/Components/Button.vue";
 import Modal from "@/Components/Modal.vue";
 import TextInput from "@/Components/Form/TextInput.vue";
-
-interface Permission {
-    id: number;
-    name: string;
-}
-interface Role {
-    id: number;
-    name: string;
-    permissions: Permission[];
-    permissions_count: number;
-}
+import type { Permission } from "@/Types/permission";
+import { useRole } from "@/Composables/useRole";
 
 // ── Props ────────────────────────────────────────────────────────────────
 const props = defineProps<{
@@ -218,61 +225,52 @@ const groupedPermissions = computed(() => {
     return groups;
 });
 
-// ── Modal refs ────────────────────────────────────────────────────────────
-const modalRef = ref<HTMLDialogElement | null>(null);
-const deleteModalRef = ref<HTMLDialogElement | null>(null);
-const editingRole = ref<Role | null>(null);
-const deletingRole = ref<Role | null>(null);
+// ── Composables ───────────────────────────────────────────────────────────
+const {
+    modalRef,
+    deleteModalRef,
+    editingRole,
+    deletingRole,
+    form,
+    deleteForm,
+    openCreate,
+    openEdit,
+    closeModal,
+    confirmDelete,
+    save,
+    deleteRole,
+} = useRole();
 
-// ── Forms ─────────────────────────────────────────────────────────────────
-const form = useForm({ name: "", permissions: [] as string[] });
-const deleteForm = useForm({});
+// ── Select All Logic ──────────────────────────────────────────────────────
+const allPermissionNames = computed(() => props.permissions.map(p => p.name));
 
-// ── Modal helpers ─────────────────────────────────────────────────────────
-function openCreate() {
-    editingRole.value = null;
-    form.reset();
-    form.clearErrors();
-    modalRef.value?.showModal();
-}
-
-function openEdit(role: Role) {
-    editingRole.value = role;
-    form.name = role.name;
-    form.permissions = role.permissions.map((p) => p.name);
-    form.clearErrors();
-    modalRef.value?.showModal();
-}
-
-function closeModal() {
-    modalRef.value?.close();
-}
-
-function confirmDelete(role: Role) {
-    deletingRole.value = role;
-    deleteModalRef.value?.showModal();
-}
-
-// ── CRUD via Inertia router ───────────────────────────────────────────────
-function save() {
-    if (editingRole.value) {
-        form.put(route("admin.roles.update", editingRole.value.id), {
-            onSuccess: closeModal,
-        });
-    } else {
-        form.post(route("admin.roles.store"), {
-            onSuccess: () => {
-                form.reset();
-                closeModal();
-            },
-        });
+const isAllSelected = computed({
+    get: () => form.permissions.length === allPermissionNames.value.length && allPermissionNames.value.length > 0,
+    set: (val: boolean) => {
+        if (val) {
+            form.permissions = [...allPermissionNames.value];
+        } else {
+            form.permissions = [];
+        }
     }
+});
+
+function isGroupSelected(groupName: string) {
+    const groupPerms = groupedPermissions.value[groupName] || [];
+    if (!groupPerms.length) return false;
+    return groupPerms.every(p => form.permissions.includes(p.name));
 }
 
-function deleteRole() {
-    if (!deletingRole.value) return;
-    deleteForm.delete(route("admin.roles.destroy", deletingRole.value.id), {
-        onSuccess: () => deleteModalRef.value?.close(),
-    });
+function toggleGroup(groupName: string, event: Event) {
+    const checked = (event.target as HTMLInputElement).checked;
+    const groupPerms = groupedPermissions.value[groupName] || [];
+    const groupPermNames = groupPerms.map(p => p.name);
+    
+    if (checked) {
+        const newPerms = new Set([...form.permissions, ...groupPermNames]);
+        form.permissions = Array.from(newPerms);
+    } else {
+        form.permissions = form.permissions.filter(p => !groupPermNames.includes(p));
+    }
 }
 </script>

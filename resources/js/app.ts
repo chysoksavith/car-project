@@ -5,6 +5,10 @@ import Toast, { PluginOptions, POSITION } from 'vue-toastification';
 import 'vue-toastification/dist/index.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import '../css/app.css';
+import { route } from 'ziggy-js';
+
+// Make route() available globally (used by composables without explicit import)
+(window as any).route = route;
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 
