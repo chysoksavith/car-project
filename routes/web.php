@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\V1\LoginController;
 
 // Redirect root to admin dashboard
 Route::get('/', function () {
@@ -12,7 +12,7 @@ Route::get('/', function () {
 // Authentication Routes
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'show'])->name('login');
-    Route::post('/login', [LoginController::class, 'login']);
+    Route::post('/login', [LoginController::class, 'login'])->middleware('throttle:login');
 });
 
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
@@ -22,4 +22,6 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/', function () {
         return Inertia::render('Welcome');
     })->name('dashboard');
+
+    Route::get('/users', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('admin.users.index');
 });

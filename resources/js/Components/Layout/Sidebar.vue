@@ -43,17 +43,17 @@
 
         <!-- Bottom User Profile -->
         <div class="border-t border-base-200/80 p-3 shrink-0">
-            <a class="flex items-center gap-3 p-2 rounded-xl hover:bg-base-200 transition-colors cursor-pointer group">
+            <div class="flex items-center gap-3 p-2 rounded-xl hover:bg-base-200 transition-colors cursor-default group">
                 <div class="avatar placeholder shrink-0">
-                    <div class="w-10 h-10 rounded-full bg-base-300 text-base-content flex items-center justify-center font-bold shadow-sm">
-                        JD
+                    <div class="w-10 h-10 rounded-full bg-primary/20 text-primary font-bold text-sm flex items-center justify-center ring-2 ring-primary/20 shadow-sm">
+                        {{ user?.initials ?? '?' }}
                     </div>
                 </div>
                 <div v-show="!isCollapsed" class="flex-1 min-w-0">
-                    <p class="text-sm font-bold text-base-content truncate">John Doe</p>
-                    <p class="text-xs text-base-content/60 truncate">admin@saas.com</p>
+                    <p class="text-sm font-bold text-base-content truncate">{{ user?.name ?? '—' }}</p>
+                    <p class="text-xs text-base-content/60 truncate">{{ user?.email ?? '—' }}</p>
                 </div>
-            </a>
+            </div>
         </div>
     </aside>
 </template>
@@ -61,6 +61,9 @@
 <script setup lang="ts">
 import { h } from 'vue';
 import SidebarItem from './SidebarItem.vue';
+import { useAuth } from '@/Composables/useAuth';
+
+const { user } = useAuth();
 
 defineProps<{
     isCollapsed: boolean;
@@ -100,7 +103,7 @@ const managementItems = [
         name: 'Users & Teams',
         icon: () => Icon('M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z'),
         children: [
-            { name: 'All Users', href: '#' },
+            { name: 'All Users', href: '/admin/users' },
             { name: 'Roles & Permissions', href: '#' },
             { name: 'Invites', href: '#' }
         ]
