@@ -14,6 +14,9 @@
             v-bind="$attrs"
         />
         <InputError :message="error" />
+        <div v-if="hint && !error" class="label pb-0">
+            <span class="label-text-alt text-base-content/50">{{ hint }}</span>
+        </div>
     </div>
 </template>
 
@@ -26,6 +29,7 @@ defineProps<{
     modelValue: string | number | null;
     label?: string;
     error?: string;
+    hint?: string;
     inputClass?: string;
     required?: boolean;
 }>();

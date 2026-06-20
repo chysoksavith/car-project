@@ -36,10 +36,24 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
+import { usePage } from '@inertiajs/vue3';
+import { useToast } from 'vue-toastification';
 import Sidebar from '@/Components/Layout/Sidebar.vue';
 import Topbar from '@/Components/Layout/Topbar.vue';
 
 // Desktop sidebar state
 const isSidebarCollapsed = ref(false);
+
+const page = usePage();
+const toast = useToast();
+
+watch(() => page.props.flash, (flash: any) => {
+    if (flash?.success) {
+        toast.success(flash.success);
+    }
+    if (flash?.error) {
+        toast.error(flash.error);
+    }
+}, { deep: true, immediate: true });
 </script>

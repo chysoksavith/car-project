@@ -1,17 +1,15 @@
 <template>
     <DashboardLayout>
-        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
-            <div>
-                <h1 class="text-2xl font-bold tracking-tight">Users Management</h1>
-                <p class="text-sm text-base-content/60 mt-1">Manage system administrators and frontend users.</p>
-            </div>
+        <PageHeader 
+            title="Users Management" 
+            description="Manage system administrators and frontend users."
+            class="mb-6"
+        >
             <Button variant="primary" class="shrink-0">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
-                </svg>
+                <i class="fa-solid fa-plus mr-2"></i>
                 Add User
             </Button>
-        </div>
+        </PageHeader>
 
         <DataTable
             :data="users"
@@ -55,7 +53,10 @@
             </template>
 
             <template #cell(actions)="{ item }">
-                <button class="btn btn-sm btn-ghost text-primary hover:bg-primary/10 transition-colors">Edit</button>
+                <TableActionButtons 
+                    @edit="console.log('Edit', item.id)"
+                    @delete="console.log('Delete', item.id)"
+                />
             </template>
         </DataTable>
 
@@ -66,6 +67,8 @@
 import DashboardLayout from '@/Layouts/DashboardLayout.vue';
 import Button from '@/Components/Button.vue';
 import DataTable from '@/Components/DataTable.vue';
+import TableActionButtons from '@/Components/TableActionButtons.vue';
+import PageHeader from '@/Components/PageHeader.vue';
 
 defineProps<{
     users: any;
