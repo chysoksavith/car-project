@@ -15,6 +15,20 @@ class PermissionService
     }
 
     /**
+     * Get paginated permissions with optional search query.
+     */
+    public function getPaginatedWithSearch(?string $search = null, int $perPage = 15)
+    {
+        return Permission::query()
+            ->when($search, function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%");
+            })
+            ->orderBy('name')
+            ->paginate($perPage)
+            ->withQueryString();
+    }
+
+    /**
      * Create a new permission.
      */
     public function create(string $name): Permission

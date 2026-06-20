@@ -1,6 +1,6 @@
 <template>
     <button
-        class="btn rounded-xl font-bold tracking-wide transition-all gap-2"
+        class="btn font-bold tracking-wide transition-all gap-2"
         :class="[
             variant ? `btn-${variant}` : 'btn-primary',
             size ? `btn-${size}` : '',

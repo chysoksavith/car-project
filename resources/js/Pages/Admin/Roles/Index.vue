@@ -5,7 +5,16 @@
             <PageHeader
                 title="Roles"
                 description="Manage roles and their permissions."
-            />
+            >
+                <Button
+                    @click="openCreate"
+                    variant="primary"
+                    size="sm"
+                    icon="fa-solid fa-plus"
+                >
+                    New Role
+                </Button>
+            </PageHeader>
 
             <!-- DataTable -->
             <DataTable
@@ -15,17 +24,6 @@
                 :searchQuery="filters.search"
                 searchPlaceholder="Search roles..."
             >
-                <template #toolbar-actions>
-                    <Button
-                        @click="openCreate"
-                        variant="primary"
-                        size="sm"
-                        icon="fa-solid fa-plus"
-                    >
-                        New Role
-                    </Button>
-                </template>
-
                 <template #cell(name)="{ item }">
                     <span class="font-semibold text-sm text-base-content">{{
                         item.name

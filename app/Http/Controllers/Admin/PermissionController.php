@@ -20,10 +20,15 @@ class PermissionController extends Controller
 
     // ─────────────────────────────────────────────────────────────────────────
 
-    public function index(): Response
+    public function index(\Illuminate\Http\Request $request): Response
     {
+        $search = $request->input('search');
+
         return Inertia::render('Admin/Permissions/Index', [
-            'permissions' => PermissionResource::collection($this->permissionService->all())->resolve(),
+            'permissions' => PermissionResource::collection(
+                $this->permissionService->getPaginatedWithSearch($search)
+            ),
+            'filters' => ['search' => $search],
         ]);
     }
 
