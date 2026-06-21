@@ -144,6 +144,11 @@ const menuGroups = [
                 icon: "fa-solid fa-truck-field",
                 href: "/admin/suppliers",
             },
+            {
+                name: "Shipments",
+                icon: "fa-solid fa-ship",
+                href: "/admin/shipments",
+            },
         ],
     },
 ];

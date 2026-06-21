@@ -34,8 +34,7 @@ Route::prefix('admin')->middleware(['auth', \App\Http\Middleware\CheckBackendAcc
     Route::resource('colors', \App\Http\Controllers\Admin\ColorController::class)->except('show')->names('admin.colors');
 
     // Suppliers
-    Route::resource('suppliers', \App\Http\Controllers\Admin\SupplierController::class)->except('show')->names('admin.suppliers');
-
-    // Inspection Items
-    Route::resource('inspection-items', \App\Http\Controllers\Admin\InspectionItemController::class)->except('show')->names('admin.inspection-items');
+    Route::resource('suppliers', \App\Http\Controllers\Admin\SupplierController::class)->except(['show'])->names('admin.suppliers');
+    Route::resource('inspection-items', \App\Http\Controllers\Admin\InspectionItemController::class)->except(['show'])->names('admin.inspection-items');
+    Route::resource('shipments', \App\Http\Controllers\Admin\ShipmentController::class)->except(['show'])->names('admin.shipments');
 });
