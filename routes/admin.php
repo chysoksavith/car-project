@@ -32,4 +32,7 @@ Route::prefix('admin')->middleware(['auth', \App\Http\Middleware\CheckBackendAcc
 
     // Colors
     Route::resource('colors', \App\Http\Controllers\Admin\ColorController::class)->except('show')->names('admin.colors');
+
+    // Suppliers
+    Route::resource('suppliers', \App\Http\Controllers\Admin\SupplierController::class)->except('show')->names('admin.suppliers');
 });

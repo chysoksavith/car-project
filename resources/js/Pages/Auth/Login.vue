@@ -79,9 +79,9 @@
                 <form @submit.prevent="submit" class="space-y-6 mt-8">
                     <TextInput
                         v-model="form.email"
-                        type="email"
-                        label="Email Address"
-                        placeholder="name@company.com"
+                        type="text"
+                        label="Email or Phone Number"
+                        placeholder="name@company.com or +1234567890"
                         :error="form.errors.email"
                         required
                     />

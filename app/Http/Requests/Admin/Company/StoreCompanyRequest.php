@@ -12,7 +12,7 @@ class StoreCompanyRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return auth()->user()->can('companies.create');
     }
 
     /**

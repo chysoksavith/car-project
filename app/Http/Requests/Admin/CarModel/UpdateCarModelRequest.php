@@ -12,7 +12,7 @@ class UpdateCarModelRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return auth()->user()->can('car_models.edit');
     }
 
     /**

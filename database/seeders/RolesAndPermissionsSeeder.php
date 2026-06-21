@@ -55,6 +55,11 @@ class RolesAndPermissionsSeeder extends Seeder
             'colors.create',
             'colors.edit',
             'colors.delete',
+            // Suppliers
+            'suppliers.view',
+            'suppliers.create',
+            'suppliers.edit',
+            'suppliers.delete',
         ];
 
         foreach ($permissions as $perm) {
@@ -98,6 +103,10 @@ class RolesAndPermissionsSeeder extends Seeder
             'colors.create',
             'colors.edit',
             'colors.delete',
+            'suppliers.view',
+            'suppliers.create',
+            'suppliers.edit',
+            'suppliers.delete',
         ]);
 
         // Editor — read-only + edit users
@@ -115,6 +124,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'car_models.edit',
             'colors.view',
             'colors.edit',
+            'suppliers.view',
+            'suppliers.edit',
         ]);
 
         // Viewer — read-only access
@@ -127,6 +138,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'makers.view',
             'car_models.view',
             'colors.view',
+            'suppliers.view',
         ]);
 
         $this->command->info('Roles and permissions seeded.');
