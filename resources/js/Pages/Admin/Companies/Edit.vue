@@ -15,7 +15,7 @@
 
         <div class="card bg-base-100 shadow-sm border border-base-200">
             <div class="card-body">
-                <CompanyForm :company="company" isEdit />
+                <CompanyForm :company="company.data" isEdit />
             </div>
         </div>
     </DashboardLayout>

@@ -28,6 +28,7 @@ class UpdateCompanyRequest extends FormRequest
             'phone'     => ['nullable', 'string', 'max:50'],
             'address'   => ['nullable', 'string'],
             'is_active' => ['boolean'],
+            'logo'      => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
         ];
     }
 }

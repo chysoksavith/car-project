@@ -46,7 +46,7 @@ class CompanyController extends Controller
     public function edit(Company $company): Response
     {
         return Inertia::render('Admin/Companies/Edit', [
-            'company' => $company,
+            'company' => new \App\Http\Resources\Admin\CompanyResource($company),
         ]);
     }
 

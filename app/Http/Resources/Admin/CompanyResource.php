@@ -21,6 +21,7 @@ class CompanyResource extends JsonResource
             'phone'      => $this->phone,
             'address'    => $this->address,
             'is_active'  => $this->is_active,
+            'logo_url'   => $this->getLatestAttachment('logo')?->url,
             'created_at' => $this->created_at,
         ];
     }

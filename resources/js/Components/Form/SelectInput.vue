@@ -9,14 +9,8 @@
                     : '',
                 selectClass,
             ]"
-            :value="modelValue"
+            v-model="internalValue"
             :required="required"
-            @change="
-                $emit(
-                    'update:modelValue',
-                    ($event.target as HTMLSelectElement).value,
-                )
-            "
             v-bind="$attrs"
         >
             <option v-if="placeholder" value="" disabled selected>
@@ -35,10 +29,11 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
 import InputLabel from "./InputLabel.vue";
 import InputError from "./InputError.vue";
 
-defineProps<{
+const props = defineProps<{
     modelValue: string | number | null;
     options: any[];
     label?: string;
@@ -48,7 +43,12 @@ defineProps<{
     required?: boolean;
 }>();
 
-defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue"]);
+
+const internalValue = computed({
+    get: () => props.modelValue,
+    set: (val) => emit("update:modelValue", val)
+});
 </script>
 
 <script lang="ts">

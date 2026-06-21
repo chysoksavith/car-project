@@ -50,6 +50,10 @@ class HandleInertiaRequests extends Middleware
                             ->implode(''),
                         'roles'       => $request->user()->getRoleNames(),
                         'permissions' => $request->user()->getAllPermissions()->pluck('name'),
+                        'company'     => $request->user()->company ? [
+                            'name'     => $request->user()->company->name,
+                            'logo_url' => $request->user()->company->getLatestAttachment('logo')?->url,
+                        ] : null,
                     ]
                     : null,
             ],

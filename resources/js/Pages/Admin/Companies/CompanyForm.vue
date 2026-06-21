@@ -24,6 +24,28 @@
                 :error="form.errors.phone"
             />
 
+            <div class="form-control w-full">
+                <label class="label">
+                    <span class="label-text">Company Logo</span>
+                </label>
+                <div class="flex items-center gap-4">
+                    <div v-if="props.company?.logo_url" class="avatar">
+                        <div class="w-16 rounded border border-base-300">
+                            <img :src="props.company.logo_url" alt="Logo preview" />
+                        </div>
+                    </div>
+                    <input
+                        type="file"
+                        class="file-input file-input-bordered w-full max-w-xs"
+                        @input="form.logo = $event.target.files[0]"
+                        accept="image/*"
+                    />
+                </div>
+                <div v-if="form.errors.logo" class="text-error text-sm mt-1">
+                    {{ form.errors.logo }}
+                </div>
+            </div>
+
             <div class="md:col-span-2">
                 <TextareaInput
                     id="address"
@@ -72,11 +94,17 @@ const form = useForm({
     phone: props.company?.phone || "",
     address: props.company?.address || "",
     is_active: props.company?.is_active ?? true,
+    logo: null as File | null,
 });
 
 const submit = () => {
     if (props.isEdit && props.company) {
-        form.put(route("admin.companies.update", props.company.id));
+        form.transform((data) => ({
+            ...data,
+            _method: 'put',
+        })).post(route("admin.companies.update", props.company.id), {
+            forceFormData: true,
+        });
     } else {
         form.post(route("admin.companies.store"));
     }

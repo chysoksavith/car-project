@@ -11,16 +11,15 @@
                 class="flex items-center gap-3 w-full px-4"
                 :class="[isCollapsed ? 'justify-center px-0' : '']"
             >
-                <div
-                    class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-primary-content font-bold text-xl shadow-md shadow-primary/30 shrink-0"
-                >
-                    S
+                <div v-if="user?.company?.logo_url" class="w-10 h-10 rounded-xl shrink-0 overflow-hidden shadow-md">
+                    <img :src="user.company.logo_url" class="w-full h-full object-cover" alt="Company Logo" />
                 </div>
-                <span
-                    v-show="!isCollapsed"
-                    class="text-2xl font-bold tracking-tight truncate"
-                    >SaaS App</span
-                >
+                <div v-else class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-primary-content font-bold text-xl shadow-md shadow-primary/30 shrink-0">
+                    {{ user?.company?.name?.charAt(0).toUpperCase() ?? 'S' }}
+                </div>
+                <span v-show="!isCollapsed" class="text-xl font-bold tracking-tight truncate">
+                    {{ user?.company?.name ?? 'SaaS App' }}
+                </span>
             </div>
         </div>
 
