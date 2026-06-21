@@ -1,7 +1,7 @@
 <template>
     <DashboardLayout>
         <PageHeader
-            title="Car Models"
+            :breadcrumbs="[{ label: 'Car Models' }]"
             description="Manage your car models."
             class="mb-6"
         >

@@ -1,6 +1,6 @@
 <template>
     <DashboardLayout>
-        <PageHeader title="Edit Color" description="Update color details." />
+        <PageHeader :breadcrumbs="[{ label: 'Colors', url: route('admin.colors.index') }, { label: 'Edit Color' }]" description="Update color details." />
         <div class="card bg-base-100 shadow-sm border border-base-200">
             <div class="card-body">
                 <ColorForm :color="color.data || color" isEdit />

@@ -1,6 +1,6 @@
 <template>
     <DashboardLayout>
-        <PageHeader title="Edit Car Model" description="Update the car model details." />
+        <PageHeader :breadcrumbs="[{ label: 'Car Models', url: route('admin.car-models.index') }, { label: 'Edit Car Model' }]" description="Update the car model details." />
         <div class="card bg-base-100 shadow-sm border border-base-200">
             <div class="card-body">
                 <CarModelForm :carModel="carModel.data || carModel" :makers="makers" isEdit />

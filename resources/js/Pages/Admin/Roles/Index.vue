@@ -3,7 +3,7 @@
         <div class="flex flex-col gap-6">
             <!-- Page Header -->
             <PageHeader
-                title="Roles"
+                :breadcrumbs="[{ label: 'Roles' }]"
                 description="Manage roles and their permissions."
             >
                 <Button

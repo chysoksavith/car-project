@@ -1,7 +1,7 @@
 <template>
     <DashboardLayout>
         <PageHeader
-            title="Add Supplier"
+            :breadcrumbs="[{ label: 'Suppliers', url: route('admin.suppliers.index') }, { label: 'Add Supplier' }]"
             description="Create a new supplier."
             class="mb-6"
             :backUrl="route('admin.suppliers.index')"

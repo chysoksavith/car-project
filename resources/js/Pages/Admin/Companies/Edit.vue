@@ -1,7 +1,7 @@
 <template>
     <DashboardLayout>
         <PageHeader
-            title="Edit Company"
+            :breadcrumbs="[{ label: 'Companies', url: route('admin.companies.index') }, { label: 'Edit Company' }]"
             description="Update company details."
             class="mb-6"
         >

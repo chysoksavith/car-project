@@ -3,12 +3,18 @@
         class="flex flex-col sm:flex-row sm:items-center justify-between gap-4"
     >
         <div>
-            <h1 class="text-2xl font-bold tracking-tight text-base-content">
-                {{ title }}
-            </h1>
-            <p v-if="description" class="text-base-content/60 text-sm mt-0.5">
-                {{ description }}
-            </p>
+            <div v-if="breadcrumbs && breadcrumbs.length > 0" class="breadcrumbs text-sm">
+                <ul>
+                    <li v-for="(item, index) in breadcrumbs" :key="index">
+                        <Link v-if="item.url" :href="item.url">
+                            {{ item.label }}
+                        </Link>
+                        <span v-else class="font-medium">
+                            {{ item.label }}
+                        </span>
+                    </li>
+                </ul>
+            </div>
         </div>
         <div class="flex items-center gap-2 shrink-0">
             <slot />
@@ -17,8 +23,14 @@
 </template>
 
 <script setup lang="ts">
+import { Link } from '@inertiajs/vue3';
+
+interface BreadcrumbItem {
+    label: string;
+    url?: string;
+}
+
 defineProps<{
-    title: string;
-    description?: string;
+    breadcrumbs?: BreadcrumbItem[];
 }>();
 </script>

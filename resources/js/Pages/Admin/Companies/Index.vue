@@ -1,7 +1,7 @@
 <template>
     <DashboardLayout>
         <PageHeader
-            title="Companies"
+            :breadcrumbs="[{ label: 'Companies' }]"
             description="Manage companies in the system."
             class="mb-6"
         >

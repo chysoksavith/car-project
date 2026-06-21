@@ -1,7 +1,7 @@
 <template>
     <DashboardLayout>
         <PageHeader
-            title="Create User"
+            :breadcrumbs="[{ label: 'Users', url: route('admin.users.index') }, { label: 'Create User' }]"
             description="Add a new user to the system."
             class="mb-6"
         >

@@ -1,7 +1,7 @@
 <template>
     <DashboardLayout>
         <PageHeader
-            title="Makers"
+            :breadcrumbs="[{ label: 'Makers' }]"
             description="Manage your car makers and brands."
             class="mb-6"
         >

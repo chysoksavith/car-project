@@ -1,7 +1,7 @@
 <template>
     <DashboardLayout>
         <PageHeader
-            title="Users Management"
+            :breadcrumbs="[{ label: 'Users Management' }]"
             description="Manage system administrators and frontend users."
             class="mb-6"
         >

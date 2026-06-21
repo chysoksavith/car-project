@@ -1,6 +1,6 @@
 <template>
     <DashboardLayout>
-        <PageHeader title="Create Color" description="Add a new color to the system." />
+        <PageHeader :breadcrumbs="[{ label: 'Colors', url: route('admin.colors.index') }, { label: 'Create Color' }]" description="Add a new color to the system." />
         <div class="card bg-base-100 shadow-sm border border-base-200">
             <div class="card-body">
                 <ColorForm />

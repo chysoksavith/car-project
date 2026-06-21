@@ -3,7 +3,7 @@
         <div class="flex flex-col gap-6">
             <!-- Page Header -->
             <PageHeader
-                title="Permissions"
+                :breadcrumbs="[{ label: 'Permissions' }]"
                 description="Define granular permissions that can be assigned to roles."
             >
                 <Button

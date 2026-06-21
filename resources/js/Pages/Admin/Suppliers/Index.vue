@@ -1,7 +1,7 @@
 <template>
     <DashboardLayout>
         <PageHeader
-            title="Suppliers"
+            :breadcrumbs="[{ label: 'Suppliers' }]"
             description="Manage suppliers for your vehicles and parts."
             class="mb-6"
         >

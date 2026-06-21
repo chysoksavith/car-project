@@ -1,7 +1,7 @@
 <template>
     <DashboardLayout>
         <PageHeader
-            title="Create Company"
+            :breadcrumbs="[{ label: 'Companies', url: route('admin.companies.index') }, { label: 'Create Company' }]"
             description="Add a new company to the system."
             class="mb-6"
         >

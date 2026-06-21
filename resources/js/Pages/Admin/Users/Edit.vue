@@ -1,7 +1,7 @@
 <template>
     <DashboardLayout>
         <PageHeader
-            title="Edit User"
+            :breadcrumbs="[{ label: 'Users', url: route('admin.users.index') }, { label: 'Edit User' }]"
             description="Update an existing user's information."
             class="mb-6"
         >

@@ -4,7 +4,7 @@
             <!-- Page Header -->
             <!-- Page Header -->
             <PageHeader
-                title="Dashboard Overview"
+                :breadcrumbs="[{ label: 'Dashboard Overview' }]"
                 description="Welcome back! Here's what's happening with your app today."
             >
                 <div class="flex items-center gap-3">

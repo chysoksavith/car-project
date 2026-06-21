@@ -1,7 +1,7 @@
 <template>
     <DashboardLayout>
         <PageHeader
-            title="Colors"
+            :breadcrumbs="[{ label: 'Colors' }]"
             description="Manage colors available for vehicles."
             class="mb-6"
         >

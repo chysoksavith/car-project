@@ -1,7 +1,7 @@
 <template>
     <DashboardLayout>
         <PageHeader
-            title="Edit Maker"
+            :breadcrumbs="[{ label: 'Makers', url: route('admin.makers.index') }, { label: 'Edit Maker' }]"
             description="Update maker details."
             class="mb-6"
         >

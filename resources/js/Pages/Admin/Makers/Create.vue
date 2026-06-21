@@ -1,7 +1,7 @@
 <template>
     <DashboardLayout>
         <PageHeader
-            title="Create Maker"
+            :breadcrumbs="[{ label: 'Makers', url: route('admin.makers.index') }, { label: 'Create Maker' }]"
             description="Add a new maker to the system."
             class="mb-6"
         >
