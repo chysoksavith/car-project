@@ -43,7 +43,7 @@
         <!-- Right: User dropdown -->
         <div class="flex items-center gap-1">
 
-            <!-- ─── User Dropdown ─────────────────────────────────── -->
+            <!-- # User Dropdown -->
             <div class="dropdown dropdown-end" ref="userDropdownRef">
                 <!-- Trigger -->
                 <div
@@ -146,7 +146,7 @@
                     </ul>
                 </div>
             </div>
-            <!-- ─── End User Dropdown ─────────────────────────────── -->
+            <!-- # End User Dropdown -->
         </div>
     </header>
 </template>

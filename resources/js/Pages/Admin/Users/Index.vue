@@ -5,7 +5,7 @@
             description="Manage system administrators and frontend users."
             class="mb-6"
         >
-            <Button variant="primary" class="shrink-0">
+            <Button v-can="'users.create'" variant="primary" class="shrink-0">
                 <i class="fa-solid fa-plus mr-2"></i>
                 Add User
             </Button>
@@ -51,35 +51,28 @@
             </template>
 
             <template #cell(role)="{ item }">
-                <span
-                    class="badge badge-sm font-medium"
-                    :class="
-                        item.user_type === 'backend'
-                            ? 'badge-primary badge-outline'
-                            : 'badge-ghost'
-                    "
+                <Badge
+                    :variant="item.user_type === 'backend' ? 'primary' : 'ghost'"
+                    :outline="item.user_type === 'backend'"
                 >
                     {{ item.user_type }}
-                </span>
+                </Badge>
             </template>
 
             <template #cell(status)="{ item }">
-                <div class="flex items-center gap-2">
-                    <div
-                        class="w-2 h-2 rounded-full"
-                        :class="item.is_active ? 'bg-success' : 'bg-error'"
-                    ></div>
-                    <span
-                        class="text-sm font-medium"
-                        :class="item.is_active ? 'text-success' : 'text-error'"
-                    >
-                        {{ item.is_active ? "Active" : "Inactive" }}
-                    </span>
-                </div>
+                <Badge
+                    :variant="item.is_active ? 'success' : 'error'"
+                    outline
+                    dot
+                >
+                    {{ item.is_active ? "Active" : "Inactive" }}
+                </Badge>
             </template>
 
             <template #cell(actions)="{ item }">
                 <TableActionButtons
+                    :hasEdit="can('users.edit')"
+                    :hasDelete="can('users.delete')"
                     @edit="console.log('Edit', item.id)"
                     @delete="console.log('Delete', item.id)"
                 />
@@ -91,6 +84,7 @@
 <script setup lang="ts">
 import DashboardLayout from "@/Layouts/DashboardLayout.vue";
 import Button from "@/Components/Button.vue";
+import Badge from "@/Components/Badge.vue";
 import DataTable from "@/Components/DataTable.vue";
 import TableActionButtons from "@/Components/TableActionButtons.vue";
 import PageHeader from "@/Components/PageHeader.vue";
@@ -101,6 +95,7 @@ defineProps<{
 }>();
 
 const columns = [
+    { key: "no", label: "No.", class: "w-16" },
     { key: "name", label: "Name" },
     { key: "contact", label: "Contact Info" },
     { key: "role", label: "Role" },

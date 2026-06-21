@@ -15,13 +15,13 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            // ── Foundation (must run first) ────────────────────────────
+            // # Foundation (must run first)
             RolesAndPermissionsSeeder::class,
 
-            // ── Users ─────────────────────────────────────────────────
+            // # Users
             UserSeeder::class,
 
-            // ── Add future seeders here ────────────────────────────────
+            // # Add future seeders here
             // CustomerSeeder::class,
             // CarSeeder::class,
         ]);

@@ -21,8 +21,6 @@ class RoleController extends Controller
         private readonly PermissionService $permissionService,
     ) {}
 
-    // ─────────────────────────────────────────────────────────────────────────
-
     public function index(\Illuminate\Http\Request $request): Response
     {
         $search = $request->input('search');
@@ -36,8 +34,6 @@ class RoleController extends Controller
         ]);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-
     public function store(StoreRoleRequest $request): RedirectResponse
     {
         $role = $this->roleService->create(
@@ -47,8 +43,6 @@ class RoleController extends Controller
 
         return back()->with('success', "Role '{$role->name}' created.");
     }
-
-    // ─────────────────────────────────────────────────────────────────────────
 
     public function update(UpdateRoleRequest $request, Role $role): RedirectResponse
     {
@@ -60,8 +54,6 @@ class RoleController extends Controller
 
         return back()->with('success', "Role '{$updated->name}' updated.");
     }
-
-    // ─────────────────────────────────────────────────────────────────────────
 
     public function destroy(Role $role): RedirectResponse
     {

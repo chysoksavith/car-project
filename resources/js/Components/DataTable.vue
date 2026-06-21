@@ -40,7 +40,7 @@
                     </thead>
                     <tbody>
                         <tr
-                            v-for="item in data.data"
+                            v-for="(item, index) in data.data"
                             :key="item.id"
                             class="hover:bg-base-200/30 transition-colors border-b border-base-200/50"
                         >
@@ -50,8 +50,13 @@
                                 :class="col.class || ''"
                             >
                                 <!-- Render custom slot if it exists, otherwise print the raw property -->
-                                <slot :name="`cell(${col.key})`" :item="item">
-                                    {{ item[col.key] }}
+                                <slot :name="`cell(${col.key})`" :item="item" :index="index">
+                                    <template v-if="col.key === 'no'">
+                                        {{ (data.meta?.from ?? data.from ?? 1) + index }}
+                                    </template>
+                                    <template v-else>
+                                        {{ item[col.key] }}
+                                    </template>
                                 </slot>
                             </td>
                         </tr>
@@ -87,19 +92,19 @@
                 <p class="text-sm text-base-content/60">
                     Showing
                     <span class="font-medium text-base-content">{{
-                        data.from || 0
+                        data.meta?.from ?? data.from ?? 0
                     }}</span>
                     to
                     <span class="font-medium text-base-content">{{
-                        data.to || 0
+                        data.meta?.to ?? data.to ?? 0
                     }}</span>
                     of
                     <span class="font-medium text-base-content">{{
-                        data.total || 0
+                        data.meta?.total ?? data.total ?? 0
                     }}</span>
                     results
                 </p>
-                <Pagination v-if="data.links" :links="data.links" />
+                <Pagination :links="data.meta?.links ?? data.links ?? []" />
             </div>
         </div>
     </div>

@@ -18,8 +18,8 @@
                 />
 
                 <!-- Page Content -->
-                <main class="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
-                    <div class="mx-auto max-w-7xl w-full">
+                <main class="flex-1 overflow-y-auto p-4 lg:p-6">
+                    <div class="w-full">
                         <slot />
                     </div>
                 </main>

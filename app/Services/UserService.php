@@ -22,7 +22,7 @@ class UserService
                       ->orWhere('phone_number', 'like', "%{$search}%");
                 });
             })
-            ->latest()
+            ->orderBy('id', 'desc')
             ->paginate($perPage)
             ->withQueryString();
     }

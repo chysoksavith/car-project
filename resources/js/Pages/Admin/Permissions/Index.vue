@@ -7,6 +7,7 @@
                 description="Define granular permissions that can be assigned to roles."
             >
                 <Button
+                    v-if="can('permissions.create')"
                     @click="openCreate"
                     variant="primary"
                     size="sm"
@@ -33,6 +34,8 @@
 
                 <template #cell(actions)="{ item }">
                     <TableActionButtons
+                        :hasEdit="can('permissions.edit')"
+                        :hasDelete="can('permissions.delete')"
                         @edit="openEdit(item)"
                         @delete="confirmDelete(item)"
                     />
@@ -40,7 +43,7 @@
             </DataTable>
         </div>
 
-        <!-- ── Create / Edit Modal ─────────────────────────────────────── -->
+        <!-- # Create / Edit Modal -->
         <Modal
             ref="modalRef"
             maxWidth="sm"
@@ -71,7 +74,7 @@
             </template>
         </Modal>
 
-        <!-- ── Delete Confirm ──────────────────────────────────────────── -->
+        <!-- # Delete Confirm -->
         <Modal ref="deleteModalRef" maxWidth="sm" title="Delete Permission">
             <p class="text-sm text-base-content/70">
                 Delete
@@ -111,19 +114,20 @@ import Modal from "@/Components/Modal.vue";
 import TextInput from "@/Components/Form/TextInput.vue";
 import { usePermission } from "@/Composables/usePermission";
 
-// ── Props (data from the controller) ─────────────────────────────────────
+// # Props (data from the controller)
 const props = defineProps<{
     permissions: any; // Paginated data object
     filters: { search?: string };
 }>();
 
-// ── Columns ───────────────────────────────────────────────────────────────
+// # Columns
 const columns = [
+    { key: "no", label: "No.", class: "w-16" },
     { key: "name", label: "Permission Name" },
     { key: "actions", label: "Actions", class: "w-24 text-right" },
 ];
 
-// ── Composables ───────────────────────────────────────────────────────────
+// # Composables
 const {
     modalRef,
     deleteModalRef,

@@ -15,8 +15,6 @@ class UserController extends Controller
         private readonly UserService $userService,
     ) {}
 
-    // ─────────────────────────────────────────────────────────────────────────
-
     public function index(Request $request): Response
     {
         $search = $request->input('search');

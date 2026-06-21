@@ -18,8 +18,6 @@ class PermissionController extends Controller
         private readonly PermissionService $permissionService,
     ) {}
 
-    // ─────────────────────────────────────────────────────────────────────────
-
     public function index(\Illuminate\Http\Request $request): Response
     {
         $search = $request->input('search');
@@ -32,8 +30,6 @@ class PermissionController extends Controller
         ]);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-
     public function store(StorePermissionRequest $request): RedirectResponse
     {
         $permission = $this->permissionService->create($request->validated('name'));
@@ -41,16 +37,12 @@ class PermissionController extends Controller
         return back()->with('success', "Permission '{$permission->name}' created.");
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-
     public function update(UpdatePermissionRequest $request, Permission $permission): RedirectResponse
     {
         $updated = $this->permissionService->update($permission, $request->validated('name'));
 
         return back()->with('success', "Permission renamed to '{$updated->name}'.");
     }
-
-    // ─────────────────────────────────────────────────────────────────────────
 
     public function destroy(Permission $permission): RedirectResponse
     {

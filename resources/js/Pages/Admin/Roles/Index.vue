@@ -7,6 +7,7 @@
                 description="Manage roles and their permissions."
             >
                 <Button
+                    v-if="can('roles.create')"
                     @click="openCreate"
                     variant="primary"
                     size="sm"
@@ -32,11 +33,12 @@
 
                 <template #cell(permissions)="{ item }">
                     <div class="flex flex-wrap gap-1">
-                        <span
+                        <Badge
                             v-for="perm in item.permissions"
                             :key="perm.id"
-                            class="badge badge-ghost badge-sm font-mono"
-                            >{{ perm.name }}</span
+                            variant="ghost"
+                            class="font-mono"
+                            >{{ perm.name }}</Badge
                         >
                         <span
                             v-if="!item.permissions.length"
@@ -48,6 +50,8 @@
 
                 <template #cell(actions)="{ item }">
                     <TableActionButtons
+                        :hasEdit="can('roles.edit')"
+                        :hasDelete="can('roles.delete')"
                         @edit="openEdit(item)"
                         @delete="confirmDelete(item)"
                     />
@@ -55,7 +59,7 @@
             </DataTable>
         </div>
 
-        <!-- ── Create / Edit Modal ─────────────────────────────────────── -->
+        <!-- # Create / Edit Modal -->
         <Modal
             ref="modalRef"
             maxWidth="4xl"
@@ -158,7 +162,7 @@
             </template>
         </Modal>
 
-        <!-- ── Delete Confirm Modal ────────────────────────────────────── -->
+        <!-- # Delete Confirm Modal -->
         <Modal ref="deleteModalRef" maxWidth="sm" title="Delete Role">
             <p class="text-sm text-base-content/70">
                 Are you sure you want to delete
@@ -194,26 +198,28 @@ import DataTable from "@/Components/DataTable.vue";
 import TableActionButtons from "@/Components/TableActionButtons.vue";
 import PageHeader from "@/Components/PageHeader.vue";
 import Button from "@/Components/Button.vue";
+import Badge from "@/Components/Badge.vue";
 import Modal from "@/Components/Modal.vue";
 import TextInput from "@/Components/Form/TextInput.vue";
 import type { Permission } from "@/Types/permission";
 import { useRole } from "@/Composables/useRole";
 
-// ── Props ────────────────────────────────────────────────────────────────
+// # Props
 const props = defineProps<{
     roles: any; // Paginated response
     permissions: Permission[];
     filters: { search?: string };
 }>();
 
-// ── DataTable Columns ────────────────────────────────────────────────────
+// # DataTable Columns
 const columns = [
+    { key: "no", label: "No.", class: "w-16" },
     { key: "name", label: "Name" },
     { key: "permissions", label: "Permissions" },
     { key: "actions", label: "Actions", class: "text-right w-32" },
 ];
 
-// ── Group Permissions by Prefix ──────────────────────────────────────────
+// # Group Permissions by Prefix
 const groupedPermissions = computed(() => {
     const groups: Record<string, Permission[]> = {};
     props.permissions.forEach((p) => {
@@ -225,7 +231,7 @@ const groupedPermissions = computed(() => {
     return groups;
 });
 
-// ── Composables ───────────────────────────────────────────────────────────
+// # Composables
 const {
     modalRef,
     deleteModalRef,
@@ -241,7 +247,7 @@ const {
     deleteRole,
 } = useRole();
 
-// ── Select All Logic ──────────────────────────────────────────────────────
+// # Select All Logic
 const allPermissionNames = computed(() => props.permissions.map(p => p.name));
 
 const isAllSelected = computed({

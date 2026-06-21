@@ -17,7 +17,7 @@ class RoleService
             ->when($search, function ($query, $search) {
                 $query->where('name', 'like', "%{$search}%");
             })
-            ->orderBy('name')
+            ->orderBy('id', 'desc')
             ->paginate($perPage)
             ->withQueryString();
     }

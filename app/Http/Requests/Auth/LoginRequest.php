@@ -30,18 +30,14 @@ class LoginRequest extends FormRequest
         $this->decaySeconds = config('security.login.decay_seconds', 60);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // Authorization
-    // ─────────────────────────────────────────────────────────────────────────
+    // # Authorization
 
     public function authorize(): bool
     {
         return true;
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // Validation Rules
-    // ─────────────────────────────────────────────────────────────────────────
+    // # Validation Rules
 
     public function rules(): array
     {
@@ -63,9 +59,7 @@ class LoginRequest extends FormRequest
         ];
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // Sanitization — run before validation
-    // ─────────────────────────────────────────────────────────────────────────
+    // # Sanitization — run before validation
 
     protected function prepareForValidation(): void
     {
@@ -74,9 +68,7 @@ class LoginRequest extends FormRequest
         ]);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // Rate Limiting
-    // ─────────────────────────────────────────────────────────────────────────
+    // # Rate Limiting
 
     /**
      * Unique throttle key: normalised email + client IP.
@@ -113,9 +105,7 @@ class LoginRequest extends FormRequest
         ]);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // Authentication
-    // ─────────────────────────────────────────────────────────────────────────
+    // # Authentication
 
     /**
      * Attempt to authenticate the request's credentials.

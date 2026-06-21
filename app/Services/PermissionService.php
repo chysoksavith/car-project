@@ -11,7 +11,7 @@ class PermissionService
      */
     public function all(): \Illuminate\Database\Eloquent\Collection
     {
-        return Permission::orderBy('name')->get(['id', 'name']);
+        return Permission::orderBy('id', 'desc')->get(['id', 'name']);
     }
 
     /**
@@ -23,7 +23,7 @@ class PermissionService
             ->when($search, function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%");
             })
-            ->orderBy('name')
+            ->orderBy('id', 'desc')
             ->paginate($perPage)
             ->withQueryString();
     }

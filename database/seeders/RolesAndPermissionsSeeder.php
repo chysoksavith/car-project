@@ -13,7 +13,7 @@ class RolesAndPermissionsSeeder extends Seeder
         // Reset cached roles and permissions
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        // ── Define all permissions ─────────────────────────────────────────
+        // # Define all permissions
         $permissions = [
             // Users
             'users.view', 'users.create', 'users.edit', 'users.delete',
@@ -27,7 +27,7 @@ class RolesAndPermissionsSeeder extends Seeder
             Permission::firstOrCreate(['name' => $perm, 'guard_name' => 'web']);
         }
 
-        // ── Define roles and assign permissions ───────────────────────────
+        // # Define roles and assign permissions
 
         // Super Admin — bypass all gates (handled in AuthServiceProvider)
         $superAdmin = Role::firstOrCreate(['name' => 'super-admin', 'guard_name' => 'web']);

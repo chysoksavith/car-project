@@ -28,7 +28,7 @@ class UserSeeder extends Seeder
                 'role' => 'super-admin',
             ],
 
-            // ── Add more default users here ────────────────────────────
+            // # Add more default users here
             // [
             //     'data' => [
             //         'email'      => 'editor@saas.com',
