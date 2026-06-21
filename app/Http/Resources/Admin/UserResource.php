@@ -19,6 +19,8 @@ class UserResource extends JsonResource
             'user_type'    => $this->user_type,
             'is_active'    => $this->is_active,
             'roles'        => $this->whenLoaded('roles', fn () => $this->roles->pluck('name')),
+            'creator_name' => $this->whenLoaded('creator', fn () => $this->creator?->name),
+            'updater_name' => $this->whenLoaded('updater', fn () => $this->updater?->name),
             'created_at'   => $this->created_at,
         ];
     }

@@ -29,34 +29,24 @@
             class="flex-1 overflow-y-auto py-4 overflow-x-hidden nice-scrollbar"
         >
             <ul class="menu w-full px-3 gap-1">
-                <!-- Overview Section -->
-                <li
-                    v-show="!isCollapsed"
-                    class="menu-title text-xs font-semibold uppercase tracking-wider text-base-content/50 mt-2"
-                >
-                    Overview
-                </li>
+                <template v-for="(group, index) in menuGroups" :key="group.name">
+                    <!-- Group Title -->
+                    <li
+                        v-show="!isCollapsed"
+                        class="menu-title text-xs font-semibold uppercase tracking-wider text-base-content/50"
+                        :class="index === 0 ? 'mt-2' : 'mt-6'"
+                    >
+                        {{ group.name }}
+                    </li>
 
-                <SidebarItem
-                    v-for="item in overviewItems"
-                    :key="item.name"
-                    :item="item"
-                    :is-collapsed="isCollapsed"
-                />
-
-                <!-- Management Section (With Dropdown) -->
-                <li
-                    v-show="!isCollapsed"
-                    class="menu-title text-xs font-semibold uppercase tracking-wider text-base-content/50 mt-6"
-                >
-                    Management
-                </li>
-                <SidebarItem
-                    v-for="item in managementItems"
-                    :key="item.name"
-                    :item="item"
-                    :is-collapsed="isCollapsed"
-                />
+                    <!-- Group Items -->
+                    <SidebarItem
+                        v-for="item in group.items"
+                        :key="item.name"
+                        :item="item"
+                        :is-collapsed="isCollapsed"
+                    />
+                </template>
             </ul>
         </div>
 
@@ -116,38 +106,60 @@ const Icon = (path: string) =>
         ],
     );
 
-const overviewItems = [
+const menuGroups = [
     {
-        name: "Dashboard",
-        icon: () =>
-            Icon(
-                "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6",
-            ),
-        active: true,
-        href: "/",
-    },
-];
-
-const managementItems = [
-    {
-        name: "Users & Teams",
-        icon: () =>
-            Icon(
-                "M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z",
-            ),
-        children: [
-            { name: "All Users", href: "/admin/users" },
-            { name: "Roles", href: "/admin/roles" },
-            { name: "Permissions", href: "/admin/permissions" },
+        name: "Overview",
+        items: [
+            {
+                name: "Dashboard",
+                icon: () =>
+                    Icon(
+                        "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6",
+                    ),
+                active: true,
+                href: "/",
+            },
         ],
     },
     {
-        name: "Companies",
-        icon: () =>
-            Icon(
-                "M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-            ),
-        href: "/admin/companies",
+        name: "Cars Management",
+        items: [
+            {
+                name: "Makers",
+                icon: () => Icon("M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"),
+                href: "/admin/makers",
+            },
+            {
+                name: "Car Models",
+                icon: () => Icon("M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"),
+                href: "/admin/car-models",
+            },
+        ],
+    },
+    {
+        name: "Management",
+        items: [
+            {
+                name: "Users & Teams",
+                icon: () =>
+                    Icon(
+                        "M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z",
+                    ),
+                children: [
+                    { name: "All Users", href: "/admin/users" },
+                    { name: "Roles", href: "/admin/roles" },
+                    { name: "Permissions", href: "/admin/permissions" },
+                ],
+            },
+            {
+                name: "Companies",
+                icon: () =>
+                    Icon(
+                        "M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                    ),
+                href: "/admin/companies",
+            },
+        ],
     },
 ];
 </script>

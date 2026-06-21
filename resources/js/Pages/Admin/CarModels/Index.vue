@@ -1,28 +1,32 @@
 <template>
     <DashboardLayout>
         <PageHeader
-            title="Companies"
-            description="Manage companies in the system."
+            title="Car Models"
+            description="Manage your car models."
             class="mb-6"
         >
             <Button
-                v-if="can('companies.create')"
-                :href="route('admin.companies.create')"
+                v-if="can('car_models.create')"
+                :href="route('admin.car-models.create')"
                 variant="primary"
                 size="sm"
                 icon="fa-solid fa-plus"
             >
-                Add Company
+                Add Model
             </Button>
         </PageHeader>
 
         <DataTable
-            :data="companies"
+            :data="carModels"
             :columns="columns"
-            searchRoute="/admin/companies"
+            searchRoute="/admin/car-models"
             :searchQuery="filters.search"
-            searchPlaceholder="Search companies..."
+            searchPlaceholder="Search models..."
         >
+            <template #cell(maker)="{ item }">
+                <span class="font-medium text-base-content/70">{{ item.maker?.name }}</span>
+            </template>
+
             <template #cell(name)="{ item }">
                 <div class="font-bold text-base-content">{{ item.name }}</div>
             </template>
@@ -45,24 +49,24 @@
 
             <template #cell(actions)="{ item }">
                 <TableActionButtons
-                    :hasEdit="can('companies.edit')"
-                    :hasDelete="can('companies.delete')"
-                    @edit="router.visit(route('admin.companies.edit', item.id))"
+                    :hasEdit="can('car_models.edit')"
+                    :hasDelete="can('car_models.delete')"
+                    @edit="router.visit(route('admin.car-models.edit', item.id))"
                     @delete="confirmDelete(item)"
                 />
             </template>
         </DataTable>
 
         <!-- Delete Confirm Modal -->
-        <Modal ref="deleteModalRef" maxWidth="sm" title="Delete Company">
+        <Modal ref="deleteModalRef" maxWidth="sm" title="Delete Model">
             <p class="text-sm text-base-content/70">
                 Are you sure you want to delete
-                <strong class="text-base-content">{{ deletingCompany?.name }}</strong>? This cannot be undone.
+                <strong class="text-base-content">{{ deletingModel?.name }}</strong>? This cannot be undone.
             </p>
 
             <template #actions>
                 <Button @click="deleteModalRef?.close()" variant="ghost" type="button">Cancel</Button>
-                <Button @click="deleteCompany" :loading="deleteForm.processing" variant="error" type="button">Delete</Button>
+                <Button @click="deleteModel" :loading="deleteForm.processing" variant="error" type="button">Delete</Button>
             </template>
         </Modal>
     </DashboardLayout>
@@ -80,32 +84,33 @@ import PageHeader from "@/Components/PageHeader.vue";
 import Modal from "@/Components/Modal.vue";
 
 const props = defineProps<{
-    companies: any;
+    carModels: any;
     filters: any;
 }>();
 
 const deleteModalRef = ref<any>(null);
-const deletingCompany = ref<any>(null);
+const deletingModel = ref<any>(null);
 const deleteForm = useForm({});
 
-const confirmDelete = (company: any) => {
-    deletingCompany.value = company;
+const confirmDelete = (model: any) => {
+    deletingModel.value = model;
     deleteModalRef.value?.showModal();
 };
 
-const deleteCompany = () => {
-    if (!deletingCompany.value) return;
-    deleteForm.delete(route('admin.companies.destroy', deletingCompany.value.id), {
+const deleteModel = () => {
+    if (!deletingModel.value) return;
+    deleteForm.delete(route('admin.car-models.destroy', deletingModel.value.id), {
         onSuccess: () => {
             deleteModalRef.value?.close();
-            setTimeout(() => deletingCompany.value = null, 300);
+            setTimeout(() => deletingModel.value = null, 300);
         },
     });
 };
 
 const columns = [
     { key: "id", label: "ID", class: "w-16 font-mono text-base-content/60" },
-    { key: "name", label: "Name" },
+    { key: "maker", label: "Maker" },
+    { key: "name", label: "Model Name" },
     { key: "status", label: "Status" },
     { key: "created_at", label: "Created" },
     { key: "actions", label: "Actions", class: "text-right" },

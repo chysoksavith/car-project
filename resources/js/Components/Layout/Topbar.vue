@@ -42,6 +42,15 @@
 
         <!-- Right: User dropdown -->
         <div class="flex items-center gap-1">
+            <!-- Theme Toggle -->
+            <button
+                @click="toggleTheme"
+                class="btn btn-square btn-ghost text-base-content/70 hover:text-base-content mr-1"
+                title="Toggle Theme"
+            >
+                <i v-if="isDark" class="fa-solid fa-moon text-lg"></i>
+                <i v-else class="fa-solid fa-sun text-lg"></i>
+            </button>
 
             <!-- # User Dropdown -->
             <div class="dropdown dropdown-end" ref="userDropdownRef">
@@ -154,6 +163,7 @@
 <script setup lang="ts">
 import { router } from "@inertiajs/vue3";
 import { useAuth } from "@/Composables/useAuth";
+import { useTheme } from "@/Composables/useTheme";
 
 defineProps<{
     isCollapsed: boolean;
@@ -162,6 +172,7 @@ defineProps<{
 defineEmits(["toggle-collapse"]);
 
 const { user } = useAuth();
+const { isDark, toggleTheme } = useTheme();
 
 function logout() {
     router.post("/logout");

@@ -74,6 +74,20 @@
                 </Badge>
             </template>
 
+            <template #cell(audit)="{ item }">
+                <div class="text-[11px] text-base-content/70 flex flex-col gap-0.5">
+                    <div v-if="item.creator_name">
+                        <span class="font-semibold">Created:</span> {{ item.creator_name }}
+                    </div>
+                    <div v-if="item.updater_name && item.updater_name !== item.creator_name">
+                        <span class="font-semibold">Updated:</span> {{ item.updater_name }}
+                    </div>
+                    <div v-if="!item.creator_name && !item.updater_name" class="opacity-50 italic">
+                        System created
+                    </div>
+                </div>
+            </template>
+
             <template #cell(actions)="{ item }">
                 <TableActionButtons
                     :hasEdit="can('users.edit')"
@@ -140,6 +154,7 @@ const columns = [
     { key: "contact", label: "Contact Info" },
     { key: "role", label: "Role" },
     { key: "status", label: "Status" },
+    { key: "audit", label: "Audit" },
     { key: "actions", label: "Actions", class: "text-right" },
 ];
 </script>

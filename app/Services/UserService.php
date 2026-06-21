@@ -13,6 +13,7 @@ class UserService
     public function getPaginatedWithSearch(?string $search = null, int $perPage = 15)
     {
         return User::query()
+            ->with(['creator', 'updater'])
             ->when($search, function ($q) use ($search) {
                 $q->where(function ($subQ) use ($search) {
                     $subQ->where('first_name', 'like', "%{$search}%")

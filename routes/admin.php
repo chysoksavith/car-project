@@ -23,4 +23,10 @@ Route::prefix('admin')->middleware(['auth', \App\Http\Middleware\CheckBackendAcc
 
     // Companies
     Route::resource('companies', \App\Http\Controllers\Admin\CompanyController::class)->except('show')->names('admin.companies');
+
+    // Makers
+    Route::resource('makers', \App\Http\Controllers\Admin\MakerController::class)->except('show')->names('admin.makers');
+
+    // Car Models
+    Route::resource('car-models', \App\Http\Controllers\Admin\CarModelController::class)->except('show')->names('admin.car-models');
 });

@@ -1,27 +1,27 @@
 <template>
     <DashboardLayout>
         <PageHeader
-            title="Companies"
-            description="Manage companies in the system."
+            title="Makers"
+            description="Manage your car makers and brands."
             class="mb-6"
         >
             <Button
-                v-if="can('companies.create')"
-                :href="route('admin.companies.create')"
+                v-if="can('makers.create')"
+                :href="route('admin.makers.create')"
                 variant="primary"
                 size="sm"
                 icon="fa-solid fa-plus"
             >
-                Add Company
+                Add Maker
             </Button>
         </PageHeader>
 
         <DataTable
-            :data="companies"
+            :data="makers"
             :columns="columns"
-            searchRoute="/admin/companies"
+            searchRoute="/admin/makers"
             :searchQuery="filters.search"
-            searchPlaceholder="Search companies..."
+            searchPlaceholder="Search makers..."
         >
             <template #cell(name)="{ item }">
                 <div class="font-bold text-base-content">{{ item.name }}</div>
@@ -45,24 +45,24 @@
 
             <template #cell(actions)="{ item }">
                 <TableActionButtons
-                    :hasEdit="can('companies.edit')"
-                    :hasDelete="can('companies.delete')"
-                    @edit="router.visit(route('admin.companies.edit', item.id))"
+                    :hasEdit="can('makers.edit')"
+                    :hasDelete="can('makers.delete')"
+                    @edit="router.visit(route('admin.makers.edit', item.id))"
                     @delete="confirmDelete(item)"
                 />
             </template>
         </DataTable>
 
         <!-- Delete Confirm Modal -->
-        <Modal ref="deleteModalRef" maxWidth="sm" title="Delete Company">
+        <Modal ref="deleteModalRef" maxWidth="sm" title="Delete Maker">
             <p class="text-sm text-base-content/70">
                 Are you sure you want to delete
-                <strong class="text-base-content">{{ deletingCompany?.name }}</strong>? This cannot be undone.
+                <strong class="text-base-content">{{ deletingMaker?.name }}</strong>? This cannot be undone.
             </p>
 
             <template #actions>
                 <Button @click="deleteModalRef?.close()" variant="ghost" type="button">Cancel</Button>
-                <Button @click="deleteCompany" :loading="deleteForm.processing" variant="error" type="button">Delete</Button>
+                <Button @click="deleteMaker" :loading="deleteForm.processing" variant="error" type="button">Delete</Button>
             </template>
         </Modal>
     </DashboardLayout>
@@ -80,25 +80,25 @@ import PageHeader from "@/Components/PageHeader.vue";
 import Modal from "@/Components/Modal.vue";
 
 const props = defineProps<{
-    companies: any;
+    makers: any;
     filters: any;
 }>();
 
 const deleteModalRef = ref<any>(null);
-const deletingCompany = ref<any>(null);
+const deletingMaker = ref<any>(null);
 const deleteForm = useForm({});
 
-const confirmDelete = (company: any) => {
-    deletingCompany.value = company;
+const confirmDelete = (maker: any) => {
+    deletingMaker.value = maker;
     deleteModalRef.value?.showModal();
 };
 
-const deleteCompany = () => {
-    if (!deletingCompany.value) return;
-    deleteForm.delete(route('admin.companies.destroy', deletingCompany.value.id), {
+const deleteMaker = () => {
+    if (!deletingMaker.value) return;
+    deleteForm.delete(route('admin.makers.destroy', deletingMaker.value.id), {
         onSuccess: () => {
             deleteModalRef.value?.close();
-            setTimeout(() => deletingCompany.value = null, 300);
+            setTimeout(() => deletingMaker.value = null, 300);
         },
     });
 };

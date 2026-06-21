@@ -1,0 +1,67 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\CarModel\StoreCarModelRequest;
+use App\Http\Requests\Admin\CarModel\UpdateCarModelRequest;
+use App\Http\Resources\Admin\CarModelResource;
+use App\Models\CarModel;
+use App\Models\Maker;
+use App\Services\CarModelService;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
+
+class CarModelController extends Controller
+{
+    public function __construct(
+        private readonly CarModelService $carModelService,
+    ) {}
+
+    public function index(Request $request): Response
+    {
+        $search = $request->input('search');
+
+        return Inertia::render('Admin/CarModels/Index', [
+            'carModels' => CarModelResource::collection(
+                $this->carModelService->getPaginatedWithSearch($search)
+            ),
+            'filters'   => ['search' => $search],
+        ]);
+    }
+
+    public function create(): Response
+    {
+        return Inertia::render('Admin/CarModels/Create', [
+            'makers' => Maker::all(),
+        ]);
+    }
+
+    public function store(StoreCarModelRequest $request): RedirectResponse
+    {
+        $this->carModelService->create($request->validated());
+        return redirect()->route('admin.car-models.index')->with('success', 'Car Model created successfully.');
+    }
+
+    public function edit(CarModel $carModel): Response
+    {
+        return Inertia::render('Admin/CarModels/Edit', [
+            'carModel' => new CarModelResource($carModel->load('maker')),
+            'makers'   => Maker::all(),
+        ]);
+    }
+
+    public function update(UpdateCarModelRequest $request, CarModel $carModel): RedirectResponse
+    {
+        $this->carModelService->update($carModel, $request->validated());
+        return redirect()->route('admin.car-models.index')->with('success', 'Car Model updated successfully.');
+    }
+
+    public function destroy(CarModel $carModel): RedirectResponse
+    {
+        $this->carModelService->delete($carModel);
+        return back()->with('success', 'Car Model deleted successfully.');
+    }
+}
