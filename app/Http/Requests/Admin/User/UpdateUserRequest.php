@@ -36,6 +36,7 @@ class UpdateUserRequest extends FormRequest
             'roles'        => ['nullable', 'array'],
             'roles.*'      => ['string', 'exists:roles,name'],
             'address'      => ['nullable', 'array'],
+            'company_id'   => ['nullable', 'exists:companies,id'],
         ];
     }
 }

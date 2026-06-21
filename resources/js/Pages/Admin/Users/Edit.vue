@@ -12,7 +12,7 @@
 
         <div class="card bg-base-100 shadow-sm border border-base-200">
             <div class="card-body">
-                <UserForm :user="user" :roles="roles" isEdit />
+                <UserForm :user="user" :roles="roles" :companies="companies" isEdit />
             </div>
         </div>
     </DashboardLayout>
@@ -27,5 +27,6 @@ import UserForm from "./UserForm.vue";
 const props = defineProps<{
     user: any;
     roles: any[];
+    companies: any[];
 }>();
 </script>

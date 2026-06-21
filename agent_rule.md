@@ -10,7 +10,8 @@ Do not duplicate UI elements across pages. Always use or create centralized comp
 - **Modals**: Use `<Modal maxWidth="...">` instead of raw `<dialog class="modal">` structures.
 - **Page Headers**: Use `<PageHeader title="..." description="...">` instead of manually styling flex containers and `h1` tags.
 - **Action Buttons**: Use `<TableActionButtons @edit="..." @delete="...">` inside data tables or lists.
-- **Forms**: Use components inside `resources/js/Components/Form/` (e.g., `<TextInput>`, `<SelectInput>`) rather than raw `<input>` or `<label>` tags.
+- **Form Inputs**: Use components inside `resources/js/Components/Form/` (e.g., `<TextInput>`, `<SelectInput>`) rather than raw `<input>`, `<textarea>`, or `<label>` tags.
+- **Form Structure (Clean Code)**: NEVER duplicate form fields across `Create.vue` and `Edit.vue`. Always extract the form logic into a shared `<Entity>Form.vue` (e.g., `CompanyForm.vue`, `UserForm.vue`) and import it into the respective page views.
 
 ### Icons and Assets
 - **NO INLINE SVGs**. Do not copy-paste raw `<svg>` tags into Vue files. 
@@ -35,6 +36,12 @@ Adhere strictly to the **Controller → Service → Resource** pattern.
 - Seeders should be clean and granular.
 - Keep domain logic isolated (e.g., `RolesAndPermissionsSeeder`, `UserSeeder`) and do not mix distinct concerns in a single file.
 - Use model factories for standard test data generation.
+- **Permissions & Seeders**: Whenever you create a new entity or component (e.g., a full CRUD), you **MUST** ensure its corresponding permissions (e.g., `entities.view`, `entities.create`, `entities.edit`, `entities.delete`) are added to `RolesAndPermissionsSeeder.php` and assign them to the appropriate roles. Always run the seeder after adding permissions.
+
+### Multi-Tenancy (Company Scoping)
+- The application uses a multi-tenant architecture based on `company_id`.
+- **All queries** for multi-tenant data must be strictly scoped to the authenticated user's `company_id` to prevent data leaks between companies (e.g. `->where('company_id', auth()->user()->company_id)` or via a Global Scope).
+- When creating new records that belong to a company, the `company_id` must be explicitly assigned or automatically inherited from the creator's company.
 
 ### Naming Conventions
 - Use standard RESTful resource methods in controllers (`index`, `create`, `store`, `show`, `edit`, `update`, `destroy`).

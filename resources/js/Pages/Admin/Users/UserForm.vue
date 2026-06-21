@@ -67,9 +67,19 @@
             />
         </div>
 
-        <!-- Role (Backend Only) -->
-        <div v-if="form.user_type === 'backend'" class="w-full md:w-1/2">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Company -->
             <SelectInput
+                label="Assign Company"
+                v-model="form.company_id"
+                :options="companies.map(c => ({ value: c.id, label: c.name }))"
+                :error="form.errors.company_id"
+                placeholder="Select a company..."
+            />
+
+            <!-- Role (Backend Only) -->
+            <SelectInput
+                v-if="form.user_type === 'backend'"
                 label="Assign Role"
                 v-model="form.role"
                 :options="roles.map(r => ({ value: r.name, label: r.name }))"
@@ -186,6 +196,7 @@ import { useLocations } from "@/Composables/useLocations";
 const props = defineProps<{
     user?: any;
     roles: any[];
+    companies: any[];
     isEdit?: boolean;
 }>();
 
@@ -201,6 +212,7 @@ const form = useForm({
     password_confirmation: '',
     user_type: props.user?.user_type || 'backend',
     is_active: props.user ? Boolean(props.user.is_active) : true,
+    company_id: props.user?.company_id || '',
     role: props.user?.roles?.length ? props.user.roles[0].name : '',
     address_type: addressData && !addressData.province ? 'handwrite' : 'select',
     address: {

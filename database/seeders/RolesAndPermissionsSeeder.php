@@ -35,6 +35,11 @@ class RolesAndPermissionsSeeder extends Seeder
             'locations.create',
             'locations.edit',
             'locations.delete',
+            // Companies
+            'companies.view',
+            'companies.create',
+            'companies.edit',
+            'companies.delete',
         ];
 
         foreach ($permissions as $perm) {
@@ -62,6 +67,10 @@ class RolesAndPermissionsSeeder extends Seeder
             'locations.create',
             'locations.edit',
             'locations.delete',
+            'companies.view',
+            'companies.create',
+            'companies.edit',
+            'companies.delete',
         ]);
 
         // Editor — read-only + edit users
@@ -71,6 +80,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'users.edit',
             'roles.view',
             'permissions.view',
+            'companies.view',
+            'companies.edit',
         ]);
 
         // Viewer — read-only access
@@ -79,6 +90,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'users.view',
             'roles.view',
             'permissions.view',
+            'companies.view',
         ]);
 
         $this->command->info('Roles and permissions seeded.');

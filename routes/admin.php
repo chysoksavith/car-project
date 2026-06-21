@@ -20,4 +20,7 @@ Route::prefix('admin')->middleware(['auth', \App\Http\Middleware\CheckBackendAcc
 
     // Locations
     Route::get('locations', [\App\Http\Controllers\Admin\LocationController::class, 'index'])->name('admin.locations.index');
+
+    // Companies
+    Route::resource('companies', \App\Http\Controllers\Admin\CompanyController::class)->except('show')->names('admin.companies');
 });
