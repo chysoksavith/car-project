@@ -5,8 +5,13 @@
             description="Manage system administrators and frontend users."
             class="mb-6"
         >
-            <Button v-can="'users.create'" variant="primary" class="shrink-0">
-                <i class="fa-solid fa-plus mr-2"></i>
+            <Button
+                v-if="can('users.create')"
+                :href="route('admin.users.create')"
+                variant="primary"
+                size="sm"
+                icon="fa-solid fa-plus"
+            >
                 Add User
             </Button>
         </PageHeader>
@@ -73,26 +78,61 @@
                 <TableActionButtons
                     :hasEdit="can('users.edit')"
                     :hasDelete="can('users.delete')"
-                    @edit="console.log('Edit', item.id)"
-                    @delete="console.log('Delete', item.id)"
+                    @edit="router.visit(route('admin.users.edit', item.id))"
+                    @delete="confirmDelete(item)"
                 />
             </template>
         </DataTable>
+
+        <!-- # Delete Confirm Modal -->
+        <Modal ref="deleteModalRef" maxWidth="sm" title="Delete User">
+            <p class="text-sm text-base-content/70">
+                Are you sure you want to delete
+                <strong class="text-base-content">{{ deletingUser?.first_name }} {{ deletingUser?.last_name }}</strong>? This cannot be undone.
+            </p>
+
+            <template #actions>
+                <Button @click="deleteModalRef?.close()" variant="ghost" type="button">Cancel</Button>
+                <Button @click="deleteUser" :loading="deleteForm.processing" variant="error" type="button">Delete</Button>
+            </template>
+        </Modal>
     </DashboardLayout>
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue";
+import { Link, router, useForm } from "@inertiajs/vue3";
 import DashboardLayout from "@/Layouts/DashboardLayout.vue";
 import Button from "@/Components/Button.vue";
 import Badge from "@/Components/Badge.vue";
 import DataTable from "@/Components/DataTable.vue";
 import TableActionButtons from "@/Components/TableActionButtons.vue";
 import PageHeader from "@/Components/PageHeader.vue";
+import Modal from "@/Components/Modal.vue";
 
-defineProps<{
+const props = defineProps<{
     users: any;
     filters: any;
 }>();
+
+const deleteModalRef = ref<any>(null);
+const deletingUser = ref<any>(null);
+const deleteForm = useForm({});
+
+const confirmDelete = (user: any) => {
+    deletingUser.value = user;
+    deleteModalRef.value?.showModal();
+};
+
+const deleteUser = () => {
+    if (!deletingUser.value) return;
+    deleteForm.delete(route('admin.users.destroy', deletingUser.value.id), {
+        onSuccess: () => {
+            deleteModalRef.value?.close();
+            setTimeout(() => deletingUser.value = null, 300);
+        },
+    });
+};
 
 const columns = [
     { key: "no", label: "No.", class: "w-16" },

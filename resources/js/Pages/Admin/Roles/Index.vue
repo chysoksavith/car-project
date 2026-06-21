@@ -73,20 +73,18 @@
                     placeholder="e.g. editor"
                     :error="form.errors.name"
                     @keyup.enter="save"
+                    required
                 />
 
                 <!-- Permissions (Grouped) -->
                 <div class="flex flex-col gap-2">
                     <div class="flex items-center justify-between">
                         <span class="font-semibold text-base-content">Permissions</span>
-                        <label class="flex items-center gap-2 cursor-pointer hover:opacity-80">
-                            <input
-                                type="checkbox"
-                                v-model="isAllSelected"
-                                class="checkbox checkbox-primary checkbox-sm"
-                            />
-                            <span class="text-sm font-medium">Select All Permissions</span>
-                        </label>
+                        <Checkbox
+                            v-model="isAllSelected"
+                            label="Select All Permissions"
+                            checkboxClass="checkbox-sm"
+                        />
                     </div>
 
                     <div
@@ -102,38 +100,28 @@
                                     <h4 class="font-bold text-sm uppercase text-base-content/80">
                                         {{ groupName }}
                                     </h4>
-                                    <label class="flex items-center gap-2 cursor-pointer group">
+                                    <div class="flex items-center gap-2 group">
                                         <span class="text-xs text-base-content/60 group-hover:text-base-content transition-colors">All</span>
-                                        <input
-                                            type="checkbox"
-                                            :checked="isGroupSelected(groupName as string)"
-                                            @change="toggleGroup(groupName as string, $event)"
-                                            class="checkbox checkbox-sm checkbox-primary rounded"
+                                        <Checkbox
+                                            :modelValue="isGroupSelected(groupName as string)"
+                                            @update:modelValue="toggleGroup(groupName as string, { target: { checked: $event } } as any)"
+                                            checkboxClass="checkbox-sm"
                                         />
-                                    </label>
+                                    </div>
                                 </div>
-                                <div class="flex flex-col gap-2.5 mt-1">
-                                    <label
+                                <div class="flex flex-col gap-1 mt-1">
+                                    <div
                                         v-for="perm in perms"
                                         :key="perm.id"
-                                        class="flex items-center gap-3 cursor-pointer group"
+                                        class="flex items-center group"
                                     >
-                                        <input
-                                            type="checkbox"
-                                            :value="perm.name"
+                                        <Checkbox
                                             v-model="form.permissions"
-                                            class="checkbox checkbox-primary checkbox-sm rounded-md"
+                                            :value="perm.name"
+                                            :label="perm.name.replace(groupName + '.', '')"
+                                            checkboxClass="checkbox-sm"
                                         />
-                                        <span
-                                            class="text-sm font-mono text-base-content/80 group-hover:text-primary transition-colors"
-                                            >{{
-                                                perm.name.replace(
-                                                    groupName + ".",
-                                                    "",
-                                                )
-                                            }}</span
-                                        >
-                                    </label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -201,6 +189,7 @@ import Button from "@/Components/Button.vue";
 import Badge from "@/Components/Badge.vue";
 import Modal from "@/Components/Modal.vue";
 import TextInput from "@/Components/Form/TextInput.vue";
+import Checkbox from "@/Components/Form/Checkbox.vue";
 import type { Permission } from "@/Types/permission";
 import { useRole } from "@/Composables/useRole";
 

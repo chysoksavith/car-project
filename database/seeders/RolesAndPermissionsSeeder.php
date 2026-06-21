@@ -16,11 +16,25 @@ class RolesAndPermissionsSeeder extends Seeder
         // # Define all permissions
         $permissions = [
             // Users
-            'users.view', 'users.create', 'users.edit', 'users.delete',
+            'users.view',
+            'users.create',
+            'users.edit',
+            'users.delete',
             // Roles
-            'roles.view', 'roles.create', 'roles.edit', 'roles.delete',
+            'roles.view',
+            'roles.create',
+            'roles.edit',
+            'roles.delete',
             // Permissions
-            'permissions.view', 'permissions.create', 'permissions.edit', 'permissions.delete',
+            'permissions.view',
+            'permissions.create',
+            'permissions.edit',
+            'permissions.delete',
+            // Locations
+            'locations.view',
+            'locations.create',
+            'locations.edit',
+            'locations.delete',
         ];
 
         foreach ($permissions as $perm) {
@@ -35,15 +49,26 @@ class RolesAndPermissionsSeeder extends Seeder
         // Admin — full user + role management, but cannot manage permissions
         $admin = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
         $admin->syncPermissions([
-            'users.view', 'users.create', 'users.edit', 'users.delete',
-            'roles.view', 'roles.create', 'roles.edit', 'roles.delete',
+            'users.view',
+            'users.create',
+            'users.edit',
+            'users.delete',
+            'roles.view',
+            'roles.create',
+            'roles.edit',
+            'roles.delete',
             'permissions.view',
+            'locations.view',
+            'locations.create',
+            'locations.edit',
+            'locations.delete',
         ]);
 
         // Editor — read-only + edit users
         $editor = Role::firstOrCreate(['name' => 'editor', 'guard_name' => 'web']);
         $editor->syncPermissions([
-            'users.view', 'users.edit',
+            'users.view',
+            'users.edit',
             'roles.view',
             'permissions.view',
         ]);
@@ -51,7 +76,9 @@ class RolesAndPermissionsSeeder extends Seeder
         // Viewer — read-only access
         $viewer = Role::firstOrCreate(['name' => 'viewer', 'guard_name' => 'web']);
         $viewer->syncPermissions([
-            'users.view', 'roles.view', 'permissions.view',
+            'users.view',
+            'roles.view',
+            'permissions.view',
         ]);
 
         $this->command->info('Roles and permissions seeded.');

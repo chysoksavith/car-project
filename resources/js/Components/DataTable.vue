@@ -23,16 +23,14 @@
 
             <!-- Table -->
             <div class="overflow-x-auto">
-                <table class="table w-full">
+                <table class="table table-zebra w-full">
                     <thead>
-                        <tr
-                            class="bg-base-200/40 text-base-content/70 border-b border-base-200/80 uppercase text-xs tracking-wider"
-                        >
+                        <tr class="text-base-content/60">
                             <th
                                 v-for="col in columns"
                                 :key="col.key"
                                 :class="col.class || ''"
-                                class="font-semibold py-4"
+                                class="font-medium bg-transparent"
                             >
                                 {{ col.label }}
                             </th>
@@ -42,7 +40,7 @@
                         <tr
                             v-for="(item, index) in data.data"
                             :key="item.id"
-                            class="hover:bg-base-200/30 transition-colors border-b border-base-200/50"
+                            class="hover"
                         >
                             <td
                                 v-for="col in columns"

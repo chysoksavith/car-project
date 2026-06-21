@@ -5,14 +5,9 @@
                 type="checkbox"
                 class="checkbox checkbox-primary"
                 :class="[{ 'checkbox-error': error }, checkboxClass]"
-                :checked="modelValue"
+                v-model="proxyModel"
+                :value="value"
                 :required="required"
-                @change="
-                    $emit(
-                        'update:modelValue',
-                        ($event.target as HTMLInputElement).checked,
-                    )
-                "
                 v-bind="$attrs"
             />
             <span v-if="label || $slots.default" class="label-text">
@@ -27,17 +22,28 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue";
 import InputError from "./InputError.vue";
 
-defineProps<{
-    modelValue: boolean;
+const props = defineProps<{
+    modelValue: boolean | any[];
+    value?: any;
     label?: string;
     error?: string;
     checkboxClass?: string;
     required?: boolean;
 }>();
 
-defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue"]);
+
+const proxyModel = computed({
+    get() {
+        return props.modelValue;
+    },
+    set(val) {
+        emit("update:modelValue", val);
+    },
+});
 </script>
 
 <script lang="ts">

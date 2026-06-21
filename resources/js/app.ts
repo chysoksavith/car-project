@@ -37,6 +37,9 @@ createInertiaApp({
             return user.permissions.includes(permission);
         };
 
+        // Global route() method
+        app.config.globalProperties.route = route;
+
         // Global v-can directive 
         app.directive('can', canDirective);
 

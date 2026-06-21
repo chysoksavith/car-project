@@ -29,6 +29,10 @@ class LoginController extends Controller
         // Prevent session fixation attacks.
         $request->session()->regenerate();
 
+        if ($request->user()->user_type === 'frontend') {
+            return redirect()->intended('/');
+        }
+
         return redirect()->intended('/admin');
     }
 

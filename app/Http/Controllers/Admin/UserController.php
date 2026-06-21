@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Admin\UserResource;
+use App\Http\Requests\Admin\User\StoreUserRequest;
+use App\Http\Requests\Admin\User\UpdateUserRequest;
+use App\Models\User;
+use Spatie\Permission\Models\Role;
+use Illuminate\Http\RedirectResponse;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -20,10 +24,47 @@ class UserController extends Controller
         $search = $request->input('search');
 
         return Inertia::render('Admin/Users/Index', [
-            'users'   => UserResource::collection(
+            'users'   => \App\Http\Resources\Admin\UserResource::collection(
                 $this->userService->getPaginatedWithSearch($search)
             ),
             'filters' => ['search' => $search],
         ]);
+    }
+
+    public function create(): Response
+    {
+        return Inertia::render('Admin/Users/Create', [
+            'roles' => Role::all(),
+        ]);
+    }
+
+    public function store(StoreUserRequest $request): RedirectResponse
+    {
+        $this->userService->create($request->validated());
+
+        return redirect()->route('admin.users.index')->with('success', 'User created successfully.');
+    }
+
+    public function edit(User $user): Response
+    {
+        $user->load(['roles', 'addresses']); // Ensure roles and addresses are loaded
+        return Inertia::render('Admin/Users/Edit', [
+            'user'  => $user,
+            'roles' => Role::all(),
+        ]);
+    }
+
+    public function update(UpdateUserRequest $request, User $user): RedirectResponse
+    {
+        $this->userService->update($user, $request->validated());
+
+        return redirect()->route('admin.users.index')->with('success', 'User updated successfully.');
+    }
+
+    public function destroy(User $user): RedirectResponse
+    {
+        $this->userService->delete($user);
+
+        return back()->with('success', 'User deleted successfully.');
     }
 }

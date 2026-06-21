@@ -2,11 +2,11 @@
     <div class="form-control w-full">
         <InputLabel :value="label" :required="required" />
         <select
-            class="select select-bordered w-full transition-all"
+            class="select select-bordered w-full"
             :class="[
                 error
-                    ? 'select-error focus:select-error'
-                    : 'focus:select-primary focus:border-primary',
+                    ? 'select-error focus:select-error border-error/50 focus:border-error'
+                    : '',
                 selectClass,
             ]"
             :value="modelValue"

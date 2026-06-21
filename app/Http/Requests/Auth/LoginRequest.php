@@ -124,6 +124,17 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        $user = Auth::user();
+
+        if (!$user->is_active) {
+            Auth::logout();
+            RateLimiter::hit($this->throttleKey(), $this->decaySeconds);
+
+            throw ValidationException::withMessages([
+                'email' => 'Access denied. Account is inactive.',
+            ]);
+        }
+
         RateLimiter::clear($this->throttleKey());
     }
 }

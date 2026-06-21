@@ -57,6 +57,7 @@
                 :error="form.errors.name"
                 hint="Use dot notation: resource.action"
                 @keyup.enter="save"
+                required
             />
 
             <template #actions>

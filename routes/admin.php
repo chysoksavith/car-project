@@ -7,14 +7,17 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 // # Admin
-Route::prefix('admin')->middleware('auth')->group(function () {
+Route::prefix('admin')->middleware(['auth', \App\Http\Middleware\CheckBackendAccess::class])->group(function () {
 
     Route::get('/', fn () => Inertia::render('Welcome'))->name('dashboard');
 
     // Users
-    Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
+    Route::resource('users', UserController::class)->except('show')->names('admin.users');
 
     // Roles & Permissions
     Route::apiResource('roles', RoleController::class)->except('show')->names('admin.roles');
     Route::apiResource('permissions', PermissionController::class)->except('show')->names('admin.permissions');
+
+    // Locations
+    Route::get('locations', [\App\Http\Controllers\Admin\LocationController::class, 'index'])->name('admin.locations.index');
 });
