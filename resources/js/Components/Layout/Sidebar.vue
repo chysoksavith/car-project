@@ -115,6 +115,11 @@ const menuGroups = [
                 icon: "fa-solid fa-palette",
                 href: "/admin/colors",
             },
+            {
+                name: "Inspection Items",
+                icon: "fa-solid fa-clipboard-list",
+                href: "/admin/inspection-items",
+            },
         ],
     },
     {

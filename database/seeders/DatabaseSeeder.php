@@ -21,6 +21,9 @@ class DatabaseSeeder extends Seeder
             // # Users
             UserSeeder::class,
 
+            // # Master data
+            // InspectionCategorySeeder::class,
+
             // # Add future seeders here
             // CustomerSeeder::class,
             // CarSeeder::class,
