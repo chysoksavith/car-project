@@ -29,4 +29,7 @@ Route::prefix('admin')->middleware(['auth', \App\Http\Middleware\CheckBackendAcc
 
     // Car Models
     Route::resource('car-models', \App\Http\Controllers\Admin\CarModelController::class)->except('show')->names('admin.car-models');
+
+    // Colors
+    Route::resource('colors', \App\Http\Controllers\Admin\ColorController::class)->except('show')->names('admin.colors');
 });

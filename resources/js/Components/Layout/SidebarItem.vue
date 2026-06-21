@@ -7,14 +7,16 @@
             class="sidebar-link group font-medium transition-colors"
             :class="{ 'sidebar-active bg-primary/10 text-primary': isItemActive }"
         >
-            <component
-                :is="item.icon"
-                class="w-5 h-5 transition-transform group-hover:scale-110"
-                :class="{
-                    'opacity-70': !isItemActive,
-                    'text-primary': isItemActive,
-                }"
-            />
+            <i
+                :class="[
+                    item.icon,
+                    'w-5 text-center transition-transform group-hover:scale-110',
+                    {
+                        'opacity-70': !isItemActive,
+                        'text-primary': isItemActive,
+                    }
+                ]"
+            ></i>
             <span v-show="!isCollapsed" class="whitespace-nowrap">{{
                 item.name
             }}</span>
@@ -33,14 +35,16 @@
                 class="sidebar-summary font-medium"
                 :class="{ 'bg-primary/5 text-primary': isAnyChildActive }"
             >
-                <component
-                    :is="item.icon"
-                    class="w-5 h-5 transition-transform group-hover:scale-110"
-                    :class="{
-                        'opacity-70': !isAnyChildActive,
-                        'text-primary': isAnyChildActive,
-                    }"
-                />
+                <i
+                    :class="[
+                        item.icon,
+                        'w-5 text-center transition-transform group-hover:scale-110',
+                        {
+                            'opacity-70': !isAnyChildActive,
+                            'text-primary': isAnyChildActive,
+                        }
+                    ]"
+                ></i>
                 <span v-show="!isCollapsed" class="whitespace-nowrap">{{
                     item.name
                 }}</span>
@@ -73,7 +77,7 @@ const page = usePage();
 const props = defineProps<{
     item: {
         name: string;
-        icon?: any;
+        icon?: string;
         href?: string;
         badge?: string | number;
         children?: any[];
