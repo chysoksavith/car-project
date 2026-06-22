@@ -14,13 +14,12 @@ use Inertia\Response;
 
 class SupplierController extends Controller
 {
+    // # Initialize dependencies
     public function __construct(
         private readonly SupplierService $supplierService
     ) {}
 
-    /**
-     * Display a listing of the resource.
-     */
+    // # Display listing of resource
     public function index(\Illuminate\Http\Request $request): Response
     {
         $search = $request->input('search');
@@ -32,17 +31,13 @@ class SupplierController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    // # Show form for creating resource
     public function create(): Response
     {
         return Inertia::render('Admin/Suppliers/Create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // # Store newly created resource
     public function store(StoreSupplierRequest $request): RedirectResponse
     {
         $data = $request->validated();
@@ -56,9 +51,7 @@ class SupplierController extends Controller
             ->with('success', 'Supplier created successfully.');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+    // # Show form for editing resource
     public function edit(Supplier $supplier): Response
     {
         return Inertia::render('Admin/Suppliers/Edit', [
@@ -66,9 +59,7 @@ class SupplierController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    // # Update specified resource
     public function update(UpdateSupplierRequest $request, Supplier $supplier): RedirectResponse
     {
         $this->supplierService->updateSupplier($supplier, $request->validated());
@@ -77,9 +68,7 @@ class SupplierController extends Controller
             ->with('success', 'Supplier updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    // # Remove specified resource from storage
     public function destroy(Supplier $supplier): RedirectResponse
     {
         $this->supplierService->deleteSupplier($supplier);

@@ -6,17 +6,13 @@ use Spatie\Permission\Models\Permission;
 
 class PermissionService
 {
-    /**
-     * Return all permissions ordered alphabetically.
-     */
+    // # All
     public function all(): \Illuminate\Database\Eloquent\Collection
     {
         return Permission::orderBy('id', 'desc')->get(['id', 'name']);
     }
 
-    /**
-     * Get paginated permissions with optional search query.
-     */
+    // # Retrieve Paginated With Search
     public function getPaginatedWithSearch(?string $search = null, int $perPage = 15)
     {
         return Permission::query()
@@ -28,17 +24,13 @@ class PermissionService
             ->withQueryString();
     }
 
-    /**
-     * Create a new permission.
-     */
+    // # Create
     public function create(string $name): Permission
     {
         return Permission::create(['name' => $name, 'guard_name' => 'web']);
     }
 
-    /**
-     * Rename an existing permission.
-     */
+    // # Update
     public function update(Permission $permission, string $name): Permission
     {
         $permission->update(['name' => $name]);
@@ -46,9 +38,7 @@ class PermissionService
         return $permission;
     }
 
-    /**
-     * Delete a permission.
-     */
+    // # Delete
     public function delete(Permission $permission): void
     {
         $permission->delete();

@@ -16,10 +16,12 @@ use Inertia\Response;
 
 class CarModelController extends Controller
 {
+    // # Initialize dependencies
     public function __construct(
         private readonly CarModelService $carModelService,
     ) {}
 
+    // # Display listing of resource
     public function index(Request $request): Response
     {
         $search = $request->input('search');
@@ -32,6 +34,7 @@ class CarModelController extends Controller
         ]);
     }
 
+    // # Show form for creating resource
     public function create(): Response
     {
         return Inertia::render('Admin/CarModels/Create', [
@@ -39,12 +42,14 @@ class CarModelController extends Controller
         ]);
     }
 
+    // # Store newly created resource
     public function store(StoreCarModelRequest $request): RedirectResponse
     {
         $this->carModelService->create($request->validated());
         return redirect()->route('admin.car-models.index')->with('success', 'Car Model created successfully.');
     }
 
+    // # Show form for editing resource
     public function edit(CarModel $carModel): Response
     {
         return Inertia::render('Admin/CarModels/Edit', [
@@ -53,12 +58,14 @@ class CarModelController extends Controller
         ]);
     }
 
+    // # Update specified resource
     public function update(UpdateCarModelRequest $request, CarModel $carModel): RedirectResponse
     {
         $this->carModelService->update($carModel, $request->validated());
         return redirect()->route('admin.car-models.index')->with('success', 'Car Model updated successfully.');
     }
 
+    // # Remove specified resource from storage
     public function destroy(CarModel $carModel): RedirectResponse
     {
         $this->carModelService->delete($carModel);

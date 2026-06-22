@@ -12,15 +12,13 @@ use Inertia\Response;
 
 class LoginController extends Controller
 {
-    // # Show Login Page
-
+    // # Display specified resource
     public function show(): Response
     {
         return Inertia::render('Auth/Login');
     }
 
-    // # Handle Login Attempt
-
+    // # Handle login action
     public function login(LoginRequest $request): RedirectResponse
     {
         // Authenticate — handles rate-limiting + lockout internally.
@@ -36,9 +34,7 @@ class LoginController extends Controller
         return redirect()->intended('/admin');
     }
 
-    // # login
-    // Handle Logout
-
+    // # Handle logout action
     public function logout(Request $request): RedirectResponse
     {
         Auth::logout();

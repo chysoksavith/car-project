@@ -15,10 +15,12 @@ use Inertia\Response;
 
 class UserController extends Controller
 {
+    // # Initialize dependencies
     public function __construct(
         private readonly UserService $userService,
     ) {}
 
+    // # Display listing of resource
     public function index(Request $request): Response
     {
         $search = $request->input('search');
@@ -31,6 +33,7 @@ class UserController extends Controller
         ]);
     }
 
+    // # Show form for creating resource
     public function create(): Response
     {
         return Inertia::render('Admin/Users/Create', [
@@ -39,6 +42,7 @@ class UserController extends Controller
         ]);
     }
 
+    // # Store newly created resource
     public function store(StoreUserRequest $request): RedirectResponse
     {
         $this->userService->create($request->validated());
@@ -46,6 +50,7 @@ class UserController extends Controller
         return redirect()->route('admin.users.index')->with('success', 'User created successfully.');
     }
 
+    // # Show form for editing resource
     public function edit(User $user): Response
     {
         $user->load(['roles', 'addresses']); // Ensure roles and addresses are loaded
@@ -56,6 +61,7 @@ class UserController extends Controller
         ]);
     }
 
+    // # Update specified resource
     public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
         $this->userService->update($user, $request->validated());
@@ -63,6 +69,7 @@ class UserController extends Controller
         return redirect()->route('admin.users.index')->with('success', 'User updated successfully.');
     }
 
+    // # Remove specified resource from storage
     public function destroy(User $user): RedirectResponse
     {
         $this->userService->delete($user);

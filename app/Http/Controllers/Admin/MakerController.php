@@ -15,10 +15,12 @@ use Inertia\Response;
 
 class MakerController extends Controller
 {
+    // # Initialize dependencies
     public function __construct(
         private readonly MakerService $makerService,
     ) {}
 
+    // # Display listing of resource
     public function index(Request $request): Response
     {
         $search = $request->input('search');
@@ -31,17 +33,20 @@ class MakerController extends Controller
         ]);
     }
 
+    // # Show form for creating resource
     public function create(): Response
     {
         return Inertia::render('Admin/Makers/Create');
     }
 
+    // # Store newly created resource
     public function store(StoreMakerRequest $request): RedirectResponse
     {
         $this->makerService->create($request->validated());
         return redirect()->route('admin.makers.index')->with('success', 'Maker created successfully.');
     }
 
+    // # Show form for editing resource
     public function edit(Maker $maker): Response
     {
         return Inertia::render('Admin/Makers/Edit', [
@@ -49,12 +54,14 @@ class MakerController extends Controller
         ]);
     }
 
+    // # Update specified resource
     public function update(UpdateMakerRequest $request, Maker $maker): RedirectResponse
     {
         $this->makerService->update($maker, $request->validated());
         return redirect()->route('admin.makers.index')->with('success', 'Maker updated successfully.');
     }
 
+    // # Remove specified resource from storage
     public function destroy(Maker $maker): RedirectResponse
     {
         $this->makerService->delete($maker);

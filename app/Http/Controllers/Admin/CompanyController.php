@@ -15,10 +15,12 @@ use Inertia\Response;
 
 class CompanyController extends Controller
 {
+    // # Initialize dependencies
     public function __construct(
         private readonly CompanyService $companyService,
     ) {}
 
+    // # Display listing of resource
     public function index(Request $request): Response
     {
         $search = $request->input('search');
@@ -31,11 +33,13 @@ class CompanyController extends Controller
         ]);
     }
 
+    // # Show form for creating resource
     public function create(): Response
     {
         return Inertia::render('Admin/Companies/Create');
     }
 
+    // # Store newly created resource
     public function store(StoreCompanyRequest $request): RedirectResponse
     {
         $this->companyService->create($request->validated());
@@ -43,6 +47,7 @@ class CompanyController extends Controller
         return redirect()->route('admin.companies.index')->with('success', 'Company created successfully.');
     }
 
+    // # Show form for editing resource
     public function edit(Company $company): Response
     {
         return Inertia::render('Admin/Companies/Edit', [
@@ -50,6 +55,7 @@ class CompanyController extends Controller
         ]);
     }
 
+    // # Update specified resource
     public function update(UpdateCompanyRequest $request, Company $company): RedirectResponse
     {
         $this->companyService->update($company, $request->validated());
@@ -57,6 +63,7 @@ class CompanyController extends Controller
         return redirect()->route('admin.companies.index')->with('success', 'Company updated successfully.');
     }
 
+    // # Remove specified resource from storage
     public function destroy(Company $company): RedirectResponse
     {
         $this->companyService->delete($company);

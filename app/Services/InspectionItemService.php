@@ -8,9 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class InspectionItemService
 {
-    /**
-     * Get paginated inspection items with search, eager loading their parent.
-     */
+    // # Retrieve Paginated With Search
     public function getPaginatedWithSearch(?string $search, int $perPage = 10): LengthAwarePaginator
     {
         return InspectionItem::with('parent')
@@ -25,9 +23,7 @@ class InspectionItemService
             ->paginate($perPage);
     }
 
-    /**
-     * Get all main categories (items with no parent) for the dropdown selection.
-     */
+    // # Retrieve Main Categories
     public function getMainCategories(): Collection
     {
         return InspectionItem::whereNull('parent_id')
@@ -35,25 +31,19 @@ class InspectionItemService
             ->get();
     }
 
-    /**
-     * Create a new inspection item.
-     */
+    // # Create Item
     public function createItem(array $data): InspectionItem
     {
         return InspectionItem::create($data);
     }
 
-    /**
-     * Update an inspection item.
-     */
+    // # Update Item
     public function updateItem(InspectionItem $item, array $data): bool
     {
         return $item->update($data);
     }
 
-    /**
-     * Delete an inspection item.
-     */
+    // # Delete Item
     public function deleteItem(InspectionItem $item): ?bool
     {
         if ($item->children()->exists()) {

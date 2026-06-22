@@ -14,10 +14,12 @@ use Spatie\Permission\Models\Permission;
 
 class PermissionController extends Controller
 {
+    // # Initialize dependencies
     public function __construct(
         private readonly PermissionService $permissionService,
     ) {}
 
+    // # Display listing of resource
     public function index(\Illuminate\Http\Request $request): Response
     {
         $search = $request->input('search');
@@ -30,6 +32,7 @@ class PermissionController extends Controller
         ]);
     }
 
+    // # Store newly created resource
     public function store(StorePermissionRequest $request): RedirectResponse
     {
         $permission = $this->permissionService->create($request->validated('name'));
@@ -37,6 +40,7 @@ class PermissionController extends Controller
         return back()->with('success', "Permission '{$permission->name}' created.");
     }
 
+    // # Update specified resource
     public function update(UpdatePermissionRequest $request, Permission $permission): RedirectResponse
     {
         $updated = $this->permissionService->update($permission, $request->validated('name'));
@@ -44,6 +48,7 @@ class PermissionController extends Controller
         return back()->with('success', "Permission renamed to '{$updated->name}'.");
     }
 
+    // # Remove specified resource from storage
     public function destroy(Permission $permission): RedirectResponse
     {
         $name = $permission->name;

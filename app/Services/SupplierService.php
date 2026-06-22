@@ -8,9 +8,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class SupplierService
 {
-    /**
-     * Get paginated suppliers with optional search
-     */
+    // # Retrieve Paginated With Search
     public function getPaginatedWithSearch(?string $search = null, int $perPage = 10): LengthAwarePaginator
     {
         return Supplier::query()
@@ -24,33 +22,25 @@ class SupplierService
             ->paginate($perPage);
     }
 
-    /**
-     * Get all suppliers
-     */
+    // # Retrieve All
     public function getAll(): Collection
     {
         return Supplier::all();
     }
 
-    /**
-     * Create a new supplier
-     */
+    // # Create Supplier
     public function createSupplier(array $data): Supplier
     {
         return Supplier::create($data);
     }
 
-    /**
-     * Update an existing supplier
-     */
+    // # Update Supplier
     public function updateSupplier(Supplier $supplier, array $data): bool
     {
         return $supplier->update($data);
     }
 
-    /**
-     * Delete a supplier
-     */
+    // # Delete Supplier
     public function deleteSupplier(Supplier $supplier): bool|null
     {
         return $supplier->delete();

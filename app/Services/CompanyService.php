@@ -6,9 +6,7 @@ use App\Models\Company;
 
 class CompanyService
 {
-    /**
-     * Get paginated companies with optional search filter.
-     */
+    // # Retrieve Paginated With Search
     public function getPaginatedWithSearch(?string $search = null, int $perPage = 15)
     {
         return Company::query()
@@ -25,6 +23,7 @@ class CompanyService
             ->withQueryString();
     }
 
+    // # Create
     public function create(array $data): Company
     {
         $company = Company::create($data);
@@ -36,6 +35,7 @@ class CompanyService
         return $company;
     }
 
+    // # Update
     public function update(Company $company, array $data): Company
     {
         $company->update($data);
@@ -52,6 +52,7 @@ class CompanyService
         return $company;
     }
 
+    // # Delete
     public function delete(Company $company): bool
     {
         return $company->delete();

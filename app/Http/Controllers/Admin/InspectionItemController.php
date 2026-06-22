@@ -15,13 +15,12 @@ use Inertia\Response;
 
 class InspectionItemController extends Controller
 {
+    // # Initialize dependencies
     public function __construct(
         private readonly InspectionItemService $inspectionItemService
     ) {}
 
-    /**
-     * Display a listing of the resource.
-     */
+    // # Display listing of resource
     public function index(Request $request): Response
     {
         $search = $request->input('search');
@@ -33,9 +32,7 @@ class InspectionItemController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    // # Show form for creating resource
     public function create(): Response
     {
         $categories = $this->inspectionItemService->getMainCategories();
@@ -45,9 +42,7 @@ class InspectionItemController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // # Store newly created resource
     public function store(StoreInspectionItemRequest $request): RedirectResponse
     {
         $data = $request->validated();
@@ -61,9 +56,7 @@ class InspectionItemController extends Controller
             ->with('success', 'Inspection item created successfully.');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+    // # Show form for editing resource
     public function edit(InspectionItem $inspectionItem): Response
     {
         $categories = $this->inspectionItemService->getMainCategories();
@@ -74,9 +67,7 @@ class InspectionItemController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    // # Update specified resource
     public function update(UpdateInspectionItemRequest $request, InspectionItem $inspectionItem): RedirectResponse
     {
         $this->inspectionItemService->updateItem($inspectionItem, $request->validated());
@@ -85,9 +76,7 @@ class InspectionItemController extends Controller
             ->with('success', 'Inspection item updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    // # Remove specified resource from storage
     public function destroy(InspectionItem $inspectionItem): RedirectResponse
     {
         try {

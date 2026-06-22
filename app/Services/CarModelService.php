@@ -7,6 +7,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class CarModelService
 {
+    // # Retrieve Paginated With Search
     public function getPaginatedWithSearch(?string $search = null, int $perPage = 10): LengthAwarePaginator
     {
         return CarModel::query()
@@ -22,16 +23,19 @@ class CarModelService
             ->withQueryString();
     }
 
+    // # Create
     public function create(array $data): CarModel
     {
         return CarModel::create($data);
     }
 
+    // # Update
     public function update(CarModel $carModel, array $data): bool
     {
         return $carModel->update($data);
     }
 
+    // # Delete
     public function delete(CarModel $carModel): ?bool
     {
         return $carModel->delete();

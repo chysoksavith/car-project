@@ -10,10 +10,7 @@ use Intervention\Image\Drivers\Gd\Driver;
 
 class FileUploadService
 {
-    /**
-     * Upload and optionally compress a file.
-     * Returns an array with file metadata.
-     */
+    // # Upload
     public function upload(UploadedFile $file, string $disk = 'public', string $path = 'attachments'): array
     {
         $extension = $file->getClientOriginalExtension();

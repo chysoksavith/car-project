@@ -8,9 +8,7 @@ use Illuminate\Support\Facades\Log;
 
 class ShipmentService
 {
-    /**
-     * Create a new shipment.
-     */
+    // # Create Shipment
     public function createShipment(array $data): Shipment
     {
         DB::beginTransaction();
@@ -27,9 +25,7 @@ class ShipmentService
         }
     }
 
-    /**
-     * Update an existing shipment.
-     */
+    // # Update Shipment
     public function updateShipment(Shipment $shipment, array $data): bool
     {
         DB::beginTransaction();
@@ -45,9 +41,7 @@ class ShipmentService
         }
     }
 
-    /**
-     * Delete a shipment.
-     */
+    // # Delete Shipment
     public function deleteShipment(Shipment $shipment): bool
     {
         DB::beginTransaction();

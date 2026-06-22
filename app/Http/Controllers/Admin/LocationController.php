@@ -10,14 +10,7 @@ use Illuminate\Support\Facades\Cache;
 
 class LocationController extends Controller
 {
-    /**
-     * Return a lean list of locations, with HTTP + server-side caching.
-     * Queries are cheap after migration indexes are applied.
-     *
-     * Query params:
-     *   type        = province | district | commune | village
-     *   parent_code = parent location code (optional)
-     */
+    // # Display listing of resource
     public function index(Request $request): JsonResponse
     {
         $type       = $request->query('type', 'province');

@@ -14,10 +14,12 @@ use Illuminate\Support\Facades\Gate;
 
 class ShipmentController extends Controller
 {
+    // # Initialize dependencies
     public function __construct(private readonly ShipmentService $shipmentService)
     {
     }
 
+    // # Display listing of resource
     public function index(Request $request)
     {
         Gate::authorize('shipments.view');
@@ -37,6 +39,7 @@ class ShipmentController extends Controller
         ]);
     }
 
+    // # Show form for creating resource
     public function create()
     {
         Gate::authorize('shipments.create');
@@ -48,6 +51,7 @@ class ShipmentController extends Controller
         ]);
     }
 
+    // # Store newly created resource
     public function store(StoreShipmentRequest $request)
     {
         $this->shipmentService->createShipment($request->validated());
@@ -55,6 +59,7 @@ class ShipmentController extends Controller
         return redirect()->route('admin.shipments.index')->with('success', 'Shipment created successfully.');
     }
 
+    // # Show form for editing resource
     public function edit(Shipment $shipment)
     {
         Gate::authorize('shipments.edit');
@@ -67,6 +72,7 @@ class ShipmentController extends Controller
         ]);
     }
 
+    // # Update specified resource
     public function update(UpdateShipmentRequest $request, Shipment $shipment)
     {
         $this->shipmentService->updateShipment($shipment, $request->validated());
@@ -74,6 +80,7 @@ class ShipmentController extends Controller
         return redirect()->route('admin.shipments.index')->with('success', 'Shipment updated successfully.');
     }
 
+    // # Remove specified resource from storage
     public function destroy(Shipment $shipment)
     {
         Gate::authorize('shipments.delete');

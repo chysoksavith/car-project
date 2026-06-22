@@ -16,11 +16,13 @@ use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
 {
+    // # Initialize dependencies
     public function __construct(
         private readonly RoleService       $roleService,
         private readonly PermissionService $permissionService,
     ) {}
 
+    // # Display listing of resource
     public function index(\Illuminate\Http\Request $request): Response
     {
         $search = $request->input('search');
@@ -34,6 +36,7 @@ class RoleController extends Controller
         ]);
     }
 
+    // # Store newly created resource
     public function store(StoreRoleRequest $request): RedirectResponse
     {
         $role = $this->roleService->create(
@@ -44,6 +47,7 @@ class RoleController extends Controller
         return back()->with('success', "Role '{$role->name}' created.");
     }
 
+    // # Update specified resource
     public function update(UpdateRoleRequest $request, Role $role): RedirectResponse
     {
         $updated = $this->roleService->update(
@@ -55,6 +59,7 @@ class RoleController extends Controller
         return back()->with('success', "Role '{$updated->name}' updated.");
     }
 
+    // # Remove specified resource from storage
     public function destroy(Role $role): RedirectResponse
     {
         $name = $role->name;

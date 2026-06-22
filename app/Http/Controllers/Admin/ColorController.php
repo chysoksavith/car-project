@@ -15,10 +15,12 @@ use Inertia\Response;
 
 class ColorController extends Controller
 {
+    // # Initialize dependencies
     public function __construct(
         private readonly ColorService $colorService,
     ) {}
 
+    // # Display listing of resource
     public function index(Request $request): Response
     {
         $search = $request->input('search');
@@ -31,17 +33,20 @@ class ColorController extends Controller
         ]);
     }
 
+    // # Show form for creating resource
     public function create(): Response
     {
         return Inertia::render('Admin/Colors/Create');
     }
 
+    // # Store newly created resource
     public function store(StoreColorRequest $request): RedirectResponse
     {
         $this->colorService->create($request->validated());
         return redirect()->route('admin.colors.index')->with('success', 'Color created successfully.');
     }
 
+    // # Show form for editing resource
     public function edit(Color $color): Response
     {
         return Inertia::render('Admin/Colors/Edit', [
@@ -49,12 +54,14 @@ class ColorController extends Controller
         ]);
     }
 
+    // # Update specified resource
     public function update(UpdateColorRequest $request, Color $color): RedirectResponse
     {
         $this->colorService->update($color, $request->validated());
         return redirect()->route('admin.colors.index')->with('success', 'Color updated successfully.');
     }
 
+    // # Remove specified resource from storage
     public function destroy(Color $color): RedirectResponse
     {
         $this->colorService->delete($color);

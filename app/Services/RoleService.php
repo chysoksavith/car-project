@@ -7,9 +7,7 @@ use Spatie\Permission\Models\Role;
 
 class RoleService
 {
-    /**
-     * Get paginated roles with optional search.
-     */
+    // # Retrieve Paginated With Search
     public function getPaginatedWithSearch(?string $search, int $perPage = 10): \Illuminate\Pagination\LengthAwarePaginator
     {
         return Role::withCount('permissions')
@@ -22,9 +20,7 @@ class RoleService
             ->withQueryString();
     }
 
-    /**
-     * Create a new role and assign permissions.
-     */
+    // # Create
     public function create(string $name, array $permissions = []): Role
     {
         $role = Role::create(['name' => $name, 'guard_name' => 'web']);
@@ -33,9 +29,7 @@ class RoleService
         return $role;
     }
 
-    /**
-     * Update an existing role's name and permissions.
-     */
+    // # Update
     public function update(Role $role, string $name, array $permissions = []): Role
     {
         $role->update(['name' => $name]);
@@ -44,9 +38,7 @@ class RoleService
         return $role->fresh('permissions');
     }
 
-    /**
-     * Delete a role.
-     */
+    // # Delete
     public function delete(Role $role): void
     {
         $role->delete();

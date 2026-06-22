@@ -7,9 +7,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class UserService
 {
-    /**
-     * Get paginated users with optional search filter.
-     */
+    // # Retrieve Paginated With Search
     public function getPaginatedWithSearch(?string $search = null, int $perPage = 15)
     {
         return User::query()
@@ -26,6 +24,7 @@ class UserService
             ->withQueryString();
     }
 
+    // # Create
     public function create(array $data): User
     {
         if (!empty($data['password'])) {
@@ -47,6 +46,7 @@ class UserService
         return $user;
     }
 
+    // # Update
     public function update(User $user, array $data): User
     {
         if (empty($data['password'])) {
@@ -73,6 +73,7 @@ class UserService
         return $user;
     }
 
+    // # Delete
     public function delete(User $user): bool
     {
         return $user->delete();
