@@ -72,7 +72,7 @@ class ContainerController extends Controller
     // # Show form for editing resource
     public function edit(Container $container)
     {
-        $container->load('cars');
+        $container->load(['cars', 'cars.attachments', 'cars.color']);
         Gate::authorize('containers.edit');
 
         $companyId = auth()->user()->company_id;

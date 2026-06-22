@@ -43,6 +43,8 @@ class UpdateCarRequest extends FormRequest
             'is_published' => ['boolean'],
             'images' => ['nullable', 'array', 'max:10'],
             'images.*' => ['image', 'max:5120'],
+            'deleted_images' => ['nullable', 'array'],
+            'deleted_images.*' => ['integer'],
         ];
     }
 }

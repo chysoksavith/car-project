@@ -56,17 +56,21 @@ class CarService
     public function update(Car $car, array $data): bool
     {
         $images = $data['images'] ?? [];
-        unset($data['images']);
+        $deletedImages = $data['deleted_images'] ?? [];
+        unset($data['images'], $data['deleted_images']);
 
         $updated = $car->update($data);
 
-        if (!empty($images)) {
-            // Replace all attachments with the new set
+        if (!empty($deletedImages)) {
             foreach ($car->attachments as $attachment) {
-                Storage::disk($attachment->disk)->delete($attachment->file_path);
-                $attachment->delete();
+                if (in_array($attachment->id, $deletedImages)) {
+                    Storage::disk($attachment->disk)->delete($attachment->file_path);
+                    $attachment->delete();
+                }
             }
+        }
 
+        if (!empty($images)) {
             foreach ($images as $image) {
                 $car->attachFile($image, 'car_images');
             }

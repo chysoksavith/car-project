@@ -41,10 +41,10 @@ class CompanyService
         $company->update($data);
 
         if (isset($data['logo']) && $data['logo'] instanceof \Illuminate\Http\UploadedFile) {
-            // Delete old logo if you want, or just attach new
-            if ($oldLogo = $company->getLatestAttachment('logo')) {
-                // Delete old file optionally: Storage::disk($oldLogo->disk)->delete($oldLogo->file_path);
-                // $oldLogo->delete();
+            // Delete old logo
+            foreach ($company->attachments()->where('collection_name', 'logo')->get() as $oldLogo) {
+                \Illuminate\Support\Facades\Storage::disk($oldLogo->disk)->delete($oldLogo->file_path);
+                $oldLogo->delete();
             }
             $company->attachFile($data['logo'], 'logo', 'public');
         }

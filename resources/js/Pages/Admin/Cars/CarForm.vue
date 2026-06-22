@@ -68,48 +68,13 @@
                 <h4 class="font-bold text-sm mb-2 text-base-content/80">
                     Car Images
                 </h4>
-                <input
-                    type="file"
-                    multiple
-                    @change="handleImageUpload"
-                    class="file-input file-input-bordered file-input-primary w-full"
-                    accept="image/*"
+                <ImageUploader 
+                    v-model="form.images" 
+                    v-model:deleted-images="form.deleted_images"
+                    :existing-images="props.car?.images" 
+                    :error="carImageError"
+                    :label="undefined"
                 />
-                <div v-if="form.errors.images" class="text-error text-sm mt-1">
-                    {{ form.errors.images }}
-                </div>
-
-                <div
-                    class="flex flex-wrap gap-4 mt-4"
-                    v-if="existingImages.length > 0 || imagePreviews.length > 0"
-                >
-                    <div
-                        v-for="img in existingImages"
-                        :key="img.id"
-                        class="relative w-24 h-24 rounded overflow-hidden border bg-base-200"
-                        v-show="imagePreviews.length === 0"
-                    >
-                        <img
-                            :src="img.url"
-                            class="object-cover w-full h-full"
-                        />
-                    </div>
-                    <div
-                        v-for="(file, index) in imagePreviews"
-                        :key="'new-' + index"
-                        class="relative w-24 h-24 rounded overflow-hidden border border-primary bg-base-200"
-                    >
-                        <img
-                            :src="file"
-                            class="object-cover w-full h-full opacity-80"
-                        />
-                        <div
-                            class="absolute inset-0 flex items-center justify-center bg-black/10 text-white text-xs font-bold drop-shadow"
-                        >
-                            New
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <div class="divider my-6"></div>
@@ -364,6 +329,7 @@ import { Link, useForm } from "@inertiajs/vue3";
 import TextInput from "@/Components/Form/TextInput.vue";
 import SelectInput from "@/Components/Form/SelectInput.vue";
 import Toggle from "@/Components/Form/Toggle.vue";
+import ImageUploader from "@/Components/Form/ImageUploader.vue";
 import Button from "@/Components/Button.vue";
 import { useDependentDropdown } from "@/Composables/useDependentDropdown";
 
@@ -378,20 +344,6 @@ const props = defineProps<{
 }>();
 
 const activeTab = ref("basic");
-
-const existingImages = computed(() => props.car?.images || []);
-const imagePreviews = ref<string[]>([]);
-
-const handleImageUpload = (event: Event) => {
-    const target = event.target as HTMLInputElement;
-    if (target.files) {
-        const files = Array.from(target.files);
-        form.images = files as any;
-
-        imagePreviews.value.forEach((url) => URL.revokeObjectURL(url));
-        imagePreviews.value = files.map((file) => URL.createObjectURL(file));
-    }
-};
 
 const stepsList = [
     { id: "basic", label: "Vehicle Information" },
@@ -467,8 +419,8 @@ const form = useForm({
     selling_price: props.car?.selling_price || 0,
     discounted_price: props.car?.discounted_price || 0,
     is_active: props.car?.is_active ?? true,
-    is_published: props.car?.is_published ?? false,
     images: [] as File[],
+    deleted_images: [] as any[],
 });
 
 const makerIdRef = computed(() => form.maker_id);
@@ -488,6 +440,12 @@ const modelOptions = computed(() => [
     { value: "", label: "-- Select Model --" },
     ...filteredCarModels.value.map((m: any) => ({ value: m.id, label: m.name })),
 ]);
+
+const carImageError = computed(() => {
+    if (form.errors.images) return form.errors.images;
+    const specificErrorKey = Object.keys(form.errors).find(k => k.startsWith('images.'));
+    return specificErrorKey ? form.errors[specificErrorKey as keyof typeof form.errors] : undefined;
+});
 
 // # Submit
 const submit = () => {

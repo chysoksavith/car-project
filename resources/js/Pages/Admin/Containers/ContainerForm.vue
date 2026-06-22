@@ -193,25 +193,20 @@
                         />
                     </div>
                     
-                    <div class="mt-4 flex items-center justify-between">
-                        <div class="w-full md:w-1/2">
-                            <label class="label"><span class="label-text">Images</span></label>
-                            <input 
-                                type="file" 
-                                multiple 
-                                @change="(e) => handleImageUpload(index, e)" 
-                                class="file-input file-input-bordered w-full" 
-                                accept="image/*"
+                    <div class="mt-4 flex flex-col md:flex-row md:items-start justify-between gap-4">
+                        <div class="w-full md:w-2/3">
+                            <ImageUploader 
+                                v-model="car.images" 
+                                v-model:deleted-images="car.deleted_images"
+                                :existing-images="car.existing_images" 
+                                :error="getCarImageError(index)"
                             />
-                            <div v-if="form.errors[`cars.${index}.images`]" class="text-error text-sm mt-1">
-                                {{ form.errors[`cars.${index}.images`] }}
-                            </div>
                         </div>
 
                         <button 
                             type="button" 
                             @click="removeCar(index)" 
-                            class="btn btn-error btn-outline btn-sm self-end"
+                            class="btn btn-error btn-outline btn-sm md:mt-9"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                             Remove Car
@@ -243,6 +238,7 @@ import { Link, useForm } from "@inertiajs/vue3";
 import TextInput from "@/Components/Form/TextInput.vue";
 import SelectInput from "@/Components/Form/SelectInput.vue";
 import TextareaInput from "@/Components/Form/TextareaInput.vue";
+import ImageUploader from "@/Components/Form/ImageUploader.vue";
 import Button from "@/Components/Button.vue";
 
 const props = withDefaults(defineProps<{
@@ -312,6 +308,7 @@ const defaultCar = {
     transport_cost: '',
     expected_profit: '',
     images: [] as File[],
+    existing_images: [] as any[],
 };
 
 const form = useForm({
@@ -326,7 +323,11 @@ const form = useForm({
     note: props.container?.note || '',
     total_shipping_cost: props.container?.total_shipping_cost || '',
     cars: (props.container?.cars && props.container.cars.length > 0) 
-        ? props.container.cars 
+        ? props.container.cars.map((car: any) => ({
+            ...car,
+            existing_images: car.images || [],
+            images: [],
+        }))
         : [{ ...defaultCar }],
 });
 
@@ -338,22 +339,40 @@ const removeCar = (index: number) => {
     form.cars.splice(index, 1);
 };
 
-const handleImageUpload = (index: number, event: Event) => {
-    const target = event.target as HTMLInputElement;
-    if (target.files) {
-        form.cars[index].images = Array.from(target.files);
-    }
+const getCarImageError = (index: number) => {
+    if (form.errors[`cars.${index}.images`]) return form.errors[`cars.${index}.images`];
+    
+    const keys = Object.keys(form.errors);
+    const prefix = `cars.${index}.images.`;
+    const specificErrorKey = keys.find(key => key.startsWith(prefix));
+    
+    return specificErrorKey ? form.errors[specificErrorKey as keyof typeof form.errors] : undefined;
 };
 
 // # Submit
 const submit = () => {
-    if (props.isEdit && props.container) {
-        form.transform((data) => ({
+    const submitOptions = {
+        forceFormData: true,
+        preserveScroll: true,
+    };
+
+    form.transform((data) => {
+        const transformedCars = data.cars.map((car: any) => {
+            const { existing_images, ...rest } = car;
+            return rest;
+        });
+        
+        return {
             ...data,
-            _method: "put",
-        })).post(route('admin.containers.update', props.container.id));
+            cars: transformedCars,
+            ...(props.isEdit && props.container ? { _method: "put" } : {})
+        };
+    });
+
+    if (props.isEdit && props.container) {
+        form.post(route('admin.containers.update', props.container.id), submitOptions);
     } else {
-        form.post(route('admin.containers.store'));
+        form.post(route('admin.containers.store'), submitOptions);
     }
 };
 </script>
