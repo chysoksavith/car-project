@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum ShipmentStatus: string
+enum ContainerStatus: string
 {
     case OnTheWay = 'on_the_way';
     case InStock = 'in_stock';

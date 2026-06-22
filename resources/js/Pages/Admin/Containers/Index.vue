@@ -1,25 +1,25 @@
 <template>
     <DashboardLayout>
         <PageHeader
-            :breadcrumbs="[{ label: 'Shipments' }]"
-            description="Manage your shipments and containers."
+            :breadcrumbs="[{ label: 'Containers' }]"
+            description="Manage your containers and containers."
             class="mb-6"
         >
             <Button
-                v-if="can('shipments.create')"
-                :href="route('admin.shipments.create')"
+                v-if="can('containers.create')"
+                :href="route('admin.containers.create')"
                 variant="primary"
                 size="sm"
                 icon="fa-solid fa-plus"
             >
-                Add Shipment
+                Add Container
             </Button>
         </PageHeader>
 
         <DataTable
-            :data="shipments"
+            :data="containers"
             :columns="columns"
-            searchRoute="/admin/shipments"
+            searchRoute="/admin/containers"
             :searchQuery="filters.search"
             searchPlaceholder="Search B/L or Container..."
         >
@@ -53,22 +53,22 @@
 
             <template #cell(actions)="{ item }">
                 <TableActionButtons
-                    :hasEdit="can('shipments.edit')"
-                    :hasDelete="can('shipments.delete')"
-                    @edit="router.visit(route('admin.shipments.edit', item.id))"
+                    :hasEdit="can('containers.edit')"
+                    :hasDelete="can('containers.delete')"
+                    @edit="router.visit(route('admin.containers.edit', item.id))"
                     @delete="confirmDelete(item)"
                 />
             </template>
         </DataTable>
 
         <!-- Delete Modal -->
-        <Modal ref="deleteModalRef" maxWidth="sm" title="Delete Shipment">
+        <Modal ref="deleteModalRef" maxWidth="sm" title="Delete Container">
             <p class="text-sm text-base-content/70">
-                Are you sure you want to delete shipment <strong class="text-base-content">{{ deletingShipment?.bl_number }}</strong>?
+                Are you sure you want to delete container <strong class="text-base-content">{{ deletingContainer?.bl_number }}</strong>?
             </p>
             <template #actions>
                 <Button @click="deleteModalRef?.close()" variant="ghost" type="button">Cancel</Button>
-                <Button @click="deleteShipment" :loading="deleteForm.processing" variant="error" type="button">Delete</Button>
+                <Button @click="deleteContainer" :loading="deleteForm.processing" variant="error" type="button">Delete</Button>
             </template>
         </Modal>
     </DashboardLayout>
@@ -86,7 +86,7 @@ import TableActionButtons from "@/Components/TableActionButtons.vue";
 import Modal from "@/Components/Modal.vue";
 
 const props = defineProps<{
-    shipments: any;
+    containers: any;
     filters: any;
 }>();
 
@@ -100,22 +100,22 @@ const columns = [
 ];
 
 const deleteModalRef = ref<any>(null);
-const deletingShipment = ref<any>(null);
+const deletingContainer = ref<any>(null);
 const deleteForm = useForm({});
 
 // # Confirm Delete
-const confirmDelete = (shipment: any) => {
-    deletingShipment.value = shipment;
+const confirmDelete = (container: any) => {
+    deletingContainer.value = container;
     deleteModalRef.value?.showModal();
 };
 
-// # Delete Shipment
-const deleteShipment = () => {
-    if (!deletingShipment.value) return;
-    deleteForm.delete(route("admin.shipments.destroy", deletingShipment.value.id), {
+// # Delete Container
+const deleteContainer = () => {
+    if (!deletingContainer.value) return;
+    deleteForm.delete(route("admin.containers.destroy", deletingContainer.value.id), {
         onSuccess: () => {
             deleteModalRef.value?.close();
-            setTimeout(() => (deletingShipment.value = null), 300);
+            setTimeout(() => (deletingContainer.value = null), 300);
         },
     });
 };

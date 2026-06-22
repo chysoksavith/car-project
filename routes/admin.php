@@ -30,11 +30,14 @@ Route::prefix('admin')->middleware(['auth', \App\Http\Middleware\CheckBackendAcc
     // Car Models
     Route::resource('car-models', \App\Http\Controllers\Admin\CarModelController::class)->except('show')->names('admin.car-models');
 
+    // Fuels
+    Route::resource('fuels', \App\Http\Controllers\Admin\FuelController::class)->except('show')->names('admin.fuels');
+
     // Colors
     Route::resource('colors', \App\Http\Controllers\Admin\ColorController::class)->except('show')->names('admin.colors');
 
     // Suppliers
     Route::resource('suppliers', \App\Http\Controllers\Admin\SupplierController::class)->except(['show'])->names('admin.suppliers');
     Route::resource('inspection-items', \App\Http\Controllers\Admin\InspectionItemController::class)->except(['show'])->names('admin.inspection-items');
-    Route::resource('shipments', \App\Http\Controllers\Admin\ShipmentController::class)->except(['show'])->names('admin.shipments');
+    Route::resource('containers', \App\Http\Controllers\Admin\ContainerController::class)->except(['show'])->names('admin.containers');
 });

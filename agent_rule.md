@@ -13,6 +13,10 @@ Do not duplicate UI elements across pages. Always use or create centralized comp
 - **Form Inputs**: Use components inside `resources/js/Components/Form/` (e.g., `<TextInput>`, `<SelectInput>`) rather than raw `<input>`, `<textarea>`, or `<label>` tags.
 - **Form Structure (Clean Code)**: NEVER duplicate form fields across `Create.vue` and `Edit.vue`. Always extract the form logic into a shared `<Entity>Form.vue` (e.g., `CompanyForm.vue`, `UserForm.vue`) and import it into the respective page views.
 
+### TypeScript Standards
+- **Strict Typing**: Avoid using `any` in TypeScript. Always define proper interfaces, types, or use generic types for props, emits, and variables to ensure type safety.
+- **Folder Structure**: Store all shared TypeScript interfaces, types, and definitions in the standard `resources/js/Types/` folder rather than declaring them inline or haphazardly across components.
+
 ### Icons and Assets
 - **NO INLINE SVGs**. Do not copy-paste raw `<svg>` tags into Vue files. 
 - **FontAwesome Only**: Use the installed FontAwesome library (e.g., `<i class="fa-solid fa-plus"></i>`).

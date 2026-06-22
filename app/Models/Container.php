@@ -22,14 +22,14 @@ use App\Models\Traits\HasTenant;
     'total_shipping_cost',
     'cost_allocation_method'
 ])]
-class Shipment extends Model
+class Container extends Model
 {
     use HasFactory, HasTenant;
 
     protected function casts(): array
     {
         return [
-            'status' => \App\Enums\ShipmentStatus::class,
+            'status' => \App\Enums\ContainerStatus::class,
             'departure_date' => 'date',
             'expected_date' => 'date',
             'total_shipping_cost' => 'decimal:2',

@@ -95,9 +95,9 @@
         />
 
         <div class="flex items-center justify-end gap-3 pt-4 border-t border-base-200">
-            <Link :href="route('admin.shipments.index')" class="btn btn-ghost">Cancel</Link>
+            <Link :href="route('admin.containers.index')" class="btn btn-ghost">Cancel</Link>
             <Button :loading="form.processing" variant="primary" type="submit">
-                {{ isEdit ? 'Save Changes' : 'Create Shipment' }}
+                {{ isEdit ? 'Save Changes' : 'Create Container' }}
             </Button>
         </div>
     </form>
@@ -111,7 +111,7 @@ import TextareaInput from "@/Components/Form/TextareaInput.vue";
 import Button from "@/Components/Button.vue";
 
 const props = withDefaults(defineProps<{
-    shipment?: any;
+    container?: any;
     suppliers?: any[];
     isEdit?: boolean;
 }>(), {
@@ -140,26 +140,26 @@ const allocationOptions = [
 const today = new Date().toISOString().split('T')[0];
 
 const form = useForm({
-    supplier_id: props.shipment?.supplier_id || '',
-    ship_id: props.shipment?.ship_id || '',
-    bl_number: props.shipment?.bl_number || '',
-    container_number: props.shipment?.container_number || '',
-    container_type: props.shipment?.container_type || '',
-    status: props.shipment?.status || 'on_the_way',
-    departure_date: props.shipment?.departure_date || today,
-    expected_date: props.shipment?.expected_date || today,
-    video_review_arrival: props.shipment?.video_review_arrival || '',
-    note: props.shipment?.note || '',
-    total_shipping_cost: props.shipment?.total_shipping_cost || '',
-    cost_allocation_method: props.shipment?.cost_allocation_method || 'equal_split',
+    supplier_id: props.container?.supplier_id || '',
+    ship_id: props.container?.ship_id || '',
+    bl_number: props.container?.bl_number || '',
+    container_number: props.container?.container_number || '',
+    container_type: props.container?.container_type || '',
+    status: props.container?.status || 'on_the_way',
+    departure_date: props.container?.departure_date || today,
+    expected_date: props.container?.expected_date || today,
+    video_review_arrival: props.container?.video_review_arrival || '',
+    note: props.container?.note || '',
+    total_shipping_cost: props.container?.total_shipping_cost || '',
+    cost_allocation_method: props.container?.cost_allocation_method || 'equal_split',
 });
 
 // # Submit
 const submit = () => {
-    if (props.isEdit && props.shipment) {
-        form.put(route('admin.shipments.update', props.shipment.id));
+    if (props.isEdit && props.container) {
+        form.put(route('admin.containers.update', props.container.id));
     } else {
-        form.post(route('admin.shipments.store'));
+        form.post(route('admin.containers.store'));
     }
 };
 </script>

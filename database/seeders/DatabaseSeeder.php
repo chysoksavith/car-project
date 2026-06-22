@@ -23,6 +23,8 @@ class DatabaseSeeder extends Seeder
 
             // # Master data
             // InspectionCategorySeeder::class,
+            FuelSeeder::class,
+            DemoDataSeeder::class,
 
             // # Add future seeders here
             // CustomerSeeder::class,

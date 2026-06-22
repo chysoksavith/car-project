@@ -5,14 +5,14 @@ namespace App\Http\Requests\Admin;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UpdateShipmentRequest extends FormRequest
+class StoreContainerRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return $this->user()->can('shipments.edit');
+        return $this->user()->can('containers.create');
     }
 
     /**
@@ -22,15 +22,13 @@ class UpdateShipmentRequest extends FormRequest
      */
     public function rules(): array
     {
-        $shipmentId = $this->route('shipment')->id;
-
         return [
             'supplier_id' => ['nullable', 'exists:suppliers,id'],
             'ship_id' => ['nullable', 'integer'],
             'bl_number' => ['required', 'string', 'max:255'],
-            'container_number' => ['required', 'string', 'max:255', Rule::unique('shipments')->ignore($shipmentId)],
+            'container_number' => ['required', 'string', 'max:255', 'unique:containers,container_number'],
             'container_type' => ['nullable', 'string', 'max:255'],
-            'status' => ['required', new \Illuminate\Validation\Rules\Enum(\App\Enums\ShipmentStatus::class)],
+            'status' => ['required', new \Illuminate\Validation\Rules\Enum(\App\Enums\ContainerStatus::class)],
             'departure_date' => ['nullable', 'date'],
             'expected_date' => ['nullable', 'date'],
             'video_review_arrival' => ['nullable', 'string', 'max:255'],

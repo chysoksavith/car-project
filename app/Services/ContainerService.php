@@ -2,57 +2,57 @@
 
 namespace App\Services;
 
-use App\Models\Shipment;
+use App\Models\Container;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class ShipmentService
+class ContainerService
 {
-    // # Create Shipment
-    public function createShipment(array $data): Shipment
+    // # Create Container
+    public function createContainer(array $data): Container
     {
         DB::beginTransaction();
         try {
             // company_id will be automatically filled by HasTenant trait or user's session
-            $shipment = Shipment::create($data);
+            $container = Container::create($data);
             DB::commit();
 
-            return $shipment;
+            return $container;
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Failed to create shipment: ' . $e->getMessage());
+            Log::error('Failed to create container: ' . $e->getMessage());
             throw $e;
         }
     }
 
-    // # Update Shipment
-    public function updateShipment(Shipment $shipment, array $data): bool
+    // # Update Container
+    public function updateContainer(Container $container, array $data): bool
     {
         DB::beginTransaction();
         try {
-            $updated = $shipment->update($data);
+            $updated = $container->update($data);
             DB::commit();
 
             return $updated;
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Failed to update shipment: ' . $e->getMessage());
+            Log::error('Failed to update container: ' . $e->getMessage());
             throw $e;
         }
     }
 
-    // # Delete Shipment
-    public function deleteShipment(Shipment $shipment): bool
+    // # Delete Container
+    public function deleteContainer(Container $container): bool
     {
         DB::beginTransaction();
         try {
-            $deleted = $shipment->delete();
+            $deleted = $container->delete();
             DB::commit();
 
             return $deleted;
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Failed to delete shipment: ' . $e->getMessage());
+            Log::error('Failed to delete container: ' . $e->getMessage());
             throw $e;
         }
     }

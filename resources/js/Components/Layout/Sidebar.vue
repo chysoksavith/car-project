@@ -110,11 +110,6 @@ const menuGroups = [
                 href: "/admin/car-models",
             },
             {
-                name: "Colors",
-                icon: "fa-solid fa-palette",
-                href: "/admin/colors",
-            },
-            {
                 name: "Inspection Items",
                 icon: "fa-solid fa-clipboard-list",
                 href: "/admin/inspection-items",
@@ -134,19 +129,34 @@ const menuGroups = [
                 ],
             },
             {
-                name: "Companies",
-                icon: "fa-solid fa-building",
-                href: "/admin/companies",
-            },
-            {
                 name: "Suppliers",
                 icon: "fa-solid fa-truck-field",
                 href: "/admin/suppliers",
             },
             {
-                name: "Shipments",
+                name: "Containers",
                 icon: "fa-solid fa-ship",
-                href: "/admin/shipments",
+                href: "/admin/containers",
+            },
+        ],
+    },
+    {
+        name: "Config",
+        items: [
+            {
+                name: "Companies",
+                icon: "fa-solid fa-building",
+                href: "/admin/companies",
+            },
+            {
+                name: "Fuels",
+                icon: "fa-solid fa-gas-pump",
+                href: "/admin/fuels",
+            },
+            {
+                name: "Colors",
+                icon: "fa-solid fa-palette",
+                href: "/admin/colors",
             },
         ],
     },
