@@ -4,8 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use App\Models\Traits\HasTenant;
+use App\Models\Traits\TracksAuditCols;
 
 #[Fillable([
     'company_id',
@@ -20,18 +22,21 @@ use App\Models\Traits\HasTenant;
     'video_review_arrival',
     'note',
     'total_shipping_cost',
-    'cost_allocation_method'
+    'cost_allocation_method',
+    'created_by',
+    'updated_by',
+    'deleted_by',
 ])]
 class Container extends Model
 {
-    use HasFactory, HasTenant;
+    use HasFactory, SoftDeletes, HasTenant, TracksAuditCols;
 
     protected function casts(): array
     {
         return [
-            'status' => \App\Enums\ContainerStatus::class,
-            'departure_date' => 'date',
-            'expected_date' => 'date',
+            'status'              => \App\Enums\ContainerStatus::class,
+            'departure_date'      => 'date',
+            'expected_date'       => 'date',
             'total_shipping_cost' => 'decimal:2',
         ];
     }
@@ -45,4 +50,7 @@ class Container extends Model
     {
         return $this->hasMany(\App\Models\Car::class);
     }
+
+    // Audit relations are provided by TracksAuditCols:
+    // creator(), updater(), deleter()
 }

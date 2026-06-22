@@ -3,9 +3,9 @@
 namespace App\Services;
 
 use App\Models\Car;
+use App\Support\ServiceLogger;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class CarService
@@ -30,78 +30,66 @@ class CarService
     }
 
     // # Create
+    // NOTE: No transaction here — callers (ContainerService, controller) wrap this.
     public function create(array $data): Car
     {
-        DB::beginTransaction();
-        try {
-            $data['slug'] = Str::slug($data['name']) . '-' . uniqid();
+        $data['slug'] = Str::slug($data['name']) . '-' . uniqid();
 
-            $images = $data['images'] ?? [];
-            unset($data['images']);
+        $images = $data['images'] ?? [];
+        unset($data['images']);
 
-            $car = Car::create($data);
+        $car = Car::create($data);
 
-            if (!empty($images)) {
-                foreach ($images as $image) {
-                    $car->attachFile($image, 'car_images');
-                }
-            }
-
-            DB::commit();
-
-            return $car;
-        } catch (\Exception $e) {
-            DB::rollBack();
-            Log::error('Failed to create car: ' . $e->getMessage());
-            throw $e;
+        foreach ($images as $image) {
+            $car->attachFile($image, 'car_images');
         }
+
+        ServiceLogger::created('Car', $car->id, [
+            'name'         => $car->name,
+            'container_id' => $car->container_id,
+        ]);
+
+        return $car;
     }
 
     // # Update
     public function update(Car $car, array $data): bool
     {
-        DB::beginTransaction();
-        try {
-            $images = $data['images'] ?? [];
-            unset($data['images']);
+        $images = $data['images'] ?? [];
+        unset($data['images']);
 
-            $updated = $car->update($data);
+        $updated = $car->update($data);
 
-            if (!empty($images)) {
-                // Delete old attachments and physical files before adding new ones
-                foreach ($car->attachments as $attachment) {
-                    \Illuminate\Support\Facades\Storage::disk($attachment->disk)->delete($attachment->file_path);
-                    $attachment->delete();
-                }
-
-                foreach ($images as $image) {
-                    $car->attachFile($image, 'car_images');
-                }
+        if (!empty($images)) {
+            // Replace all attachments with the new set
+            foreach ($car->attachments as $attachment) {
+                Storage::disk($attachment->disk)->delete($attachment->file_path);
+                $attachment->delete();
             }
 
-            DB::commit();
-
-            return $updated;
-        } catch (\Exception $e) {
-            DB::rollBack();
-            Log::error('Failed to update car: ' . $e->getMessage());
-            throw $e;
+            foreach ($images as $image) {
+                $car->attachFile($image, 'car_images');
+            }
         }
+
+        ServiceLogger::updated('Car', $car->id, [
+            'name'         => $car->name,
+            'container_id' => $car->container_id,
+        ]);
+
+        return $updated;
     }
 
-    // # Delete
+    // # Soft-delete
     public function delete(Car $car): ?bool
     {
-        DB::beginTransaction();
-        try {
-            $deleted = $car->delete();
-            DB::commit();
+        $deleted = $car->delete();
 
-            return $deleted;
-        } catch (\Exception $e) {
-            DB::rollBack();
-            Log::error('Failed to delete car: ' . $e->getMessage());
-            throw $e;
-        }
+        ServiceLogger::deleted('Car', $car->id, [
+            'name'         => $car->name,
+            'container_id' => $car->container_id,
+        ]);
+
+        return $deleted;
     }
 }

@@ -2,9 +2,10 @@
 
 namespace App\Services;
 
+use App\Models\Car;
 use App\Models\Container;
+use App\Support\ServiceLogger;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class ContainerService
 {
@@ -12,108 +13,113 @@ class ContainerService
     {
     }
 
-    // # Create Container
+    // # Create Container with optional nested cars
     public function createContainer(array $data): Container
     {
-        DB::beginTransaction();
-        try {
+        return DB::transaction(function () use ($data) {
             $cars = $data['cars'] ?? [];
             unset($data['cars']);
 
-            // company_id will be automatically filled by HasTenant trait or user's session
             $container = Container::create($data);
 
-            if (!empty($cars)) {
-                foreach ($cars as $carData) {
-                    $carData['container_id'] = $container->id;
-                    $carData['inventory_status'] = $carData['inventory_status'] ?? 'IN_TRANSIT';
-                    $carData['sales_status'] = $carData['sales_status'] ?? 'AVAILABLE';
-                    $carData['condition'] = $carData['condition'] ?? 'NEW';
-                    $carData['quantity'] = $carData['quantity'] ?? 1;
-                    $carData['is_active'] = $carData['is_active'] ?? true;
-                    $carData['is_published'] = $carData['is_published'] ?? false;
-                    $this->carService->create($carData);
-                }
+            foreach ($cars as $carData) {
+                $this->carService->create(
+                    $this->applyCarDefaults($carData, $container->id)
+                );
             }
 
-            DB::commit();
+            ServiceLogger::created('Container', $container->id, [
+                'container_number' => $container->container_number,
+                'bl_number'        => $container->bl_number,
+                'cars_count'       => count($cars),
+            ]);
 
             return $container;
-        } catch (\Exception $e) {
-            DB::rollBack();
-            Log::error('Failed to create container: ' . $e->getMessage());
-            throw $e;
-        }
+        });
     }
 
-    // # Update Container
+    // # Update Container and sync nested cars
     public function updateContainer(Container $container, array $data): bool
     {
-        DB::beginTransaction();
-        try {
+        return DB::transaction(function () use ($container, $data) {
             $cars = $data['cars'] ?? [];
             unset($data['cars']);
 
             $updated = $container->update($data);
 
-            $existingCarIds = $container->cars()->pluck('id')->toArray();
+            $existingCarIds = $container->cars()->pluck('id')->all();
             $submittedCarIds = [];
 
-            if (!empty($cars)) {
-                foreach ($cars as $carData) {
-                    $carData['container_id'] = $container->id;
-                    if (isset($carData['id'])) {
+            foreach ($cars as $carData) {
+                $carData['container_id'] = $container->id;
+
+                if (isset($carData['id'])) {
+                    $car = Car::find($carData['id']);
+                    if ($car) {
+                        $this->carService->update($car, $carData);
                         $submittedCarIds[] = $carData['id'];
-                        $car = \App\Models\Car::find($carData['id']);
-                        if ($car) {
-                            $this->carService->update($car, $carData);
-                        }
-                    } else {
-                        $carData['inventory_status'] = $carData['inventory_status'] ?? 'IN_TRANSIT';
-                        $carData['sales_status'] = $carData['sales_status'] ?? 'AVAILABLE';
-                        $carData['condition'] = $carData['condition'] ?? 'NEW';
-                        $carData['quantity'] = $carData['quantity'] ?? 1;
-                        $carData['is_active'] = $carData['is_active'] ?? true;
-                        $carData['is_published'] = $carData['is_published'] ?? false;
-                        $newCar = $this->carService->create($carData);
-                        $submittedCarIds[] = $newCar->id;
                     }
+                } else {
+                    $newCar = $this->carService->create(
+                        $this->applyCarDefaults($carData, $container->id)
+                    );
+                    $submittedCarIds[] = $newCar->id;
                 }
             }
 
+            // Soft-delete cars that were removed from the container
             $carsToDelete = array_diff($existingCarIds, $submittedCarIds);
             if (!empty($carsToDelete)) {
-                foreach ($carsToDelete as $carId) {
-                    $car = \App\Models\Car::find($carId);
-                    if ($car) {
-                        $this->carService->delete($car);
-                    }
-                }
+                Car::whereIn('id', $carsToDelete)->get()->each(
+                    fn (Car $car) => $this->carService->delete($car)
+                );
             }
 
-            DB::commit();
+            ServiceLogger::updated('Container', $container->id, [
+                'container_number' => $container->container_number,
+                'cars_updated'     => count($submittedCarIds),
+                'cars_removed'     => count($carsToDelete),
+            ]);
 
             return $updated;
-        } catch (\Exception $e) {
-            DB::rollBack();
-            Log::error('Failed to update container: ' . $e->getMessage());
-            throw $e;
-        }
+        });
     }
 
-    // # Delete Container
+    // # Soft-delete Container and all its cars
     public function deleteContainer(Container $container): bool
     {
-        DB::beginTransaction();
-        try {
+        return DB::transaction(function () use ($container) {
+            // Cascade soft-delete to all child cars
+            $container->cars()->each(fn (Car $car) => $this->carService->delete($car));
+
             $deleted = $container->delete();
-            DB::commit();
+
+            ServiceLogger::deleted('Container', $container->id, [
+                'container_number' => $container->container_number,
+            ]);
 
             return $deleted;
-        } catch (\Exception $e) {
-            DB::rollBack();
-            Log::error('Failed to delete container: ' . $e->getMessage());
-            throw $e;
-        }
+        });
+    }
+
+    // ---------------------------------------------------------------------------
+    // Helpers
+    // ---------------------------------------------------------------------------
+
+    /**
+     * Merge sensible defaults onto a new car payload before persisting.
+     */
+    private function applyCarDefaults(array $carData, int $containerId): array
+    {
+        return array_merge([
+            'inventory_status' => 'IN_TRANSIT',
+            'sales_status'     => 'AVAILABLE',
+            'condition'        => 'NEW',
+            'quantity'         => 1,
+            'is_active'        => true,
+            'is_published'     => false,
+        ], $carData, [
+            'container_id' => $containerId, // always authoritative
+        ]);
     }
 }
