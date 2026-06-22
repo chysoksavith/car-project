@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('containers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('company_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('company_id')->nullable()->constrained()->cascadeOnDelete();
             $table->unsignedBigInteger('ship_id')->nullable();
             $table->string('bl_number');
             $table->string('container_number')->unique();
