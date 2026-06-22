@@ -77,6 +77,15 @@
                 placeholder="Select a company..."
             />
 
+            <!-- Department -->
+            <SelectInput
+                label="Assign Department"
+                v-model="form.department_id"
+                :options="departments?.map(d => ({ value: d.id, label: d.name })) || []"
+                :error="form.errors.department_id"
+                placeholder="Select a department..."
+            />
+
             <!-- Role (Backend Only) -->
             <SelectInput
                 v-if="form.user_type === 'backend'"
@@ -197,6 +206,7 @@ const props = defineProps<{
     user?: any;
     roles: any[];
     companies: any[];
+    departments?: any[];
     isEdit?: boolean;
 }>();
 
@@ -213,6 +223,7 @@ const form = useForm({
     user_type: props.user?.user_type || 'backend',
     is_active: props.user ? Boolean(props.user.is_active) : true,
     company_id: props.user?.company_id || '',
+    department_id: props.user?.department_id || '',
     role: props.user?.roles?.length ? props.user.roles[0].name : '',
     address_type: addressData && !addressData.province ? 'handwrite' : 'select',
     address: {

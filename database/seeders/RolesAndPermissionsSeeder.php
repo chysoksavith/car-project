@@ -80,6 +80,11 @@ class RolesAndPermissionsSeeder extends Seeder
             'containers.create',
             'containers.edit',
             'containers.delete',
+            // Departments
+            'departments.view',
+            'departments.create',
+            'departments.edit',
+            'departments.delete',
         ];
 
         foreach ($permissions as $perm) {
@@ -143,6 +148,10 @@ class RolesAndPermissionsSeeder extends Seeder
             'containers.create',
             'containers.edit',
             'containers.delete',
+            'departments.view',
+            'departments.create',
+            'departments.edit',
+            'departments.delete',
         ]);
 
         // Editor — read-only + edit users
@@ -170,6 +179,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'car_inspections.edit',
             'containers.view',
             'containers.edit',
+            'departments.view',
+            'departments.edit',
         ]);
 
         // Viewer — read-only access
@@ -187,6 +198,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'inspection_items.view',
             'car_inspections.view',
             'containers.view',
+            'departments.view',
         ]);
 
         $this->command->info('Roles and permissions seeded.');

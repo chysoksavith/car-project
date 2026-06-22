@@ -40,4 +40,7 @@ Route::prefix('admin')->middleware(['auth', \App\Http\Middleware\CheckBackendAcc
     Route::resource('suppliers', \App\Http\Controllers\Admin\SupplierController::class)->except(['show'])->names('admin.suppliers');
     Route::resource('inspection-items', \App\Http\Controllers\Admin\InspectionItemController::class)->except(['show'])->names('admin.inspection-items');
     Route::resource('containers', \App\Http\Controllers\Admin\ContainerController::class)->except(['show'])->names('admin.containers');
+    
+    // Departments
+    Route::resource('departments', \App\Http\Controllers\Admin\DepartmentController::class)->except('show')->names('admin.departments');
 });

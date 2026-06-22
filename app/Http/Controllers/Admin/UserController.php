@@ -37,8 +37,9 @@ class UserController extends Controller
     public function create(): Response
     {
         return Inertia::render('Admin/Users/Create', [
-            'roles'     => Role::all(),
-            'companies' => \App\Models\Company::all(),
+            'roles'       => Role::all(),
+            'companies'   => \App\Models\Company::all(),
+            'departments' => \App\Models\Department::all(),
         ]);
     }
 
@@ -55,9 +56,10 @@ class UserController extends Controller
     {
         $user->load(['roles', 'addresses']); // Ensure roles and addresses are loaded
         return Inertia::render('Admin/Users/Edit', [
-            'user'      => $user,
-            'roles'     => Role::all(),
-            'companies' => \App\Models\Company::all(),
+            'user'        => $user,
+            'roles'       => Role::all(),
+            'companies'   => \App\Models\Company::all(),
+            'departments' => \App\Models\Department::all(),
         ]);
     }
 

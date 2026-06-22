@@ -12,7 +12,7 @@
 
         <div class="card bg-base-100 shadow-sm border border-base-200">
             <div class="card-body">
-                <UserForm :user="user" :roles="roles" :companies="companies" isEdit />
+                <UserForm :user="user" :roles="roles" :companies="companies" :departments="departments" isEdit />
             </div>
         </div>
     </DashboardLayout>
@@ -28,5 +28,6 @@ const props = defineProps<{
     user: any;
     roles: any[];
     companies: any[];
+    departments: any[];
 }>();
 </script>

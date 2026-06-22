@@ -138,6 +138,7 @@ const menuGroups = [
                 icon: "fa-solid fa-ship",
                 href: "/admin/containers",
             },
+
         ],
     },
     {
@@ -147,6 +148,11 @@ const menuGroups = [
                 name: "Companies",
                 icon: "fa-solid fa-building",
                 href: "/admin/companies",
+            },
+            {
+                name: "Departments",
+                icon: "fa-solid fa-building-user",
+                href: "/admin/departments",
             },
             {
                 name: "Fuels",

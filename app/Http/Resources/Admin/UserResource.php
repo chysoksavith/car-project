@@ -21,6 +21,8 @@ class UserResource extends JsonResource
             'roles'        => $this->whenLoaded('roles', fn () => $this->roles->pluck('name')),
             'creator_name' => $this->whenLoaded('creator', fn () => $this->creator?->name),
             'updater_name' => $this->whenLoaded('updater', fn () => $this->updater?->name),
+            'department'   => $this->whenLoaded('department'),
+            'department_id'=> $this->department_id,
             'created_at'   => $this->created_at,
         ];
     }
