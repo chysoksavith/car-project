@@ -2,22 +2,23 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Facades\Storage;
 
+#[Fillable([
+    'attachable_type',
+    'attachable_id',
+    'file_name',
+    'file_path',
+    'mime_type',
+    'size',
+    'disk',
+    'collection_name',
+])]
 class Attachment extends Model
 {
-    protected $fillable = [
-        'attachable_type',
-        'attachable_id',
-        'file_name',
-        'file_path',
-        'mime_type',
-        'size',
-        'disk',
-        'collection_name',
-    ];
 
     public function attachable(): MorphTo
     {

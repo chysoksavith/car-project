@@ -1,5 +1,10 @@
 <?php
 
+use App\Enums\CarCondition;
+use App\Enums\InventoryStatus;
+use App\Enums\RegistrationType;
+use App\Enums\SalesStatus;
+use App\Enums\Transmission;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -63,11 +68,9 @@ return new class extends Migration
                 ->constrained()
                 ->nullOnDelete();
 
-            $table->enum('condition', ['NEW', 'USED'])->default('NEW');
+            $table->enum('condition', CarCondition::cases())->default(CarCondition::NEW->value);
 
-
-            $table->string('transmission')->nullable();
-            // Automatic, Manual, CVT
+            $table->enum('transmission', Transmission::cases())->nullable();
 
             $table->string('body_number')->nullable();
 
@@ -82,10 +85,7 @@ return new class extends Migration
             | Registration Information
             |--------------------------------------------------------------------------
             */
-            $table->enum('registration_type', [
-                'TAX_PAPER',
-                'PLATE_NUMBER',
-            ])->default('TAX_PAPER');
+            $table->enum('registration_type', RegistrationType::cases())->default(RegistrationType::TAX_PAPER->value);
 
             $table->string('plate_number')->nullable();
 
@@ -101,18 +101,9 @@ return new class extends Migration
 
             $table->timestamp('in_stock_at')->nullable();
 
-            $table->enum('inventory_status', [
-                'IN_TRANSIT',
-                'IN_SHOWROOM',
-                'DELIVERED',
-            ])->default('IN_TRANSIT');
+            $table->enum('inventory_status', InventoryStatus::cases())->default(InventoryStatus::IN_TRANSIT->value);
 
-            $table->enum('sales_status', [
-                'AVAILABLE',
-                'BOOKED',
-                'RESERVED',
-                'SOLD',
-            ])->default('AVAILABLE');
+            $table->enum('sales_status', SalesStatus::cases())->default(SalesStatus::AVAILABLE->value);
 
             /*
             |--------------------------------------------------------------------------

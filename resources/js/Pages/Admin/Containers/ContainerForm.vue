@@ -12,9 +12,8 @@
 
             <TextInput
                 label="Ship ID"
-                type="number"
                 v-model="form.ship_id"
-                placeholder="e.g. 1"
+                placeholder="e.g. SHIP001"
                 :error="form.errors.ship_id"
             />
 
@@ -64,26 +63,12 @@
             />
 
             <TextInput
-                label="Video Review Arrival"
-                v-model="form.video_review_arrival"
-                placeholder="Link to video..."
-                :error="form.errors.video_review_arrival"
-            />
-
-            <TextInput
                 label="Total Shipping Cost"
                 type="number"
                 step="0.01"
                 v-model="form.total_shipping_cost"
                 placeholder="0.00"
                 :error="form.errors.total_shipping_cost"
-            />
-
-            <SelectInput
-                label="Cost Allocation Method"
-                v-model="form.cost_allocation_method"
-                :options="allocationOptions"
-                :error="form.errors.cost_allocation_method"
             />
         </div>
 
@@ -310,12 +295,6 @@ const statusOptions = [
     { value: 'delivered', label: 'Delivered' },
 ];
 
-const allocationOptions = [
-    { value: 'equal_split', label: 'Equal Split' },
-    { value: 'by_volume', label: 'By Volume' },
-    { value: 'by_weight', label: 'By Weight' },
-];
-
 const today = new Date().toISOString().split('T')[0];
 
 const defaultCar = {
@@ -344,10 +323,8 @@ const form = useForm({
     status: props.container?.status || 'on_the_way',
     departure_date: props.container?.departure_date || today,
     expected_date: props.container?.expected_date || today,
-    video_review_arrival: props.container?.video_review_arrival || '',
     note: props.container?.note || '',
     total_shipping_cost: props.container?.total_shipping_cost || '',
-    cost_allocation_method: props.container?.cost_allocation_method || 'equal_split',
     cars: (props.container?.cars && props.container.cars.length > 0) 
         ? props.container.cars 
         : [{ ...defaultCar }],

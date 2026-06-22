@@ -24,17 +24,15 @@ class StoreContainerRequest extends FormRequest
     {
         return [
             'supplier_id' => ['nullable', 'exists:suppliers,id'],
-            'ship_id' => ['nullable', 'integer'],
+            'ship_id' => ['nullable', 'string', 'max:255'],
             'bl_number' => ['required', 'string', 'max:255'],
             'container_number' => ['required', 'string', 'max:255', 'unique:containers,container_number'],
             'container_type' => ['nullable', 'string', 'max:255'],
             'status' => ['required', new \Illuminate\Validation\Rules\Enum(\App\Enums\ContainerStatus::class)],
             'departure_date' => ['nullable', 'date'],
             'expected_date' => ['nullable', 'date'],
-            'video_review_arrival' => ['nullable', 'string', 'max:255'],
             'note' => ['nullable', 'string'],
             'total_shipping_cost' => ['nullable', 'numeric', 'min:0'],
-            'cost_allocation_method' => ['nullable', 'string', 'max:255'],
 
             'cars' => ['nullable', 'array'],
             'cars.*.id' => ['nullable', 'exists:cars,id'],

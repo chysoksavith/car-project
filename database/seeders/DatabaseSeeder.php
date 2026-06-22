@@ -15,20 +15,13 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            // # Foundation (must run first)
             RolesAndPermissionsSeeder::class,
-
-            // # Users
             UserSeeder::class,
-
-            // # Master data
-            // InspectionCategorySeeder::class,
             FuelSeeder::class,
+            LocationSeeder::class,
             DemoDataSeeder::class,
 
-            // # Add future seeders here
-            // CustomerSeeder::class,
-            // CarSeeder::class,
+           
         ]);
     }
 }

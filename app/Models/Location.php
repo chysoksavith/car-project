@@ -2,8 +2,19 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
+#[Fillable([
+    'code',
+    'name_km',
+    'name_en',
+    'type',
+    'type_km',
+    'type_en',
+    'parent_code',
+    'reference',
+])]
 class Location extends Model
 {
     /**
@@ -26,17 +37,6 @@ class Location extends Model
      * @var string
      */
     protected $keyType = 'string';
-
-    protected $fillable = [
-        'code',
-        'name_km',
-        'name_en',
-        'type',
-        'type_km',
-        'type_en',
-        'parent_code',
-        'reference',
-    ];
 
     /**
      * Get the parent location (e.g. Commune for a Village).
