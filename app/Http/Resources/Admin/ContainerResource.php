@@ -4,6 +4,7 @@ namespace App\Http\Resources\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\Admin\CarResource;
 
 class ContainerResource extends JsonResource
 {
@@ -30,6 +31,7 @@ class ContainerResource extends JsonResource
             'cost_allocation_method' => $this->cost_allocation_method,
             'created_at' => $this->created_at?->toDateTimeString(),
             'updated_at' => $this->updated_at?->toDateTimeString(),
+            'cars' => CarResource::collection($this->whenLoaded('cars')),
         ];
     }
 }

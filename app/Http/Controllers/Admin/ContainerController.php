@@ -8,6 +8,10 @@ use App\Http\Requests\Admin\StoreContainerRequest;
 use App\Http\Requests\Admin\UpdateContainerRequest;
 use App\Http\Resources\Admin\ContainerResource;
 use App\Services\ContainerService;
+use App\Models\Maker;
+use App\Models\CarModel;
+use App\Models\Fuel;
+use App\Models\Color;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -44,10 +48,16 @@ class ContainerController extends Controller
     {
         Gate::authorize('containers.create');
 
+        $companyId = auth()->user()->company_id;
+
         $suppliers = \App\Models\Supplier::where('is_active', true)->get(['id', 'name']);
 
         return Inertia::render('Admin/Containers/Create', [
             'suppliers' => $suppliers,
+            'makers' => Maker::where('company_id', $companyId)->where('is_active', true)->get(['id', 'name']),
+            'carModels' => CarModel::where('company_id', $companyId)->where('is_active', true)->get(['id', 'name', 'maker_id']),
+            'fuels' => Fuel::where('company_id', $companyId)->where('is_active', true)->get(['id', 'name']),
+            'colors' => Color::where('company_id', $companyId)->where('is_active', true)->get(['id', 'name']),
         ]);
     }
 
@@ -62,13 +72,20 @@ class ContainerController extends Controller
     // # Show form for editing resource
     public function edit(Container $container)
     {
+        $container->load('cars');
         Gate::authorize('containers.edit');
+
+        $companyId = auth()->user()->company_id;
 
         $suppliers = \App\Models\Supplier::where('is_active', true)->get(['id', 'name']);
 
         return Inertia::render('Admin/Containers/Edit', [
             'container' => new ContainerResource($container),
             'suppliers' => $suppliers,
+            'makers' => Maker::where('company_id', $companyId)->where('is_active', true)->get(['id', 'name']),
+            'carModels' => CarModel::where('company_id', $companyId)->where('is_active', true)->get(['id', 'name', 'maker_id']),
+            'fuels' => Fuel::where('company_id', $companyId)->where('is_active', true)->get(['id', 'name']),
+            'colors' => Color::where('company_id', $companyId)->where('is_active', true)->get(['id', 'name']),
         ]);
     }
 

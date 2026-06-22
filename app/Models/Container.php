@@ -40,4 +40,9 @@ class Container extends Model
     {
         return $this->belongsTo(\App\Models\Supplier::class);
     }
+
+    public function cars()
+    {
+        return $this->hasMany(\App\Models\Car::class);
+    }
 }

@@ -1,9 +1,9 @@
 <template>
-    <div class="drawer lg:drawer-open min-h-screen bg-base-200">
+    <div class="drawer lg:drawer-open h-screen bg-base-200 overflow-hidden">
         <input id="mobile-drawer" type="checkbox" class="drawer-toggle" />
 
         <!-- Main Application Layout -->
-        <div class="drawer-content flex min-h-screen min-w-0">
+        <div class="drawer-content flex h-screen min-w-0">
             <!-- Desktop Sidebar -->
             <div class="hidden lg:flex z-20">
                 <Sidebar :is-collapsed="isSidebarCollapsed" />

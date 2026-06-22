@@ -9,7 +9,13 @@
 
         <div class="card bg-base-100 shadow-sm border border-base-200">
             <div class="card-body">
-                <ContainerForm :suppliers="suppliers" />
+                <ContainerForm 
+                    :suppliers="suppliers"
+                    :makers="makers"
+                    :carModels="carModels"
+                    :fuels="fuels"
+                    :colors="colors"
+                />
             </div>
         </div>
     </DashboardLayout>
@@ -22,5 +28,9 @@ import ContainerForm from "./ContainerForm.vue";
 
 defineProps<{
     suppliers: any[];
+    makers: any[];
+    carModels: any[];
+    fuels: any[];
+    colors: any[];
 }>();
 </script>

@@ -97,8 +97,13 @@ const menuGroups = [
         ],
     },
     {
-        name: "Cars Management",
+        name: "Cars",
         items: [
+            {
+                name: "All Cars",
+                icon: "fa-solid fa-car-side",
+                href: "/admin/cars",
+            },
             {
                 name: "Makers",
                 icon: "fa-solid fa-industry",
@@ -114,35 +119,43 @@ const menuGroups = [
                 icon: "fa-solid fa-clipboard-list",
                 href: "/admin/inspection-items",
             },
+            {
+                name: "Fuels",
+                icon: "fa-solid fa-gas-pump",
+                href: "/admin/fuels",
+            },
+            {
+                name: "Colors",
+                icon: "fa-solid fa-palette",
+                href: "/admin/colors",
+            },
         ],
     },
     {
-        name: "Management",
+        name: "Containers",
         items: [
             {
-                name: "Users & Teams",
-                icon: "fa-solid fa-users",
-                children: [
-                    { name: "All Users", href: "/admin/users" },
-                    { name: "Roles", href: "/admin/roles" },
-                    { name: "Permissions", href: "/admin/permissions" },
-                ],
+                name: "Containers",
+                icon: "fa-solid fa-ship",
+                href: "/admin/containers",
             },
             {
                 name: "Suppliers",
                 icon: "fa-solid fa-truck-field",
                 href: "/admin/suppliers",
             },
-            {
-                name: "Containers",
-                icon: "fa-solid fa-ship",
-                href: "/admin/containers",
-            },
-
         ],
     },
     {
-        name: "Config",
+        name: "Users & Teams",
+        items: [
+            { name: "All Users", icon: "fa-solid fa-users", href: "/admin/users" },
+            { name: "Roles", icon: "fa-solid fa-user-shield", href: "/admin/roles" },
+            { name: "Permissions", icon: "fa-solid fa-key", href: "/admin/permissions" },
+        ],
+    },
+    {
+        name: "Management",
         items: [
             {
                 name: "Companies",
@@ -153,16 +166,6 @@ const menuGroups = [
                 name: "Departments",
                 icon: "fa-solid fa-building-user",
                 href: "/admin/departments",
-            },
-            {
-                name: "Fuels",
-                icon: "fa-solid fa-gas-pump",
-                href: "/admin/fuels",
-            },
-            {
-                name: "Colors",
-                icon: "fa-solid fa-palette",
-                href: "/admin/colors",
             },
         ],
     },
