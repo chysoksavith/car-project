@@ -95,6 +95,7 @@ const categoryOptions = computed(() => {
     }));
 });
 
+// # Submit
 const submit = () => {
     // Convert empty string to null for parent_id
     if (form.parent_id === "") {

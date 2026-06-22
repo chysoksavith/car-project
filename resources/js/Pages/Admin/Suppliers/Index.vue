@@ -102,11 +102,13 @@ const deleteModalRef = ref<any>(null);
 const deletingSupplier = ref<any>(null);
 const deleteForm = useForm({});
 
+// # Confirm Delete
 const confirmDelete = (supplier: any) => {
     deletingSupplier.value = supplier;
     deleteModalRef.value?.showModal();
 };
 
+// # Delete Supplier
 const deleteSupplier = () => {
     if (!deletingSupplier.value) return;
     deleteForm.delete(route("admin.suppliers.destroy", deletingSupplier.value.id), {

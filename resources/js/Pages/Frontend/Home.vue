@@ -20,6 +20,7 @@ import Button from "@/Components/Button.vue";
 
 const form = useForm({});
 
+// # Logout
 const logout = () => {
     form.post(route('logout'));
 };

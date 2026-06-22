@@ -174,6 +174,7 @@ defineEmits(["toggle-collapse"]);
 const { user } = useAuth();
 const { isDark, toggleTheme } = useTheme();
 
+// # Logout
 function logout() {
     router.post("/logout");
 }

@@ -85,6 +85,7 @@ const form = useForm({
     is_active: props.supplier ? Boolean(props.supplier.is_active) : true,
 });
 
+// # Submit
 const submit = () => {
     if (props.isEdit && props.supplier) {
         form.put(route('admin.suppliers.update', props.supplier.id));

@@ -76,6 +76,7 @@ watch(() => form.hex_code, (newVal) => {
     }
 });
 
+// # Submit
 const submit = () => {
     if (props.isEdit && props.color) {
         form.put(route('admin.colors.update', props.color.id));

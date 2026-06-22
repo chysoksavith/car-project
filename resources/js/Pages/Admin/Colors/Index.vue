@@ -102,11 +102,13 @@ const deleteModalRef = ref<any>(null);
 const deletingColor = ref<any>(null);
 const deleteForm = useForm({});
 
+// # Confirm Delete
 const confirmDelete = (color: any) => {
     deletingColor.value = color;
     deleteModalRef.value?.showModal();
 };
 
+// # Delete Color
 const deleteColor = () => {
     if (!deletingColor.value) return;
     deleteForm.delete(route("admin.colors.destroy", deletingColor.value.id), {

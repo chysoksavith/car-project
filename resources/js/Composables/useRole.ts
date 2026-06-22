@@ -2,6 +2,7 @@ import { ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
 import type { Role } from "@/Types/role";
 
+// # Use Role
 export function useRole() {
     const modalRef = ref<HTMLDialogElement | null>(null);
     const deleteModalRef = ref<HTMLDialogElement | null>(null);
@@ -11,6 +12,7 @@ export function useRole() {
     const form = useForm({ name: "", permissions: [] as string[] });
     const deleteForm = useForm({});
 
+    // # Open Create
     function openCreate() {
         editingRole.value = null;
         form.reset();
@@ -18,6 +20,7 @@ export function useRole() {
         modalRef.value?.showModal();
     }
 
+    // # Open Edit
     function openEdit(role: Role) {
         editingRole.value = role;
         form.name = role.name;
@@ -26,15 +29,18 @@ export function useRole() {
         modalRef.value?.showModal();
     }
 
+    // # Close Modal
     function closeModal() {
         modalRef.value?.close();
     }
 
+    // # Confirm Delete
     function confirmDelete(role: Role) {
         deletingRole.value = role;
         deleteModalRef.value?.showModal();
     }
 
+    // # Save
     function save() {
         if (editingRole.value) {
             form.put(route("admin.roles.update", editingRole.value.id), {
@@ -50,6 +56,7 @@ export function useRole() {
         }
     }
 
+    // # Delete Role
     function deleteRole() {
         if (!deletingRole.value) return;
         deleteForm.delete(route("admin.roles.destroy", deletingRole.value.id), {

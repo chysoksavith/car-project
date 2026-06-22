@@ -85,7 +85,7 @@ const props = defineProps<{
     isCollapsed?: boolean;
 }>();
 
-// Check if a given href is active based on the current page URL
+// # Check if a given href is active based on the current page URL
 const isActivePath = (href?: string) => {
     if (!href || href === "#") return false;
 
@@ -117,6 +117,7 @@ watch(
     },
 );
 
+// # On Toggle
 const onToggle = (e: Event) => {
     const details = e.target as HTMLDetailsElement;
     isOpen.value = details.open;

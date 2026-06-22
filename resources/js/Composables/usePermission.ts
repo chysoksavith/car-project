@@ -2,6 +2,7 @@ import { ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
 import type { Permission } from "@/Types/permission";
 
+// # Use Permission
 export function usePermission() {
     const modalRef = ref<HTMLDialogElement | null>(null);
     const deleteModalRef = ref<HTMLDialogElement | null>(null);
@@ -11,6 +12,7 @@ export function usePermission() {
     const form = useForm({ name: "" });
     const deleteForm = useForm({});
 
+    // # Open Create
     function openCreate() {
         editingPerm.value = null;
         form.reset();
@@ -18,6 +20,7 @@ export function usePermission() {
         modalRef.value?.showModal();
     }
 
+    // # Open Edit
     function openEdit(perm: Permission) {
         editingPerm.value = perm;
         form.name = perm.name;
@@ -25,11 +28,13 @@ export function usePermission() {
         modalRef.value?.showModal();
     }
 
+    // # Confirm Delete
     function confirmDelete(perm: Permission) {
         deletingPerm.value = perm;
         deleteModalRef.value?.showModal();
     }
 
+    // # Save
     function save() {
         if (editingPerm.value) {
             form.put(route("admin.permissions.update", editingPerm.value.id), {
@@ -45,6 +50,7 @@ export function usePermission() {
         }
     }
 
+    // # Delete Perm
     function deletePerm() {
         if (!deletingPerm.value) return;
         deleteForm.delete(

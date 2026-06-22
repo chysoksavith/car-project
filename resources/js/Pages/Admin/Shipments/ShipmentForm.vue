@@ -154,6 +154,7 @@ const form = useForm({
     cost_allocation_method: props.shipment?.cost_allocation_method || 'equal_split',
 });
 
+// # Submit
 const submit = () => {
     if (props.isEdit && props.shipment) {
         form.put(route('admin.shipments.update', props.shipment.id));

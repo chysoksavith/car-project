@@ -115,11 +115,13 @@ const deleteModalRef = ref<any>(null);
 const deletingItem = ref<any>(null);
 const deleteForm = useForm({});
 
+// # Confirm Delete
 const confirmDelete = (item: any) => {
     deletingItem.value = item;
     deleteModalRef.value?.showModal();
 };
 
+// # Delete Item
 const deleteItem = () => {
     if (!deletingItem.value) return;
     deleteForm.delete(route("admin.inspection-items.destroy", deletingItem.value.id), {

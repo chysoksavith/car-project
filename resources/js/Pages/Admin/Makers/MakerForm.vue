@@ -46,6 +46,7 @@ const form = useForm({
     is_active: props.maker?.is_active ?? true,
 });
 
+// # Submit
 const submit = () => {
     if (props.isEdit && props.maker) {
         form.put(route("admin.makers.update", props.maker.id));

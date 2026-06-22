@@ -88,11 +88,13 @@ const deleteModalRef = ref<any>(null);
 const deletingMaker = ref<any>(null);
 const deleteForm = useForm({});
 
+// # Confirm Delete
 const confirmDelete = (maker: any) => {
     deletingMaker.value = maker;
     deleteModalRef.value?.showModal();
 };
 
+// # Delete Maker
 const deleteMaker = () => {
     if (!deletingMaker.value) return;
     deleteForm.delete(route('admin.makers.destroy', deletingMaker.value.id), {

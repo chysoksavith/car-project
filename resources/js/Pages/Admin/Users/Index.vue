@@ -133,11 +133,13 @@ const deleteModalRef = ref<any>(null);
 const deletingUser = ref<any>(null);
 const deleteForm = useForm({});
 
+// # Confirm Delete
 const confirmDelete = (user: any) => {
     deletingUser.value = user;
     deleteModalRef.value?.showModal();
 };
 
+// # Delete User
 const deleteUser = () => {
     if (!deletingUser.value) return;
     deleteForm.delete(route('admin.users.destroy', deletingUser.value.id), {

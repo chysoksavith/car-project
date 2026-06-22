@@ -47,3 +47,7 @@ Adhere strictly to the **Controller → Service → Resource** pattern.
 - Use standard RESTful resource methods in controllers (`index`, `create`, `store`, `show`, `edit`, `update`, `destroy`).
 - Vue views should match the controller structure (`Pages/Admin/Users/Index.vue`, `Pages/Admin/Roles/Create.vue`).
 - Vue component filenames must use PascalCase (`PageHeader.vue`).
+
+### Comment Standards
+- Whenever explaining what a function or method does (in PHP, Vue, JS, TS, etc.), the comment MUST be formatted exactly as `// # ` followed by a short, clean, and easily understandable explanation.
+- Do NOT use bulky `/** ... */` docblocks for simple function explanations. Keep comments concise.

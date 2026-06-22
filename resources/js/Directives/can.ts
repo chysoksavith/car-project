@@ -1,6 +1,7 @@
 import { DirectiveBinding } from 'vue';
 import { router } from '@inertiajs/vue3';
 
+// # Can
 export const can = (el: HTMLElement, binding: DirectiveBinding) => {
     // Access Inertia's shared props via the global router instance
     const user = (router.page?.props as any)?.auth?.user;

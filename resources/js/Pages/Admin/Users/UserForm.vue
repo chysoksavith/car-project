@@ -231,6 +231,7 @@ const { provinces, districts, communes, villages, loading, init } = useLocations
 
 onMounted(init);
 
+// # Submit
 const submit = () => {
     form.transform((data) => {
         const addressPayload = { ...data.address };

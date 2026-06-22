@@ -92,11 +92,13 @@ const deleteModalRef = ref<any>(null);
 const deletingModel = ref<any>(null);
 const deleteForm = useForm({});
 
+// # Confirm Delete
 const confirmDelete = (model: any) => {
     deletingModel.value = model;
     deleteModalRef.value?.showModal();
 };
 
+// # Delete Model
 const deleteModel = () => {
     if (!deletingModel.value) return;
     deleteForm.delete(route('admin.car-models.destroy', deletingModel.value.id), {

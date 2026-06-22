@@ -250,12 +250,14 @@ const isAllSelected = computed({
     }
 });
 
+// # Is Group Selected
 function isGroupSelected(groupName: string) {
     const groupPerms = groupedPermissions.value[groupName] || [];
     if (!groupPerms.length) return false;
     return groupPerms.every(p => form.permissions.includes(p.name));
 }
 
+// # Toggle Group
 function toggleGroup(groupName: string, event: Event) {
     const checked = (event.target as HTMLInputElement).checked;
     const groupPerms = groupedPermissions.value[groupName] || [];

@@ -97,6 +97,7 @@ const form = useForm({
     logo: null as File | null,
 });
 
+// # Submit
 const submit = () => {
     if (props.isEdit && props.company) {
         form.transform((data) => ({

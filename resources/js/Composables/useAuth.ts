@@ -17,40 +17,34 @@ interface SharedProps {
     [key: string]: unknown;
 }
 
-/**
- * Provides convenient access to the authenticated user,
- * their roles, and permission-check helpers.
- *
- * All data comes from HandleInertiaRequests shared props —
- * no extra API calls required.
- */
+// # Provides convenient access to the authenticated user,
 export function useAuth() {
     const page = usePage<SharedProps>();
 
     const user = computed<AuthUser | null>(() => page.props.auth?.user ?? null);
     const isAuthenticated = computed(() => user.value !== null);
 
-    /** Check if the user has a specific permission */
+    // # Check if the user has a specific permission
     const can = (permission: string): boolean => {
         return user.value?.permissions.includes(permission) ?? false;
     };
 
-    /** Check if the user has any of the given permissions */
+    // # Check if the user has any of the given permissions
     const canAny = (...permissions: string[]): boolean => {
         return permissions.some((p) => can(p));
     };
 
-    /** Check if the user has all of the given permissions */
+    // # Check if the user has all of the given permissions
     const canAll = (...permissions: string[]): boolean => {
         return permissions.every((p) => can(p));
     };
 
-    /** Check if the user has a specific role */
+    // # Check if the user has a specific role
     const hasRole = (role: string): boolean => {
         return user.value?.roles.includes(role) ?? false;
     };
 
-    /** Check if the user has any of the given roles */
+    // # Check if the user has any of the given roles
     const hasAnyRole = (...roles: string[]): boolean => {
         return roles.some((r) => hasRole(r));
     };
