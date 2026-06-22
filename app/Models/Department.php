@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasTenant;
+use App\Models\Traits\TracksAuditCols;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Department extends Model
 {
-    use HasFactory, \App\Models\Traits\HasTenant, \Illuminate\Database\Eloquent\SoftDeletes, \App\Models\Traits\TracksAuditCols;
+    use HasFactory, HasTenant, SoftDeletes, TracksAuditCols;
 
     protected $fillable = [
         'company_id',

@@ -12,6 +12,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use App\Models\Traits\HasTenant;
+use App\Models\Traits\TracksAuditCols;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[Fillable(['company_id', 'department_id', 'name', 'first_name', 'last_name', 'phone_number', 'birth_date', 'user_type', 'is_active', 'email', 'password', 'created_by', 'updated_by', 'deleted_by'])]
@@ -19,8 +20,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasApiTokens, HasFactory, Notifiable, HasRoles, HasTenant, SoftDeletes, \App\Models\Traits\TracksAuditCols;
-
+    use HasApiTokens, HasFactory, Notifiable, HasRoles, HasTenant, SoftDeletes, TracksAuditCols; 
     /**
      * Get the attributes that should be cast.
      *

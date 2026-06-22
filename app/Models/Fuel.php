@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasTenant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Fuel extends Model
 {
-    use HasFactory, \App\Models\Traits\HasTenant;
-
+    use HasFactory, HasTenant;
     protected $fillable = [
         'company_id',
         'name',
