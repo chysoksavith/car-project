@@ -22,6 +22,7 @@
             searchRoute="/admin/containers"
             :searchQuery="filters.search"
             searchPlaceholder="Search B/L or Container..."
+            @row-click="handleRowClick"
         >
             <template #cell(bl_number)="{ item }">
                 <div class="font-medium text-base-content">{{ item.bl_number }}</div>
@@ -52,14 +53,22 @@
             </template>
 
             <template #cell(actions)="{ item }">
-                <TableActionButtons
-                    :hasEdit="can('containers.edit')"
-                    :hasDelete="can('containers.delete')"
-                    @edit="router.visit(route('admin.containers.edit', item.id))"
-                    @delete="confirmDelete(item)"
-                />
+                <div @click.stop>
+                    <TableActionButtons
+                        :hasEdit="can('containers.edit')"
+                        :hasDelete="can('containers.delete')"
+                        @edit="router.visit(route('admin.containers.edit', item.id))"
+                        @delete="confirmDelete(item)"
+                    />
+                </div>
             </template>
         </DataTable>
+
+        <!-- Container Cars Sidebar -->
+        <ContainerCarsSidebar 
+            v-model="isSidebarOpen"
+            :container="selectedContainer"
+        />
 
         <!-- Delete Modal -->
         <Modal ref="deleteModalRef" maxWidth="sm" title="Delete Container">
@@ -71,6 +80,8 @@
                 <Button @click="deleteContainer" :loading="deleteForm.processing" variant="error" type="button">Delete</Button>
             </template>
         </Modal>
+
+
     </DashboardLayout>
 </template>
 
@@ -84,6 +95,7 @@ import DataTable from "@/Components/DataTable.vue";
 import Badge from "@/Components/Badge.vue";
 import TableActionButtons from "@/Components/TableActionButtons.vue";
 import Modal from "@/Components/Modal.vue";
+import ContainerCarsSidebar from "./Components/ContainerCarsSidebar.vue";
 
 const props = defineProps<{
     containers: any;
@@ -102,6 +114,15 @@ const columns = [
 const deleteModalRef = ref<any>(null);
 const deletingContainer = ref<any>(null);
 const deleteForm = useForm({});
+
+const isSidebarOpen = ref(false);
+const selectedContainer = ref<any>(null);
+
+// # Handle Row Click
+const handleRowClick = (item: any) => {
+    selectedContainer.value = item;
+    isSidebarOpen.value = true;
+};
 
 // # Confirm Delete
 const confirmDelete = (container: any) => {

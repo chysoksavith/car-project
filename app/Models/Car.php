@@ -49,6 +49,7 @@ use App\Models\Traits\HasAttachments;
     'sold_at',
     'is_active',
     'is_published',
+    'options',
     'created_by',
     'updated_by',
 ])]

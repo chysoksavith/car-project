@@ -28,14 +28,17 @@ class ContainerController extends Controller
     {
         Gate::authorize('containers.view');
 
-        $query = Container::query();
+        $query = Container::with(['cars.maker', 'cars.carModel', 'cars.color', 'cars.attachments']);
 
         if ($request->filled('search')) {
             $query->where('bl_number', 'like', "%{$request->search}%")
                   ->orWhere('container_number', 'like', "%{$request->search}%");
         }
 
-        $containers = $query->latest()->paginate(10)->withQueryString();
+        $containers = $query->with(['cars.maker', 'cars.carModel', 'cars.color', 'cars.attachments'])
+                            ->latest()
+                            ->paginate(10)
+                            ->withQueryString();
 
         return Inertia::render('Admin/Containers/Index', [
             'containers' => ContainerResource::collection($containers),

@@ -43,6 +43,7 @@ class StoreContainerRequest extends FormRequest
             'cars.*.images' => ['nullable', 'array'],
             'cars.*.images.*' => ['image', 'max:2048'],
             'cars.*.description' => ['nullable', 'string'],
+            'cars.*.options' => ['nullable', 'string'],
             'cars.*.year' => ['nullable', 'integer'],
             'cars.*.color_id' => ['nullable', 'exists:colors,id'],
             'cars.*.body_number' => ['nullable', 'string', 'max:255'],

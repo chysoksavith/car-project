@@ -40,7 +40,8 @@
                         <tr
                             v-for="(item, index) in data.data"
                             :key="item.id"
-                            class="hover"
+                            class="hover cursor-pointer"
+                            @click="$emit('row-click', item)"
                         >
                             <td
                                 v-for="col in columns"
@@ -113,6 +114,8 @@ import { ref, watch } from "vue";
 import { router } from "@inertiajs/vue3";
 import Pagination from "./Pagination.vue";
 
+const emit = defineEmits(['row-click']);
+
 const props = defineProps<{
     data: any;
     columns: Array<{ key: string; label: string; class?: string }>;
@@ -120,6 +123,7 @@ const props = defineProps<{
     searchQuery?: string;
     searchPlaceholder?: string;
 }>();
+
 
 const internalSearch = ref(props.searchQuery || "");
 

@@ -2,7 +2,7 @@
     <div class="flex items-center justify-center gap-4">
         <button
             v-if="hasEdit"
-            @click="$emit('edit')"
+            @click.stop="$emit('edit')"
             class="flex items-center gap-1.5 text-info hover:opacity-70 transition-opacity text-sm font-medium"
             title="Edit"
         >
@@ -12,7 +12,7 @@
 
         <button
             v-if="hasDelete"
-            @click="$emit('delete')"
+            @click.stop="$emit('delete')"
             class="flex items-center gap-1.5 text-error hover:opacity-70 transition-opacity text-sm font-medium"
             title="Delete"
         >

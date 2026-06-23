@@ -185,11 +185,16 @@
                         />
                     </div>
                     
-                    <div class="mt-4">
+                    <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                         <TextareaInput
                             label="Description"
                             v-model="car.description"
                             :error="form.errors[`cars.${index}.description`]"
+                        />
+                        <TextareaInput
+                            label="Options"
+                            v-model="car.options"
+                            :error="form.errors[`cars.${index}.options`]"
                         />
                     </div>
                     
@@ -301,6 +306,7 @@ const defaultCar = {
     car_model_id: '',
     fuel_id: '',
     description: '',
+    options: '',
     year: '',
     color_id: '',
     body_number: '',

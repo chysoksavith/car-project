@@ -55,12 +55,18 @@
                     :error="form.errors.fuel_id"
                 />
             </div>
-            <div class="mt-4">
+            <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
                 <TextInput
                     id="description"
                     v-model="form.description"
                     label="Description"
                     :error="form.errors.description"
+                />
+                <TextInput
+                    id="options"
+                    v-model="form.options"
+                    label="Options"
+                    :error="form.errors.options"
                 />
             </div>
 
@@ -395,6 +401,7 @@ const containerOptions = computed(() => [
 const form = useForm({
     name: props.car?.name || "",
     description: props.car?.description || "",
+    options: props.car?.options || "",
     maker_id: props.car?.maker_id || "",
     car_model_id: props.car?.car_model_id || "",
     container_id: props.car?.container_id || "",
@@ -454,7 +461,7 @@ const submit = () => {
         onError: (errors: any) => {
             const basicFields = [
                 "name", "maker_id", "car_model_id", "container_id", "fuel_id", 
-                "description", "year", "color_id", "condition", "transmission", 
+                "description", "options", "year", "color_id", "condition", "transmission", 
                 "body_number", "engine_number", "engine_capacity_cc", "registration_type", 
                 "plate_number", "certificate_number"
             ];

@@ -16,6 +16,7 @@ class StoreCarRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
+            'options' => ['nullable', 'string'],
             'maker_id' => ['nullable', 'exists:makers,id'],
             'car_model_id' => ['nullable', 'exists:car_models,id'],
             'container_id' => ['nullable', 'exists:containers,id'],
