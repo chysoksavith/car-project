@@ -76,100 +76,118 @@
 
 <script setup lang="ts">
 import SidebarItem from "./SidebarItem.vue";
+import { computed } from "vue";
 import { useAuth } from "@/Composables/useAuth";
 
-const { user } = useAuth();
+const { user, can, hasRole } = useAuth();
 
 defineProps<{
     isCollapsed: boolean;
 }>();
 
-const menuGroups = [
-    {
-        name: "Overview",
-        items: [
-            {
-                name: "Dashboard",
-                icon: "fa-solid fa-gauge",
-                active: true,
-                href: "/",
-            },
-        ],
-    },
-    {
-        name: "Cars",
-        items: [
-            {
-                name: "All Cars",
-                icon: "fa-solid fa-car-side",
-                href: "/admin/cars",
-            },
-            {
-                name: "Makers",
-                icon: "fa-solid fa-industry",
-                href: "/admin/makers",
-            },
-            {
-                name: "Car Models",
-                icon: "fa-solid fa-car",
-                href: "/admin/car-models",
-            },
-            {
-                name: "Inspection Items",
-                icon: "fa-solid fa-clipboard-list",
-                href: "/admin/inspection-items",
-            },
-            {
-                name: "Fuels",
-                icon: "fa-solid fa-gas-pump",
-                href: "/admin/fuels",
-            },
-            {
-                name: "Colors",
-                icon: "fa-solid fa-palette",
-                href: "/admin/colors",
-            },
-        ],
-    },
-    {
-        name: "Containers",
-        items: [
-            {
-                name: "Containers",
-                icon: "fa-solid fa-ship",
-                href: "/admin/containers",
-            },
-            {
-                name: "Suppliers",
-                icon: "fa-solid fa-truck-field",
-                href: "/admin/suppliers",
-            },
-        ],
-    },
-    {
-        name: "Users & Teams",
-        items: [
-            { name: "All Users", icon: "fa-solid fa-users", href: "/admin/users" },
-            { name: "Roles", icon: "fa-solid fa-user-shield", href: "/admin/roles" },
-            { name: "Permissions", icon: "fa-solid fa-key", href: "/admin/permissions" },
-        ],
-    },
-    {
-        name: "Management",
-        items: [
-            {
-                name: "Companies",
-                icon: "fa-solid fa-building",
-                href: "/admin/companies",
-            },
-            {
-                name: "Departments",
-                icon: "fa-solid fa-building-user",
-                href: "/admin/departments",
-            },
-        ],
-    },
-];
+const menuGroups = computed(() => {
+    const groups = [
+        {
+            name: "Overview",
+            items: [
+                {
+                    name: "Dashboard",
+                    icon: "fa-solid fa-gauge",
+                    active: true,
+                    href: "/",
+                },
+            ],
+        },
+        {
+            name: "Cars",
+            items: [
+                {
+                    name: "All Cars",
+                    icon: "fa-solid fa-car-side",
+                    href: "/admin/cars",
+                    permission: "cars.view",
+                },
+                {
+                    name: "Makers",
+                    icon: "fa-solid fa-industry",
+                    href: "/admin/makers",
+                    permission: "makers.view",
+                },
+                {
+                    name: "Car Models",
+                    icon: "fa-solid fa-car",
+                    href: "/admin/car-models",
+                    permission: "car_models.view",
+                },
+                {
+                    name: "Inspection Items",
+                    icon: "fa-solid fa-clipboard-list",
+                    href: "/admin/inspection-items",
+                    permission: "inspection_items.view",
+                },
+                {
+                    name: "Fuels",
+                    icon: "fa-solid fa-gas-pump",
+                    href: "/admin/fuels",
+                    permission: "fuels.view",
+                },
+                {
+                    name: "Colors",
+                    icon: "fa-solid fa-palette",
+                    href: "/admin/colors",
+                    permission: "colors.view",
+                },
+            ],
+        },
+        {
+            name: "Containers",
+            items: [
+                {
+                    name: "Containers",
+                    icon: "fa-solid fa-ship",
+                    href: "/admin/containers",
+                    permission: "containers.view",
+                },
+                {
+                    name: "Suppliers",
+                    icon: "fa-solid fa-truck-field",
+                    href: "/admin/suppliers",
+                    permission: "suppliers.view",
+                },
+            ],
+        },
+        {
+            name: "Users & Teams",
+            items: [
+                { name: "All Users", icon: "fa-solid fa-users", href: "/admin/users", permission: "users.view" },
+                { name: "Roles", icon: "fa-solid fa-user-shield", href: "/admin/roles", permission: "roles.view" },
+                { name: "Permissions", icon: "fa-solid fa-key", href: "/admin/permissions", permission: "permissions.view" },
+            ],
+        },
+        {
+            name: "Management",
+            items: [
+                {
+                    name: "Companies",
+                    icon: "fa-solid fa-building",
+                    href: "/admin/companies",
+                    permission: "companies.view",
+                },
+                {
+                    name: "Departments",
+                    icon: "fa-solid fa-building-user",
+                    href: "/admin/departments",
+                    permission: "departments.view",
+                },
+            ],
+        },
+    ];
+
+    return groups.map(group => ({
+        ...group,
+        items: group.items.filter(item => !item.permission || can(item.permission))
+    })).filter(group => group.items.length > 0);
+});
 </script>
 
 <style scoped>

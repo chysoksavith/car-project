@@ -193,8 +193,8 @@
                         />
                     </div>
                     
-                    <div class="mt-4 flex flex-col md:flex-row md:items-start justify-between gap-4">
-                        <div class="w-full md:w-2/3">
+                    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                        <div class="col-span-1">
                             <ImageUploader 
                                 v-model="car.images" 
                                 v-model:deleted-images="car.deleted_images"
@@ -202,13 +202,15 @@
                                 :error="getCarImageError(index)"
                             />
                         </div>
+                    </div>
 
+                    <div class="mt-6 flex justify-end border-t border-base-200 pt-4">
                         <button 
                             type="button" 
                             @click="removeCar(index)" 
-                            class="btn btn-error btn-outline btn-sm md:mt-9"
+                            class="btn btn-error btn-sm"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                            <i class="fa-solid fa-trash-can mr-1"></i>
                             Remove Car
                         </button>
                     </div>
@@ -218,7 +220,7 @@
         
         <div class="mt-4">
             <Button type="button" variant="secondary" @click="addCar" class="w-full md:w-auto">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" /></svg>
+                <i class="fa-solid fa-plus mr-1"></i>
                 Add Another Car
             </Button>
         </div>
