@@ -53,6 +53,7 @@ class UpdateContainerRequest extends FormRequest
                 'nullable',
                 'string',
                 'max:255',
+                'distinct',
                 function ($attribute, $value, $fail) {
                     // Extract the index from the attribute (e.g. cars.0.body_number)
                     preg_match('/cars\.(\d+)\.body_number/', $attribute, $matches);
@@ -62,7 +63,7 @@ class UpdateContainerRequest extends FormRequest
                         $carId = request()->input("cars.{$index}.id");
                     }
 
-                    $query = \App\Models\Car::where('body_number', $value);
+                    $query = \Illuminate\Support\Facades\DB::table('cars')->where('body_number', $value);
                     if ($carId) {
                         $query->where('id', '!=', $carId);
                     }
@@ -76,6 +77,35 @@ class UpdateContainerRequest extends FormRequest
             'cars.*.cif_price' => ['nullable', 'numeric', 'min:0'],
             'cars.*.transport_cost' => ['nullable', 'numeric', 'min:0'],
             'cars.*.expected_profit' => ['nullable', 'numeric', 'min:0'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'cars.*.body_number.distinct' => 'This body number is duplicated within the container.',
+            'cars.*.body_number.unique' => 'This body number has already been taken.',
+        ];
+    }
+
+    public function attributes(): array
+    {
+        return [
+            'cars.*.name' => 'car name',
+            'cars.*.maker_id' => 'maker',
+            'cars.*.car_model_id' => 'car model',
+            'cars.*.fuel_id' => 'fuel',
+            'cars.*.year' => 'year',
+            'cars.*.color_id' => 'color',
+            'cars.*.body_number' => 'body number',
+            'cars.*.engine_capacity_cc' => 'engine capacity',
+            'cars.*.registration_type' => 'registration type',
+            'cars.*.cif_price' => 'CIF price',
+            'cars.*.transport_cost' => 'transport cost',
+            'cars.*.expected_profit' => 'expected profit',
+            'cars.*.description' => 'description',
+            'cars.*.options' => 'options',
+            'cars.*.images' => 'images',
         ];
     }
 }

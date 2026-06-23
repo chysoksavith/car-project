@@ -45,12 +45,41 @@ class StoreContainerRequest extends FormRequest
             'cars.*.options' => ['nullable', 'string'],
             'cars.*.year' => ['nullable', 'integer'],
             'cars.*.color_id' => ['nullable', 'exists:colors,id'],
-            'cars.*.body_number' => ['nullable', 'string', 'max:255', 'unique:cars,body_number'],
+            'cars.*.body_number' => ['nullable', 'string', 'max:255', 'distinct', 'unique:cars,body_number'],
             'cars.*.engine_capacity_cc' => ['nullable', 'numeric'],
             'cars.*.registration_type' => ['nullable', Rule::enum(\App\Enums\RegistrationType::class)],
             'cars.*.cif_price' => ['nullable', 'numeric', 'min:0'],
             'cars.*.transport_cost' => ['nullable', 'numeric', 'min:0'],
             'cars.*.expected_profit' => ['nullable', 'numeric', 'min:0'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'cars.*.body_number.distinct' => 'This body number is duplicated within the container.',
+            'cars.*.body_number.unique' => 'This body number has already been taken.',
+        ];
+    }
+
+    public function attributes(): array
+    {
+        return [
+            'cars.*.name' => 'car name',
+            'cars.*.maker_id' => 'maker',
+            'cars.*.car_model_id' => 'car model',
+            'cars.*.fuel_id' => 'fuel',
+            'cars.*.year' => 'year',
+            'cars.*.color_id' => 'color',
+            'cars.*.body_number' => 'body number',
+            'cars.*.engine_capacity_cc' => 'engine capacity',
+            'cars.*.registration_type' => 'registration type',
+            'cars.*.cif_price' => 'CIF price',
+            'cars.*.transport_cost' => 'transport cost',
+            'cars.*.expected_profit' => 'expected profit',
+            'cars.*.description' => 'description',
+            'cars.*.options' => 'options',
+            'cars.*.images' => 'images',
         ];
     }
 }
