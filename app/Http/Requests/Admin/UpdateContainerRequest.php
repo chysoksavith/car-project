@@ -29,7 +29,6 @@ class UpdateContainerRequest extends FormRequest
             'ship_id' => ['nullable', 'string', 'max:255'],
             'bl_number' => ['required', 'string', 'max:255'],
             'container_number' => ['required', 'string', 'max:255', Rule::unique('containers')->ignore($containerId)],
-            'container_type' => ['nullable', 'string', 'max:255'],
             'status' => ['required', Rule::enum(\App\Enums\ContainerStatus::class)],
             'departure_date' => ['nullable', 'date'],
             'expected_date' => ['nullable', 'date'],
@@ -50,7 +49,28 @@ class UpdateContainerRequest extends FormRequest
             'cars.*.options' => ['nullable', 'string'],
             'cars.*.year' => ['nullable', 'integer'],
             'cars.*.color_id' => ['nullable', 'exists:colors,id'],
-            'cars.*.body_number' => ['nullable', 'string', 'max:255'],
+            'cars.*.body_number' => [
+                'nullable',
+                'string',
+                'max:255',
+                function ($attribute, $value, $fail) {
+                    // Extract the index from the attribute (e.g. cars.0.body_number)
+                    preg_match('/cars\.(\d+)\.body_number/', $attribute, $matches);
+                    $carId = null;
+                    if (!empty($matches)) {
+                        $index = $matches[1];
+                        $carId = request()->input("cars.{$index}.id");
+                    }
+
+                    $query = \App\Models\Car::where('body_number', $value);
+                    if ($carId) {
+                        $query->where('id', '!=', $carId);
+                    }
+                    if ($query->exists()) {
+                        $fail('The body number has already been taken.');
+                    }
+                }
+            ],
             'cars.*.engine_capacity_cc' => ['nullable', 'numeric'],
             'cars.*.registration_type' => ['nullable', Rule::enum(\App\Enums\RegistrationType::class)],
             'cars.*.cif_price' => ['nullable', 'numeric', 'min:0'],

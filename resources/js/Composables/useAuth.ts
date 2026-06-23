@@ -24,8 +24,16 @@ export function useAuth() {
     const user = computed<AuthUser | null>(() => page.props.auth?.user ?? null);
     const isAuthenticated = computed(() => user.value !== null);
 
+    // # Check if the user has a specific role
+    const hasRole = (role: string): boolean => {
+        return user.value?.roles.includes(role) ?? false;
+    };
+
     // # Check if the user has a specific permission
     const can = (permission: string): boolean => {
+        if (hasRole('super-admin')) {
+            return true;
+        }
         return user.value?.permissions.includes(permission) ?? false;
     };
 
@@ -39,10 +47,6 @@ export function useAuth() {
         return permissions.every((p) => can(p));
     };
 
-    // # Check if the user has a specific role
-    const hasRole = (role: string): boolean => {
-        return user.value?.roles.includes(role) ?? false;
-    };
 
     // # Check if the user has any of the given roles
     const hasAnyRole = (...roles: string[]): boolean => {

@@ -49,12 +49,14 @@
                 </template>
 
                 <template #cell(actions)="{ item }">
+                    <div @click.stop class="flex justify-end">
                     <TableActionButtons
                         :hasEdit="can('roles.edit')"
                         :hasDelete="can('roles.delete')"
                         @edit="openEdit(item)"
                         @delete="confirmDelete(item)"
                     />
+                </div>
                 </template>
             </DataTable>
         </div>
@@ -202,10 +204,10 @@ const props = defineProps<{
 
 // # DataTable Columns
 const columns = [
-    { key: "no", label: "No.", class: "w-16" },
+    { key: "no", label: "No.",  },
     { key: "name", label: "Name" },
     { key: "permissions", label: "Permissions" },
-    { key: "actions", label: "Actions", class: "text-right w-32" },
+    { key: "actions", label: "Actions", class: "text-right" },
 ];
 
 // # Group Permissions by Prefix

@@ -25,12 +25,12 @@
             <div class="overflow-x-auto">
                 <table class="table table-zebra w-full">
                     <thead>
-                        <tr class="text-base-content/60">
+                        <tr class="text-base-content/60 border-b border-base-200/80">
                             <th
                                 v-for="col in columns"
                                 :key="col.key"
-                                :class="col.class || ''"
-                                class="font-medium bg-transparent"
+                                :class="[col.class, { 'text-left': !col.class || (!col.class.includes('text-center') && !col.class.includes('text-right')) }]"
+                                class="font-medium bg-transparent align-middle whitespace-nowrap px-4 py-3 text-sm"
                             >
                                 {{ col.label }}
                             </th>
@@ -40,13 +40,14 @@
                         <tr
                             v-for="(item, index) in data.data"
                             :key="item.id"
-                            class="hover cursor-pointer"
+                            class="hover cursor-pointer border-b border-base-200/50 last:border-0 transition-colors"
                             @click="$emit('row-click', item)"
                         >
                             <td
                                 v-for="col in columns"
                                 :key="col.key"
-                                :class="col.class || ''"
+                                :class="[col.class, { 'text-left': !col.class || (!col.class.includes('text-center') && !col.class.includes('text-right')) }]"
+                                class="align-middle px-4 py-3"
                             >
                                 <!-- Render custom slot if it exists, otherwise print the raw property -->
                                 <slot :name="`cell(${col.key})`" :item="item" :index="index">

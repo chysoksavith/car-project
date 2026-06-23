@@ -15,7 +15,6 @@ use App\Models\Traits\TracksAuditCols;
     'ship_id',
     'bl_number',
     'container_number',
-    'container_type',
     'status',
     'departure_date',
     'expected_date',

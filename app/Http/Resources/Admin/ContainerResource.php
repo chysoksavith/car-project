@@ -21,7 +21,6 @@ class ContainerResource extends JsonResource
             'ship_id' => $this->ship_id,
             'bl_number' => $this->bl_number,
             'container_number' => $this->container_number,
-            'container_type' => $this->container_type,
             'status' => $this->status,
             'departure_date' => $this->departure_date ? $this->departure_date->format('Y-m-d') : null,
             'expected_date' => $this->expected_date ? $this->expected_date->format('Y-m-d') : null,

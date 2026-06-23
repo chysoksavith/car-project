@@ -26,7 +26,7 @@ class StoreCarRequest extends FormRequest
             'color_id' => ['nullable', 'exists:colors,id'],
             'condition' => ['required', Rule::enum(\App\Enums\CarCondition::class)],
             'transmission' => ['nullable', Rule::enum(\App\Enums\Transmission::class)],
-            'body_number' => ['nullable', 'string', 'max:255'],
+            'body_number' => ['nullable', 'string', 'max:255', 'unique:cars,body_number'],
             'engine_number' => ['nullable', 'string', 'max:255'],
             'engine_capacity_cc' => ['nullable', 'integer', 'min:0'],
             'registration_type' => ['required', Rule::enum(\App\Enums\RegistrationType::class)],

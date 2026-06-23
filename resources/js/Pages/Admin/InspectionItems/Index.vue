@@ -60,12 +60,14 @@
             </template>
 
             <template #cell(actions)="{ item }">
-                <TableActionButtons
+                <div @click.stop class="flex justify-end">
+                    <TableActionButtons
                     :hasEdit="can('inspection_items.edit')"
                     :hasDelete="can('inspection_items.delete')"
                     @edit="router.visit(route('admin.inspection-items.edit', item.id))"
                     @delete="confirmDelete(item)"
                 />
+                </div>
             </template>
         </DataTable>
 
@@ -103,7 +105,7 @@ const props = defineProps<{
 }>();
 
 const columns = [
-    { key: "no", label: "No.", class: "w-16" },
+    { key: "no", label: "No.",  },
     { key: "name", label: "Item Name" },
     { key: "category", label: "Parent Category" },
     { key: "price", label: "Default Price" },

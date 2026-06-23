@@ -33,12 +33,14 @@
                 </template>
 
                 <template #cell(actions)="{ item }">
+                    <div @click.stop class="flex justify-end">
                     <TableActionButtons
                         :hasEdit="can('permissions.edit')"
                         :hasDelete="can('permissions.delete')"
                         @edit="openEdit(item)"
                         @delete="confirmDelete(item)"
                     />
+                </div>
                 </template>
             </DataTable>
         </div>
@@ -123,9 +125,9 @@ const props = defineProps<{
 
 // # Columns
 const columns = [
-    { key: "no", label: "No.", class: "w-16" },
+    { key: "no", label: "No.",  },
     { key: "name", label: "Permission Name" },
-    { key: "actions", label: "Actions", class: "w-24 text-right" },
+    { key: "actions", label: "Actions", class: "text-right" },
 ];
 
 // # Composables

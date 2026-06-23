@@ -52,12 +52,14 @@
             </template>
 
             <template #cell(actions)="{ item }">
-                <TableActionButtons
+                <div @click.stop class="flex justify-end">
+                    <TableActionButtons
                     :hasEdit="can('colors.edit')"
                     :hasDelete="can('colors.delete')"
                     @edit="router.visit(route('admin.colors.edit', item.id))"
                     @delete="confirmDelete(item)"
                 />
+                </div>
             </template>
         </DataTable>
 
@@ -91,7 +93,7 @@ const props = defineProps<{
 }>();
 
 const columns = [
-    { key: "no", label: "No.", class: "w-16" },
+    { key: "no", label: "No.",  },
     { key: "name", label: "Color Name" },
     { key: "hex_code", label: "Hex Code" },
     { key: "status", label: "Status" },

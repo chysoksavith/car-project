@@ -31,7 +31,6 @@
             <template #cell(container)="{ item }">
                 <div class="flex flex-col">
                     <span class="text-sm font-bold text-base-content">{{ item.container_number }}</span>
-                    <span v-if="item.container_type" class="text-xs text-base-content/60 font-medium">{{ item.container_type }}</span>
                 </div>
             </template>
 
@@ -62,7 +61,7 @@
             </template>
 
             <template #cell(actions)="{ item }">
-                <div @click.stop>
+                <div @click.stop class="flex justify-end">
                     <TableActionButtons
                         :hasEdit="can('containers.edit')"
                         :hasDelete="can('containers.delete')"
@@ -112,10 +111,10 @@ const props = defineProps<{
 }>();
 
 const columns = [
-    { key: "no", label: "No.", class: "w-16" },
+    { key: "no", label: "No.",  },
     { key: "bl_number", label: "B/L Number" },
     { key: "container", label: "Container Info" },
-    { key: "cars", label: "Cars", class: "text-center w-24" },
+    { key: "cars", label: "Cars", class: "text-center" },
     { key: "status", label: "Status" },
     { key: "dates", label: "Dates" },
     { key: "actions", label: "Actions", class: "text-right" },

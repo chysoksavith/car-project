@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('ship_id')->nullable();
             $table->string('bl_number');
             $table->string('container_number')->unique();
-            $table->string('container_type')->nullable();
             $table->string('status')->default('on_the_way');
             $table->date('departure_date')->nullable();
             $table->date('expected_date')->nullable();

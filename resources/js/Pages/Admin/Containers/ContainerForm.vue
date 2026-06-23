@@ -32,13 +32,7 @@
                 :error="form.errors.container_number"
                 required
             />
-            
-            <TextInput
-                label="Container Type"
-                v-model="form.container_type"
-                placeholder="e.g. 40ft HC"
-                :error="form.errors.container_type"
-            />
+
             
             <SelectInput
                 label="Status"
@@ -324,7 +318,6 @@ const form = useForm({
     ship_id: props.container?.ship_id || '',
     bl_number: props.container?.bl_number || '',
     container_number: props.container?.container_number || '',
-    container_type: props.container?.container_type || '',
     status: props.container?.status || 'on_the_way',
     departure_date: props.container?.departure_date || today,
     expected_date: props.container?.expected_date || today,

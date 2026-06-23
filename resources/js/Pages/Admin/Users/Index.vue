@@ -89,12 +89,14 @@
             </template>
 
             <template #cell(actions)="{ item }">
-                <TableActionButtons
+                <div @click.stop class="flex justify-end">
+                    <TableActionButtons
                     :hasEdit="can('users.edit')"
                     :hasDelete="can('users.delete')"
                     @edit="router.visit(route('admin.users.edit', item.id))"
                     @delete="confirmDelete(item)"
                 />
+                </div>
             </template>
         </DataTable>
 
@@ -151,7 +153,7 @@ const deleteUser = () => {
 };
 
 const columns = [
-    { key: "no", label: "No.", class: "w-16" },
+    { key: "no", label: "No.",  },
     { key: "name", label: "Name" },
     { key: "contact", label: "Contact Info" },
     { key: "role", label: "Role" },
