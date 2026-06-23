@@ -36,7 +36,7 @@ class ContainerController extends Controller
         }
 
         $containers = $query->with(['cars.maker', 'cars.carModel', 'cars.color', 'cars.attachments'])
-                            ->latest()
+                            ->orderByRaw('expected_date ASC NULLS LAST')
                             ->paginate(10)
                             ->withQueryString();
 

@@ -4,6 +4,8 @@ namespace App\Enums;
 
 enum Transmission: string
 {
+    use \App\Traits\EnumOptions;
+
     case AUTOMATIC = 'AUTOMATIC';
     case MANUAL = 'MANUAL';
     case CVT = 'CVT';
@@ -18,11 +20,4 @@ enum Transmission: string
         };
     }
 
-    // # Get all available options for dropdowns
-    public static function options(): array
-    {
-        return collect(self::cases())
-            ->mapWithKeys(fn ($case) => [$case->value => $case->label()])
-            ->toArray();
-    }
 }

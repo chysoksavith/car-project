@@ -4,6 +4,8 @@ namespace App\Enums;
 
 enum CarCondition: string
 {
+    use \App\Traits\EnumOptions;
+
     case NEW = 'NEW';
     case USED = 'USED';
 
@@ -16,11 +18,4 @@ enum CarCondition: string
         };
     }
 
-    // # Get all available options for dropdowns
-    public static function options(): array
-    {
-        return collect(self::cases())
-            ->mapWithKeys(fn ($case) => [$case->value => $case->label()])
-            ->toArray();
-    }
 }

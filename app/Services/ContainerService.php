@@ -47,14 +47,15 @@ class ContainerService
 
             $updated = $container->update($data);
 
-            $existingCarIds = $container->cars()->pluck('id')->all();
+            $existingCars = $container->cars()->get()->keyBy('id');
+            $existingCarIds = $existingCars->keys()->all();
             $submittedCarIds = [];
 
             foreach ($cars as $carData) {
                 $carData['container_id'] = $container->id;
 
                 if (isset($carData['id'])) {
-                    $car = Car::find($carData['id']);
+                    $car = $existingCars->get($carData['id']);
                     if ($car) {
                         $this->carService->update($car, $carData);
                         $submittedCarIds[] = $carData['id'];
@@ -67,18 +68,21 @@ class ContainerService
                 }
             }
 
-            // Soft-delete cars that were removed from the container
-            $carsToDelete = array_diff($existingCarIds, $submittedCarIds);
-            if (!empty($carsToDelete)) {
-                Car::whereIn('id', $carsToDelete)->get()->each(
-                    fn (Car $car) => $this->carService->delete($car)
-                );
+            // # Soft-delete cars that were removed from the container
+            $carsToDeleteIds = array_diff($existingCarIds, $submittedCarIds);
+            if (!empty($carsToDeleteIds)) {
+                foreach ($carsToDeleteIds as $carId) {
+                    $carToDelete = $existingCars->get($carId);
+                    if ($carToDelete) {
+                        $this->carService->delete($carToDelete);
+                    }
+                }
             }
 
             ServiceLogger::updated('Container', $container->id, [
                 'container_number' => $container->container_number,
                 'cars_updated'     => count($submittedCarIds),
-                'cars_removed'     => count($carsToDelete),
+                'cars_removed'     => count($carsToDeleteIds),
             ]);
 
             return $updated;
@@ -89,8 +93,9 @@ class ContainerService
     public function deleteContainer(Container $container): bool
     {
         return DB::transaction(function () use ($container) {
-            // Cascade soft-delete to all child cars
-            $container->cars()->each(fn (Car $car) => $this->carService->delete($car));
+            // # Cascade soft-delete to all child cars
+            // # Retrieve all cars first to avoid chunking issues with mutating queries
+            $container->cars()->get()->each(fn (Car $car) => $this->carService->delete($car));
 
             $deleted = $container->delete();
 
@@ -102,24 +107,20 @@ class ContainerService
         });
     }
 
-    // ---------------------------------------------------------------------------
-    // Helpers
-    // ---------------------------------------------------------------------------
+    // # Helpers
 
-    /**
-     * Merge sensible defaults onto a new car payload before persisting.
-     */
+    // # Merge sensible defaults onto a new car payload before persisting.
     private function applyCarDefaults(array $carData, int $containerId): array
     {
         return array_merge([
-            'inventory_status' => 'IN_TRANSIT',
-            'sales_status'     => 'AVAILABLE',
-            'condition'        => 'NEW',
+            'inventory_status' => \App\Enums\InventoryStatus::IN_TRANSIT->value,
+            'sales_status'     => \App\Enums\SalesStatus::AVAILABLE->value,
+            'condition'        => \App\Enums\CarCondition::NEW->value,
             'quantity'         => 1,
             'is_active'        => true,
             'is_published'     => false,
         ], $carData, [
-            'container_id' => $containerId, // always authoritative
+            'container_id' => $containerId, // # always authoritative
         ]);
     }
 }

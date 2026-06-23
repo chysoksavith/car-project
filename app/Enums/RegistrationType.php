@@ -4,6 +4,8 @@ namespace App\Enums;
 
 enum RegistrationType: string
 {
+    use \App\Traits\EnumOptions;
+
     case TAX_PAPER = 'TAX_PAPER';
     case PLATE_NUMBER = 'PLATE_NUMBER';
 
@@ -16,11 +18,4 @@ enum RegistrationType: string
         };
     }
 
-    // # Get all available options for dropdowns
-    public static function options(): array
-    {
-        return collect(self::cases())
-            ->mapWithKeys(fn ($case) => [$case->value => $case->label()])
-            ->toArray();
-    }
 }

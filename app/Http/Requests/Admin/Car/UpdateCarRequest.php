@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin\Car;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateCarRequest extends FormRequest
 {
@@ -23,17 +24,17 @@ class UpdateCarRequest extends FormRequest
             'fuel_id' => ['nullable', 'exists:fuels,id'],
             'year' => ['nullable', 'integer', 'min:1900', 'max:' . (date('Y') + 1)],
             'color_id' => ['nullable', 'exists:colors,id'],
-            'condition' => ['required', 'in:NEW,USED'],
-            'transmission' => ['nullable', 'string', 'max:255'],
+            'condition' => ['required', Rule::enum(\App\Enums\CarCondition::class)],
+            'transmission' => ['nullable', Rule::enum(\App\Enums\Transmission::class)],
             'body_number' => ['nullable', 'string', 'max:255'],
             'engine_number' => ['nullable', 'string', 'max:255'],
             'engine_capacity_cc' => ['nullable', 'integer', 'min:0'],
-            'registration_type' => ['required', 'in:TAX_PAPER,PLATE_NUMBER'],
+            'registration_type' => ['required', Rule::enum(\App\Enums\RegistrationType::class)],
             'plate_number' => ['nullable', 'string', 'max:255'],
             'certificate_number' => ['nullable', 'string', 'max:255'],
             'quantity' => ['nullable', 'integer', 'min:0'],
-            'inventory_status' => ['required', 'in:IN_TRANSIT,IN_SHOWROOM,DELIVERED'],
-            'sales_status' => ['required', 'in:AVAILABLE,BOOKED,RESERVED,SOLD'],
+            'inventory_status' => ['required', Rule::enum(\App\Enums\InventoryStatus::class)],
+            'sales_status' => ['required', Rule::enum(\App\Enums\SalesStatus::class)],
             'purchase_price' => ['nullable', 'numeric', 'min:0'],
             'cif_price' => ['nullable', 'numeric', 'min:0'],
             'transport_cost' => ['nullable', 'numeric', 'min:0'],

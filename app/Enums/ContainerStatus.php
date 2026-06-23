@@ -4,6 +4,8 @@ namespace App\Enums;
 
 enum ContainerStatus: string
 {
+    use \App\Traits\EnumOptions;
+
     case OnTheWay = 'on_the_way';
     case InStock = 'in_stock';
     case Delivered = 'delivered';

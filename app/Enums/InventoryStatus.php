@@ -4,6 +4,8 @@ namespace App\Enums;
 
 enum InventoryStatus: string
 {
+    use \App\Traits\EnumOptions;
+
     case IN_TRANSIT = 'IN_TRANSIT';
     case IN_SHOWROOM = 'IN_SHOWROOM';
     case DELIVERED = 'DELIVERED';
@@ -18,11 +20,4 @@ enum InventoryStatus: string
         };
     }
 
-    // # Get all available options for dropdowns
-    public static function options(): array
-    {
-        return collect(self::cases())
-            ->mapWithKeys(fn ($case) => [$case->value => $case->label()])
-            ->toArray();
-    }
 }

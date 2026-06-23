@@ -4,6 +4,8 @@ namespace App\Enums;
 
 enum SalesStatus: string
 {
+    use \App\Traits\EnumOptions;
+
     case AVAILABLE = 'AVAILABLE';
     case BOOKED = 'BOOKED';
     case RESERVED = 'RESERVED';
@@ -20,11 +22,4 @@ enum SalesStatus: string
         };
     }
 
-    // # Get all available options for dropdowns
-    public static function options(): array
-    {
-        return collect(self::cases())
-            ->mapWithKeys(fn ($case) => [$case->value => $case->label()])
-            ->toArray();
-    }
 }

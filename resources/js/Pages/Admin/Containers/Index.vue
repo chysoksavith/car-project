@@ -30,8 +30,17 @@
 
             <template #cell(container)="{ item }">
                 <div class="flex flex-col">
-                    <span class="text-sm">{{ item.container_number }}</span>
-                    <span v-if="item.container_type" class="text-xs text-base-content/70">{{ item.container_type }}</span>
+                    <span class="text-sm font-bold text-base-content">{{ item.container_number }}</span>
+                    <span v-if="item.container_type" class="text-xs text-base-content/60 font-medium">{{ item.container_type }}</span>
+                </div>
+            </template>
+
+            <template #cell(cars)="{ item }">
+                <div class="flex items-center justify-center">
+                    <div class="badge badge-primary badge-outline gap-1 font-semibold">
+                        <i class="fa-solid fa-car-side text-[10px]"></i>
+                        {{ item.cars?.length || 0 }}
+                    </div>
                 </div>
             </template>
 
@@ -106,6 +115,7 @@ const columns = [
     { key: "no", label: "No.", class: "w-16" },
     { key: "bl_number", label: "B/L Number" },
     { key: "container", label: "Container Info" },
+    { key: "cars", label: "Cars", class: "text-center w-24" },
     { key: "status", label: "Status" },
     { key: "dates", label: "Dates" },
     { key: "actions", label: "Actions", class: "text-right" },
