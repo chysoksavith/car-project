@@ -23,11 +23,19 @@
             :searchQuery="filters.search"
             searchPlaceholder="Search cars..."
         >
+            <template #cell(id)="{ item }">
+                <Link :href="route('admin.cars.show', item.id)" class="text-primary hover:underline font-medium">
+                    #{{ item.id }}
+                </Link>
+            </template>
+
             <template #cell(name)="{ item }">
-                <div class="font-bold text-base-content">{{ item.name }}</div>
-                <div class="text-sm text-base-content/70" v-if="item.plate_number">
-                    Plate: {{ item.plate_number }}
-                </div>
+                <Link :href="route('admin.cars.show', item.id)" class="group block">
+                    <div class="font-bold text-base-content group-hover:text-primary transition-colors">{{ item.name }}</div>
+                    <div class="text-sm text-base-content/70 group-hover:text-primary/70 transition-colors" v-if="item.plate_number">
+                        Plate: {{ item.plate_number }}
+                    </div>
+                </Link>
             </template>
 
             <template #cell(maker)="{ item }">
@@ -81,7 +89,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { router, useForm } from "@inertiajs/vue3";
+import { router, useForm, Link } from "@inertiajs/vue3";
 import DashboardLayout from "@/Layouts/DashboardLayout.vue";
 import Button from "@/Components/Button.vue";
 import Badge from "@/Components/Badge.vue";

@@ -52,6 +52,8 @@ class UpdateCarRequest extends FormRequest
             'images.*' => ['image', 'max:5120'],
             'deleted_images' => ['nullable', 'array'],
             'deleted_images.*' => ['integer'],
+            'existing_image_order' => ['nullable', 'array'],
+            'existing_image_order.*' => ['integer'],
         ];
     }
 }

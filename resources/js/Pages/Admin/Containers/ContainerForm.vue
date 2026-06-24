@@ -197,6 +197,7 @@
                             <ImageUploader 
                                 v-model="car.images" 
                                 v-model:deleted-images="car.deleted_images"
+                                v-model:existing-image-order="car.existing_image_order"
                                 :existing-images="car.existing_images" 
                                 :error="getCarImageError(index)"
                             />
@@ -311,6 +312,7 @@ const defaultCar = {
     expected_profit: '',
     images: [] as File[],
     existing_images: [] as any[],
+    existing_image_order: [] as number[],
 };
 
 const form = useForm({

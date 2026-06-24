@@ -40,8 +40,8 @@ class CarService
 
         $car = Car::create($data);
 
-        foreach ($images as $image) {
-            $car->attachFile($image, 'car_images');
+        foreach ($images as $index => $image) {
+            $car->attachFile($image, 'car_images', 'public', $index);
         }
 
         ServiceLogger::created('Car', $car->id, [
@@ -57,7 +57,8 @@ class CarService
     {
         $images = $data['images'] ?? [];
         $deletedImages = $data['deleted_images'] ?? [];
-        unset($data['images'], $data['deleted_images']);
+        $existingImageOrder = $data['existing_image_order'] ?? [];
+        unset($data['images'], $data['deleted_images'], $data['existing_image_order']);
 
         $updated = $car->update($data);
 
@@ -70,9 +71,26 @@ class CarService
             }
         }
 
+        $nextSortOrder = 0;
+        if (!empty($existingImageOrder)) {
+            foreach ($existingImageOrder as $index => $attachmentId) {
+                // Update the sort order of existing attachments
+                $car->attachments()->where('id', $attachmentId)->update(['sort_order' => $index]);
+            }
+            $nextSortOrder = count($existingImageOrder);
+        } else {
+            // Re-index remaining attachments to ensure consistency
+            $remainingAttachments = $car->attachments()->get();
+            foreach ($remainingAttachments as $index => $attachment) {
+                $attachment->update(['sort_order' => $index]);
+            }
+            $nextSortOrder = $remainingAttachments->count();
+        }
+
         if (!empty($images)) {
             foreach ($images as $image) {
-                $car->attachFile($image, 'car_images');
+                $car->attachFile($image, 'car_images', 'public', $nextSortOrder);
+                $nextSortOrder++;
             }
         }
 

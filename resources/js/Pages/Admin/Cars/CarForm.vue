@@ -77,6 +77,7 @@
                 <ImageUploader 
                     v-model="form.images" 
                     v-model:deleted-images="form.deleted_images"
+                    v-model:existing-image-order="form.existing_image_order"
                     :existing-images="props.car?.images" 
                     :error="carImageError"
                     :label="undefined"
@@ -428,6 +429,7 @@ const form = useForm({
     is_active: props.car?.is_active ?? true,
     images: [] as File[],
     deleted_images: [] as any[],
+    existing_image_order: [] as number[],
 });
 
 const makerIdRef = computed(() => form.maker_id);

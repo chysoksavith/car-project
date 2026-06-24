@@ -11,13 +11,13 @@ trait HasAttachments
 {
     public function attachments(): MorphMany
     {
-        return $this->morphMany(Attachment::class, 'attachable');
+        return $this->morphMany(Attachment::class, 'attachable')->orderBy('sort_order');
     }
 
     /**
      * Attach a file to this model
      */
-    public function attachFile(UploadedFile $file, string $collectionName = 'default', string $disk = 'public'): Attachment
+    public function attachFile(UploadedFile $file, string $collectionName = 'default', string $disk = 'public', int $sortOrder = 0): Attachment
     {
         $fileUploadService = app(FileUploadService::class);
         $data = $fileUploadService->upload($file, $disk, 'attachments');
@@ -29,6 +29,7 @@ trait HasAttachments
             'size'            => $data['size'],
             'disk'            => $data['disk'],
             'collection_name' => $collectionName,
+            'sort_order'      => $sortOrder,
         ]);
     }
 

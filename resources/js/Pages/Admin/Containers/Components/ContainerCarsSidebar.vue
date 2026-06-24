@@ -53,10 +53,11 @@
                     </div>
                     
                     <!-- Car Item Card -->
-                    <div 
+                    <Link 
                         v-for="(car, index) in container.cars" 
                         :key="car.id"
-                        class="group relative bg-base-100 rounded-2xl p-3 flex gap-4 border border-base-200/60 shadow-sm hover:shadow-md transition-all duration-200 hover:border-primary/30"
+                        :href="route('admin.cars.show', car.id)"
+                        class="group relative bg-base-100 rounded-2xl p-3 flex gap-4 border border-base-200/60 shadow-sm hover:shadow-md transition-all duration-200 hover:border-primary/30 block text-left"
                     >
                         <!-- Index Number -->
                         <div class="absolute -top-2 -left-2 w-6 h-6 rounded-full bg-base-200 flex items-center justify-center text-[10px] font-bold text-base-content/60 border border-base-100 shadow-sm z-10 group-hover:bg-primary group-hover:text-primary-content transition-colors">
@@ -104,7 +105,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </Link>
                 </div>
             </div>
             
@@ -127,6 +128,8 @@
 </template>
 
 <script setup lang="ts">
+import { Link } from '@inertiajs/vue3';
+
 const props = defineProps<{
     modelValue: boolean;
     container: any;

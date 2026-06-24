@@ -4,42 +4,18 @@
             <span class="label-text font-medium text-base-content">{{ label }}</span>
         </label>
         
-        <!-- Existing Images Display -->
-        <div v-if="visibleExistingImages.length > 0" class="mb-5 p-4 rounded-xl border border-base-300 bg-base-100/50">
-            <h4 class="text-xs font-semibold text-base-content/60 uppercase tracking-wider mb-3">Previously Uploaded Images</h4>
-            <div class="flex flex-wrap gap-4">
-                <div
-                    v-for="img in visibleExistingImages"
-                    :key="img.id"
-                    class="relative w-28 h-28 rounded-lg overflow-hidden border border-base-300 bg-base-200 group shadow-sm transition-all duration-200 hover:shadow-md hover:scale-[1.02]"
-                >
-                    <img
-                        :src="img.url"
-                        class="object-cover w-full h-full"
-                    />
-                    <div class="absolute inset-0 bg-base-300/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-all duration-200 flex items-center justify-center">
-                        <button
-                            type="button"
-                            @click.stop="removeExistingImage(img.id)"
-                            class="btn btn-circle btn-error btn-sm shadow-lg scale-75 group-hover:scale-100 transition-transform duration-200"
-                            title="Remove image"
-                        >
-                            <i class="fa-solid fa-trash-can text-sm"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- FilePond Uploader for New Images -->
+        <!-- FilePond Uploader for All Images (Existing + New) -->
         <div class="filepond-wrapper relative" :class="{ 'has-error': error }">
             <file-pond
                 name="filepond"
                 ref="pond"
+                :files="initialFiles"
                 label-idle="<div class='flex flex-col items-center justify-center gap-2'><i class='fa-solid fa-cloud-arrow-up text-4xl text-base-content/30'></i><p class='text-[15px] font-medium text-base-content/80'>Drag & Drop your images or <span class='text-primary font-semibold cursor-pointer hover:underline'>Browse</span></p><p class='text-xs text-base-content/50 mt-1'>Supports JPG, PNG, GIF, WEBP</p></div>"
                 :allow-multiple="true"
+                :allow-reorder="true"
                 accepted-file-types="image/jpeg, image/png, image/webp, image/gif, image/svg+xml"
                 @updatefiles="handleUpdateFiles"
+                @reorderfiles="handleUpdateFiles"
                 class="file-pond-custom"
             />
         </div>
@@ -52,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
+import { ref, watch } from 'vue';
 
 // Import Vue FilePond
 import vueFilePond from 'vue-filepond';
@@ -60,6 +36,9 @@ import vueFilePond from 'vue-filepond';
 // Import FilePond styles
 import 'filepond/dist/filepond.min.css';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css';
+// Note: We need the poster plugin to properly display local files without fetching them
+import FilePondPluginFilePoster from 'filepond-plugin-file-poster';
+import 'filepond-plugin-file-poster/dist/filepond-plugin-file-poster.min.css';
 
 // Import FilePond plugins
 import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation';
@@ -70,52 +49,78 @@ import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 const FilePond = vueFilePond(
     FilePondPluginFileValidateType,
     FilePondPluginImageExifOrientation,
-    FilePondPluginImagePreview
+    FilePondPluginImagePreview,
+    FilePondPluginFilePoster
 );
 
 const props = withDefaults(defineProps<{
     modelValue?: File[];
     existingImages?: any[];
     deletedImages?: any[];
+    existingImageOrder?: any[];
     error?: string;
     label?: string;
 }>(), {
     modelValue: () => [],
     existingImages: () => [],
     deletedImages: () => [],
+    existingImageOrder: () => [],
     label: 'Images'
 });
 
-const emit = defineEmits(['update:modelValue', 'update:deletedImages']);
+const emit = defineEmits(['update:modelValue', 'update:deletedImages', 'update:existingImageOrder']);
 
 const pond = ref(null);
 
-const validExistingImages = computed(() => {
-    return Array.isArray(props.existingImages) ? props.existingImages.filter(i => i && i.url) : [];
-});
-
-const visibleExistingImages = computed(() => {
-    const deleted = new Set(props.deletedImages);
-    return validExistingImages.value.filter(img => !deleted.has(img.id));
-});
-
-const removeExistingImage = (id: any) => {
-    emit('update:deletedImages', [...props.deletedImages, id]);
-};
+const initialFiles = ref(
+    (props.existingImages || []).filter(i => i && i.url).map(img => ({
+        source: img.id.toString(),
+        options: {
+            type: 'local',
+            file: {
+                name: img.file_name || 'image',
+                size: img.size || 0,
+                type: img.mime_type || 'image/jpeg'
+            },
+            metadata: {
+                poster: img.url
+            }
+        }
+    }))
+);
 
 // Handle files from FilePond
 const handleUpdateFiles = (fileItems: any[]) => {
-    // Extract native JS File objects
-    const files = fileItems.map(fileItem => fileItem.file);
-    emit('update:modelValue', files);
+    const existingIds: number[] = [];
+    const newFiles: File[] = [];
+
+    fileItems.forEach(fileItem => {
+        if (fileItem.origin === 2 || fileItem.origin === 3) {
+            existingIds.push(parseInt(fileItem.source));
+        } else if (fileItem.origin === 1) {
+            newFiles.push(fileItem.file);
+        }
+    });
+
+    emit('update:existingImageOrder', existingIds);
+    emit('update:modelValue', newFiles);
+
+    const originalIds = (props.existingImages || []).map(img => img.id);
+    const deleted = originalIds.filter(id => !existingIds.includes(id));
+    
+    emit('update:deletedImages', deleted);
 };
 
 // Clear FilePond if modelValue is cleared externally (e.g. form submit success)
 watch(() => props.modelValue, (newVal) => {
     if ((!newVal || newVal.length === 0) && pond.value) {
-        // Only clear if pond has files, to avoid infinite loops
-        if ((pond.value as any).getFiles().length > 0) {
-             (pond.value as any).removeFiles();
+        if ((pond.value as any).getFiles().filter((f: any) => f.origin === 1).length > 0) {
+            const pondFiles = (pond.value as any).getFiles();
+            pondFiles.forEach((file: any) => {
+                if (file.origin === 1) {
+                    (pond.value as any).removeFile(file.id);
+                }
+            });
         }
     }
 }, { deep: true });

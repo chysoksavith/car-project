@@ -45,6 +45,8 @@ class UpdateContainerRequest extends FormRequest
             'cars.*.images.*' => ['image', 'max:2048'],
             'cars.*.deleted_images' => ['nullable', 'array'],
             'cars.*.deleted_images.*' => ['integer'],
+            'cars.*.existing_image_order' => ['nullable', 'array'],
+            'cars.*.existing_image_order.*' => ['integer'],
             'cars.*.description' => ['nullable', 'string'],
             'cars.*.options' => ['nullable', 'string'],
             'cars.*.year' => ['nullable', 'integer'],

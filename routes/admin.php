@@ -49,5 +49,5 @@ Route::prefix('admin')->middleware(['auth', \App\Http\Middleware\CheckBackendAcc
     Route::resource('departments', \App\Http\Controllers\Admin\DepartmentController::class)->except('show')->names('admin.departments');
 
     // Cars
-    Route::resource('cars', \App\Http\Controllers\Admin\CarController::class)->except('show')->names('admin.cars');
+    Route::resource('cars', \App\Http\Controllers\Admin\CarController::class)->names('admin.cars');
 });

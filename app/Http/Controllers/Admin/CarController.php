@@ -60,6 +60,20 @@ class CarController extends Controller
         return redirect()->route('admin.cars.index')->with('success', 'Car created successfully.');
     }
 
+    // # Display the specified resource
+    public function show(Car $car): Response
+    {
+        if ($car->company_id !== auth()->user()->company_id) {
+            abort(403);
+        }
+
+        $car->load(['maker', 'carModel', 'color', 'fuel', 'container', 'attachments']);
+
+        return Inertia::render('Admin/Cars/Show', [
+            'car' => (new CarResource($car))->resolve(),
+        ]);
+    }
+
     // # Show form for editing resource
     public function edit(Car $car): Response
     {

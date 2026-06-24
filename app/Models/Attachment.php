@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Storage;
     'size',
     'disk',
     'collection_name',
+    'sort_order',
 ])]
 class Attachment extends Model
 {
