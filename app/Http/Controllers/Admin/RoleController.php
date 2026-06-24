@@ -20,7 +20,9 @@ class RoleController extends Controller
     public function __construct(
         private readonly RoleService       $roleService,
         private readonly PermissionService $permissionService,
-    ) {}
+    ) {
+        $this->authorizeResource(Role::class, 'role');
+    }
 
     // # Display listing of resource
     public function index(\Illuminate\Http\Request $request): Response

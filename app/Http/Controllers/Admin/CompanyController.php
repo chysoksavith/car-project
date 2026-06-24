@@ -10,6 +10,7 @@ use App\Http\Requests\Admin\Company\UpdateCompanyRequest;
 use App\Models\Company;
 use Illuminate\Http\RedirectResponse;
 use App\Services\CompanyService;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -18,7 +19,9 @@ class CompanyController extends Controller
     // # Initialize dependencies
     public function __construct(
         private readonly CompanyService $companyService,
-    ) {}
+    ) {
+        $this->authorizeResource(Company::class, 'company');
+    }
 
     // # Display listing of resource
     public function index(Request $request): Response

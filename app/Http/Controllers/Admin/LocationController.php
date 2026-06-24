@@ -7,12 +7,15 @@ use App\Models\Location;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Gate;
 
 class LocationController extends Controller
 {
     // # Display listing of resource
     public function index(Request $request): JsonResponse
     {
+        Gate::authorize('locations.view');
+
         $type       = $request->query('type', 'province');
         $parentCode = $request->query('parent_code');
 

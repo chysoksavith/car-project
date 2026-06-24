@@ -10,6 +10,7 @@ use App\Models\Color;
 use App\Services\ColorService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -18,7 +19,9 @@ class ColorController extends Controller
     // # Initialize dependencies
     public function __construct(
         private readonly ColorService $colorService,
-    ) {}
+    ) {
+        $this->authorizeResource(Color::class, 'color');
+    }
 
     // # Display listing of resource
     public function index(Request $request): Response

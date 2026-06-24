@@ -18,7 +18,9 @@ class InspectionItemController extends Controller
     // # Initialize dependencies
     public function __construct(
         private readonly InspectionItemService $inspectionItemService
-    ) {}
+    ) {
+        $this->authorizeResource(InspectionItem::class, 'inspection_item');
+    }
 
     // # Display listing of resource
     public function index(Request $request): Response
@@ -45,12 +47,7 @@ class InspectionItemController extends Controller
     // # Store newly created resource
     public function store(StoreInspectionItemRequest $request): RedirectResponse
     {
-        $data = $request->validated();
-        if (auth()->hasUser() && auth()->user()->company_id && !auth()->user()->hasRole('super-admin')) {
-            $data['company_id'] = auth()->user()->company_id;
-        }
-
-        $this->inspectionItemService->createItem($data);
+        $this->inspectionItemService->createItem($request->validated());
 
         return redirect()->route('admin.inspection-items.index')
             ->with('success', 'Inspection item created successfully.');

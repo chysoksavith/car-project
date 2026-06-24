@@ -21,13 +21,12 @@ class ContainerController extends Controller
     // # Initialize dependencies
     public function __construct(private readonly ContainerService $containerService)
     {
+        $this->authorizeResource(Container::class, 'container');
     }
 
     // # Display listing of resource
     public function index(Request $request)
     {
-        Gate::authorize('containers.view');
-
         $query = Container::with(['cars.maker', 'cars.carModel', 'cars.color', 'cars.attachments']);
 
         if ($request->filled('search')) {
@@ -49,18 +48,14 @@ class ContainerController extends Controller
     // # Show form for creating resource
     public function create()
     {
-        Gate::authorize('containers.create');
-
-        $companyId = auth()->user()->company_id;
-
         $suppliers = \App\Models\Supplier::where('is_active', true)->get(['id', 'name']);
 
         return Inertia::render('Admin/Containers/Create', [
             'suppliers' => $suppliers,
-            'makers' => Maker::where('company_id', $companyId)->where('is_active', true)->get(['id', 'name']),
-            'carModels' => CarModel::where('company_id', $companyId)->where('is_active', true)->get(['id', 'name', 'maker_id']),
-            'fuels' => Fuel::where('company_id', $companyId)->where('is_active', true)->get(['id', 'name']),
-            'colors' => Color::where('company_id', $companyId)->where('is_active', true)->get(['id', 'name']),
+            'makers' => Maker::where('is_active', true)->get(['id', 'name']),
+            'carModels' => CarModel::where('is_active', true)->get(['id', 'name', 'maker_id']),
+            'fuels' => Fuel::where('is_active', true)->get(['id', 'name']),
+            'colors' => Color::where('is_active', true)->get(['id', 'name']),
         ]);
     }
 
@@ -76,19 +71,16 @@ class ContainerController extends Controller
     public function edit(Container $container)
     {
         $container->load(['cars', 'cars.attachments', 'cars.color']);
-        Gate::authorize('containers.edit');
-
-        $companyId = auth()->user()->company_id;
 
         $suppliers = \App\Models\Supplier::where('is_active', true)->get(['id', 'name']);
 
         return Inertia::render('Admin/Containers/Edit', [
             'container' => new ContainerResource($container),
             'suppliers' => $suppliers,
-            'makers' => Maker::where('company_id', $companyId)->where('is_active', true)->get(['id', 'name']),
-            'carModels' => CarModel::where('company_id', $companyId)->where('is_active', true)->get(['id', 'name', 'maker_id']),
-            'fuels' => Fuel::where('company_id', $companyId)->where('is_active', true)->get(['id', 'name']),
-            'colors' => Color::where('company_id', $companyId)->where('is_active', true)->get(['id', 'name']),
+            'makers' => Maker::where('is_active', true)->get(['id', 'name']),
+            'carModels' => CarModel::where('is_active', true)->get(['id', 'name', 'maker_id']),
+            'fuels' => Fuel::where('is_active', true)->get(['id', 'name']),
+            'colors' => Color::where('is_active', true)->get(['id', 'name']),
         ]);
     }
 
@@ -103,8 +95,6 @@ class ContainerController extends Controller
     // # Remove specified resource from storage
     public function destroy(Container $container)
     {
-        Gate::authorize('containers.delete');
-
         $this->containerService->deleteContainer($container);
 
         return redirect()->route('admin.containers.index')->with('success', 'Container deleted successfully.');

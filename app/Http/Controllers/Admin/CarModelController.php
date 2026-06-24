@@ -11,6 +11,7 @@ use App\Models\Maker;
 use App\Services\CarModelService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -19,7 +20,9 @@ class CarModelController extends Controller
     // # Initialize dependencies
     public function __construct(
         private readonly CarModelService $carModelService,
-    ) {}
+    ) {
+        $this->authorizeResource(CarModel::class, 'car_model');
+    }
 
     // # Display listing of resource
     public function index(Request $request): Response

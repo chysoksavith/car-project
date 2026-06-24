@@ -17,7 +17,9 @@ class PermissionController extends Controller
     // # Initialize dependencies
     public function __construct(
         private readonly PermissionService $permissionService,
-    ) {}
+    ) {
+        $this->authorizeResource(Permission::class, 'permission');
+    }
 
     // # Display listing of resource
     public function index(\Illuminate\Http\Request $request): Response

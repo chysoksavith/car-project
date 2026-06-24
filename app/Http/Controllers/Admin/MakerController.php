@@ -18,7 +18,9 @@ class MakerController extends Controller
     // # Initialize dependencies
     public function __construct(
         private readonly MakerService $makerService,
-    ) {}
+    ) {
+        $this->authorizeResource(Maker::class, 'maker');
+    }
 
     // # Display listing of resource
     public function index(Request $request): Response

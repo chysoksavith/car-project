@@ -18,7 +18,9 @@ class UserController extends Controller
     // # Initialize dependencies
     public function __construct(
         private readonly UserService $userService,
-    ) {}
+    ) {
+        $this->authorizeResource(User::class, 'user');
+    }
 
     // # Display listing of resource
     public function index(Request $request): Response

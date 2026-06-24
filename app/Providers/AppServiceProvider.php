@@ -24,6 +24,10 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->configureRateLimiting();
 
+        // Register policies for Spatie models manually since they are in vendor directory
+        \Illuminate\Support\Facades\Gate::policy(\Spatie\Permission\Models\Role::class, \App\Policies\RolePolicy::class);
+        \Illuminate\Support\Facades\Gate::policy(\Spatie\Permission\Models\Permission::class, \App\Policies\PermissionPolicy::class);
+
         // Implicitly grant "Super Admin" role all permissions
         // This works in the app by using gate-related functions like auth()->user->can() and @can()
         \Illuminate\Support\Facades\Gate::before(function ($user, $ability) {

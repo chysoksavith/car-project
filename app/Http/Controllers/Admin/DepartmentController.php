@@ -18,7 +18,9 @@ class DepartmentController extends Controller
     // # Initialize dependencies
     public function __construct(
         private readonly DepartmentService $departmentService,
-    ) {}
+    ) {
+        $this->authorizeResource(Department::class, 'department');
+    }
 
     // # Display listing of resource
     public function index(Request $request): Response

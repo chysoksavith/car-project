@@ -44,8 +44,9 @@ Adhere strictly to the **Controller → Service → Resource** pattern.
 
 ### Multi-Tenancy (Company Scoping)
 - The application uses a multi-tenant architecture based on `company_id`.
-- **All queries** for multi-tenant data must be strictly scoped to the authenticated user's `company_id` to prevent data leaks between companies (e.g. `->where('company_id', auth()->user()->company_id)` or via a Global Scope).
-- When creating new records that belong to a company, the `company_id` must be explicitly assigned or automatically inherited from the creator's company.
+- **Automatic Scoping & Inheritance**: Always use the `App\Models\Traits\HasTenant` trait on models that require company scoping.
+- **DO NOT write manual scopes or assignments**: Do not write manual `->where('company_id', ...)` scopes or assign `company_id` manually during creation in your controllers or service classes. The `HasTenant` trait automatically applies the global `TenantScope` and handles setting the `company_id` on model creation.
+- **Super-Admin Support**: The global `TenantScope` automatically allows `super-admin` users to bypass the tenant filters and access data globally. Writing manual `->where('company_id', ...)` filters or `abort(403)` company checks in controllers breaks this and must be avoided.
 
 ### Naming Conventions
 - Use standard RESTful resource methods in controllers (`index`, `create`, `store`, `show`, `edit`, `update`, `destroy`).

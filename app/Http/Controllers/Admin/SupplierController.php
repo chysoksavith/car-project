@@ -17,7 +17,9 @@ class SupplierController extends Controller
     // # Initialize dependencies
     public function __construct(
         private readonly SupplierService $supplierService
-    ) {}
+    ) {
+        $this->authorizeResource(Supplier::class, 'supplier');
+    }
 
     // # Display listing of resource
     public function index(\Illuminate\Http\Request $request): Response
@@ -40,12 +42,7 @@ class SupplierController extends Controller
     // # Store newly created resource
     public function store(StoreSupplierRequest $request): RedirectResponse
     {
-        $data = $request->validated();
-        if (auth()->hasUser() && auth()->user()->company_id && !auth()->user()->hasRole('super-admin')) {
-            $data['company_id'] = auth()->user()->company_id;
-        }
-
-        $this->supplierService->createSupplier($data);
+        $this->supplierService->createSupplier($request->validated());
 
         return redirect()->route('admin.suppliers.index')
             ->with('success', 'Supplier created successfully.');
