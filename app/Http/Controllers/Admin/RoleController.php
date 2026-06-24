@@ -42,7 +42,7 @@ class RoleController extends Controller
     public function store(StoreRoleRequest $request): RedirectResponse
     {
         $role = $this->roleService->create(
-            name:        $request->validated('name'),
+            name: $request->validated('name'),
             permissions: $request->validated('permissions', []),
         );
 
@@ -53,8 +53,8 @@ class RoleController extends Controller
     public function update(UpdateRoleRequest $request, Role $role): RedirectResponse
     {
         $updated = $this->roleService->update(
-            role:        $role,
-            name:        $request->validated('name'),
+            role: $role,
+            name: $request->validated('name'),
             permissions: $request->validated('permissions', []),
         );
 
