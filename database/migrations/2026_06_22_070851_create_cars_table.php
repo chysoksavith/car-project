@@ -101,7 +101,7 @@ return new class extends Migration
 
             $table->timestamp('in_stock_at')->nullable();
 
-            $table->enum('inventory_status', InventoryStatus::cases())->default(InventoryStatus::IN_TRANSIT->value);
+            $table->enum('inventory_status', InventoryStatus::cases())->default(InventoryStatus::ON_THE_WAY->value);
 
             $table->enum('sales_status', SalesStatus::cases())->default(SalesStatus::AVAILABLE->value);
 

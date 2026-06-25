@@ -246,9 +246,8 @@
                     v-model="form.inventory_status"
                     label="Inventory Status"
                     :options="[
-                        { value: 'IN_TRANSIT', label: 'IN_TRANSIT' },
-                        { value: 'IN_SHOWROOM', label: 'IN_SHOWROOM' },
-                        { value: 'DELIVERED', label: 'DELIVERED' },
+                        { value: 'on_the_way', label: 'On The Way' },
+                        { value: 'in_stock', label: 'In Stock' },
                     ]"
                     :error="form.errors.inventory_status"
                     required
@@ -418,7 +417,7 @@ const form = useForm({
     plate_number: props.car?.plate_number || "",
     certificate_number: props.car?.certificate_number || "",
     quantity: props.car?.quantity ?? 1,
-    inventory_status: props.car?.inventory_status || "IN_TRANSIT",
+    inventory_status: props.car?.inventory_status || "on_the_way",
     sales_status: props.car?.sales_status || "AVAILABLE",
     purchase_price: props.car?.purchase_price || 0,
     cif_price: props.car?.cif_price || 0,

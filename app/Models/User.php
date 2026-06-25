@@ -15,7 +15,7 @@ use App\Models\Traits\HasTenant;
 use App\Models\Traits\TracksAuditCols;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-#[Fillable(['company_id', 'department_id', 'name', 'first_name', 'last_name', 'phone_number', 'birth_date', 'user_type', 'is_active', 'email', 'password', 'created_by', 'updated_by', 'deleted_by'])]
+#[Fillable(['company_id', 'department_id', 'name', 'first_name', 'last_name', 'national_id', 'phone_number', 'birth_date', 'user_type', 'is_active', 'email', 'password', 'created_by', 'updated_by', 'deleted_by'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -33,6 +33,7 @@ class User extends Authenticatable
             'password' => 'hashed',
             'is_active' => 'boolean',
             'birth_date' => 'date',
+            'user_type' => \App\Enums\UserType::class,
         ];
     }
 

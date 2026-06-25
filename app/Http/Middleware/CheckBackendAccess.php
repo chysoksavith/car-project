@@ -19,7 +19,7 @@ class CheckBackendAccess
         if (Auth::check()) {
             $user = Auth::user();
 
-            if ($user->user_type === 'frontend') {
+            if ($user->user_type === \App\Enums\UserType::FRONTEND) {
                 return redirect('/');
             }
 

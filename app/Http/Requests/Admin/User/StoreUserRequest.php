@@ -29,7 +29,7 @@ class StoreUserRequest extends FormRequest
             'phone_number' => ['nullable', 'string', 'max:20'],
             'birth_date'   => ['nullable', 'date'],
             'password'     => ['required', 'string', 'min:8', 'confirmed'],
-            'user_type'    => ['required', 'string', 'in:backend,frontend'],
+            'user_type'    => ['required', \Illuminate\Validation\Rule::enum(\App\Enums\UserType::class)],
             'is_active'    => ['boolean'],
             'roles'        => ['nullable', 'array'],
             'roles.*'      => ['string', 'exists:roles,name'],

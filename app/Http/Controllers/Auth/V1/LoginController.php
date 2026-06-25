@@ -27,7 +27,7 @@ class LoginController extends Controller
         // Prevent session fixation attacks.
         $request->session()->regenerate();
 
-        if ($request->user()->user_type === 'frontend') {
+        if ($request->user()->user_type === \App\Enums\UserType::FRONTEND) {
             return redirect()->intended('/');
         }
 

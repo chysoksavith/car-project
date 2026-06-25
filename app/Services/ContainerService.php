@@ -113,7 +113,7 @@ class ContainerService
     private function applyCarDefaults(array $carData, int $containerId): array
     {
         return array_merge([
-            'inventory_status' => \App\Enums\InventoryStatus::IN_TRANSIT->value,
+            'inventory_status' => \App\Enums\InventoryStatus::ON_THE_WAY->value,
             'sales_status'     => \App\Enums\SalesStatus::AVAILABLE->value,
             'condition'        => \App\Enums\CarCondition::NEW->value,
             'quantity'         => 1,

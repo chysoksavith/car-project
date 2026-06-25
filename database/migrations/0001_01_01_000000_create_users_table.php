@@ -17,8 +17,9 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('phone_number')->nullable();
+            $table->string('national_id')->nullable();
             $table->date('birth_date')->nullable();
-            $table->string('user_type')->default('frontend')->comment('frontend, backend');
+            $table->enum('user_type', \App\Enums\UserType::cases())->default(\App\Enums\UserType::FRONTEND->value);
             $table->boolean('is_active')->default(true);
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();

@@ -126,9 +126,8 @@ const deleteCar = () => {
 
 const getInventoryStatusVariant = (status: string) => {
     const map: Record<string, string> = {
-        'IN_TRANSIT': 'warning',
-        'IN_SHOWROOM': 'info',
-        'DELIVERED': 'success',
+        'on_the_way': 'warning',
+        'in_stock': 'success',
     };
     return map[status] || 'neutral';
 };
