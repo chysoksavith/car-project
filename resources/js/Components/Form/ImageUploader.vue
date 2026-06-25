@@ -11,9 +11,11 @@
                 ref="pond"
                 :files="initialFiles"
                 label-idle="<div class='flex flex-col items-center justify-center gap-2'><i class='fa-solid fa-cloud-arrow-up text-4xl text-base-content/30'></i><p class='text-[15px] font-medium text-base-content/80'>Drag & Drop your images or <span class='text-primary font-semibold cursor-pointer hover:underline'>Browse</span></p><p class='text-xs text-base-content/50 mt-1'>Supports JPG, PNG, GIF, WEBP</p></div>"
-                :allow-multiple="true"
+                :allow-multiple="allowMultiple"
                 :allow-reorder="true"
                 accepted-file-types="image/jpeg, image/png, image/webp, image/gif, image/svg+xml"
+                :image-preview-max-height="256"
+                :file-poster-max-height="256"
                 @updatefiles="handleUpdateFiles"
                 @reorderfiles="handleUpdateFiles"
                 class="file-pond-custom"
@@ -60,12 +62,14 @@ const props = withDefaults(defineProps<{
     existingImageOrder?: any[];
     error?: string;
     label?: string;
+    allowMultiple?: boolean;
 }>(), {
     modelValue: () => [],
     existingImages: () => [],
     deletedImages: () => [],
     existingImageOrder: () => [],
-    label: 'Images'
+    label: 'Images',
+    allowMultiple: true
 });
 
 const emit = defineEmits(['update:modelValue', 'update:deletedImages', 'update:existingImageOrder']);

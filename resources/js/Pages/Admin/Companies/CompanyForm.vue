@@ -25,25 +25,14 @@
             />
 
             <div class="form-control w-full">
-                <label class="label">
-                    <span class="label-text">Company Logo</span>
-                </label>
-                <div class="flex items-center gap-4">
-                    <div v-if="props.company?.logo_url" class="avatar">
-                        <div class="w-16 rounded border border-base-300">
-                            <img :src="props.company.logo_url" alt="Logo preview" />
-                        </div>
-                    </div>
-                    <input
-                        type="file"
-                        class="file-input file-input-bordered w-full max-w-xs"
-                        @input="form.logo = $event.target.files[0]"
-                        accept="image/*"
-                    />
-                </div>
-                <div v-if="form.errors.logo" class="text-error text-sm mt-1">
-                    {{ form.errors.logo }}
-                </div>
+                <ImageUploader
+                    :model-value="form.logo ? [form.logo] : []"
+                    @update:model-value="files => form.logo = files.length > 0 ? files[0] : null"
+                    :existing-images="props.company?.logo_url ? [{ id: props.company?.id || -1, url: props.company.logo_url, file_name: 'Logo', mime_type: 'image/jpeg' }] : []"
+                    :allow-multiple="false"
+                    label="Company Logo"
+                    :error="form.errors.logo"
+                />
             </div>
 
             <div class="md:col-span-2">
@@ -82,6 +71,7 @@ import TextInput from "@/Components/Form/TextInput.vue";
 import TextareaInput from "@/Components/Form/TextareaInput.vue";
 import Toggle from "@/Components/Form/Toggle.vue";
 import Button from "@/Components/Button.vue";
+import ImageUploader from "@/Components/Form/ImageUploader.vue";
 
 const props = defineProps<{
     company?: any;
