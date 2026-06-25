@@ -27,6 +27,7 @@ class StoreUserRequest extends FormRequest
             'last_name'    => ['required', 'string', 'max:255'],
             'email'        => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'phone_number' => ['nullable', 'string', 'max:20'],
+            'national_id'  => ['nullable', 'string', 'max:50'],
             'birth_date'   => ['nullable', 'date'],
             'password'     => ['required', 'string', 'min:8', 'confirmed'],
             'user_type'    => ['required', \Illuminate\Validation\Rule::enum(\App\Enums\UserType::class)],
@@ -34,7 +35,7 @@ class StoreUserRequest extends FormRequest
             'roles'        => ['nullable', 'array'],
             'roles.*'      => ['string', 'exists:roles,name'],
             'address'      => ['nullable', 'array'],
-            'company_id'    => ['nullable', 'exists:companies,id'],
+            'company_id'    => ['required', 'exists:companies,id'],
             'department_id' => ['nullable', 'exists:departments,id'],
         ];
     }

@@ -3,19 +3,27 @@
         <div class="card-body p-0">
             <!-- Toolbar -->
             <div
-                class="p-4 border-b border-base-200/80 flex justify-between items-center bg-base-50"
+                class="p-4 border-b border-base-200/80 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-base-50"
             >
-                <div class="relative w-full sm:w-72">
-                    <div
-                        class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-base-content/40"
-                    >
-                        <i class="fa-solid fa-search"></i>
+                <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                    <div class="relative w-full sm:w-72">
+                        <div
+                            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-base-content/40"
+                        >
+                            <i class="fa-solid fa-search"></i>
+                        </div>
+                        <input
+                            type="text"
+                            v-model="internalSearch"
+                            :placeholder="searchPlaceholder || 'Search...'"
+                            class="input input-sm input-bordered w-full pl-9 bg-base-200/50 focus:bg-base-100 transition-all rounded-lg"
+                        />
                     </div>
-                    <input
-                        type="text"
-                        v-model="internalSearch"
-                        :placeholder="searchPlaceholder || 'Search...'"
-                        class="input input-sm input-bordered w-full pl-9 bg-base-200/50 focus:bg-base-100 transition-all rounded-lg"
+                    <TableFilterDropdown
+                        v-if="filterConfig"
+                        :filters="filterConfig"
+                        :route="searchRoute"
+                        :activeFilters="activeFilters"
                     />
                 </div>
                 <slot name="toolbar-actions"></slot>
@@ -114,6 +122,7 @@
 import { ref, watch } from "vue";
 import { router } from "@inertiajs/vue3";
 import Pagination from "./Pagination.vue";
+import TableFilterDropdown from "./TableFilterDropdown.vue";
 
 const emit = defineEmits(['row-click']);
 
@@ -123,8 +132,15 @@ const props = defineProps<{
     searchRoute: string;
     searchQuery?: string;
     searchPlaceholder?: string;
+    filterConfig?: {
+        [key: string]: {
+            label: string;
+            placeholder?: string;
+            options: Array<{ value: string | number; label: string }>;
+        };
+    };
+    activeFilters?: { [key: string]: string | number | null };
 }>();
-
 
 const internalSearch = ref(props.searchQuery || "");
 

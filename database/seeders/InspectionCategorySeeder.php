@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\InspectionItem;
+use App\Models\Company;
 
 class InspectionCategorySeeder extends Seeder
 {
@@ -12,6 +13,14 @@ class InspectionCategorySeeder extends Seeder
      */
     public function run(): void
     {
+        // Get Company A
+        $company = Company::withoutGlobalScopes()->where('name', 'Company A')->first();
+
+        if (!$company) {
+            $this->command->error('Company A not found. Please run DemoDataSeeder first.');
+            return;
+        }
+
         // Clear old ones just in case
         InspectionItem::truncate();
 
@@ -60,7 +69,7 @@ class InspectionCategorySeeder extends Seeder
             // Create the parent item
             $parent = InspectionItem::withoutGlobalScopes()->updateOrCreate(
                 [
-                    'company_id' => null,
+                    'company_id' => $company->id,
                     'parent_id'  => null,
                     'name_kh'    => $category
                 ],
@@ -75,7 +84,7 @@ class InspectionCategorySeeder extends Seeder
             foreach ($items as $itemData) {
                 InspectionItem::withoutGlobalScopes()->updateOrCreate(
                     [
-                        'company_id' => null,
+                        'company_id' => $company->id,
                         'parent_id'  => $parent->id,
                         'name_kh'    => $itemData['name_kh']
                     ],
@@ -85,6 +94,6 @@ class InspectionCategorySeeder extends Seeder
             }
         }
 
-        $this->command->info("Simplified inspection items seeded ({$count} items).");
+        $this->command->info("Simplified inspection items seeded ({$count} items) for {$company->name}.");
     }
 }

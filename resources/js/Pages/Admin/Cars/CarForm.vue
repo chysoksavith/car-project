@@ -74,11 +74,11 @@
                 <h4 class="font-bold text-sm mb-2 text-base-content/80">
                     Car Images
                 </h4>
-                <ImageUploader 
-                    v-model="form.images" 
+                <ImageUploader
+                    v-model="form.images"
                     v-model:deleted-images="form.deleted_images"
                     v-model:existing-image-order="form.existing_image_order"
-                    :existing-images="props.car?.images" 
+                    :existing-images="props.car?.images"
                     :error="carImageError"
                     :label="undefined"
                 />
@@ -128,6 +128,7 @@
                     v-model="form.body_number"
                     label="Body Number"
                     :error="form.errors.body_number"
+                    required
                 />
                 <TextInput
                     id="engine_number"
@@ -461,14 +462,14 @@ const submit = () => {
         preserveScroll: true,
         onError: (errors: any) => {
             const basicFields = [
-                "name", "maker_id", "car_model_id", "container_id", "fuel_id", 
-                "description", "options", "year", "color_id", "condition", "transmission", 
-                "body_number", "engine_number", "engine_capacity_cc", "registration_type", 
+                "name", "maker_id", "car_model_id", "container_id", "fuel_id",
+                "description", "options", "year", "color_id", "condition", "transmission",
+                "body_number", "engine_number", "engine_capacity_cc", "registration_type",
                 "plate_number", "certificate_number"
             ];
-            
+
             const hasBasicError = Object.keys(errors).some(key => basicFields.includes(key) || key.startsWith('images'));
-            
+
             if (hasBasicError) {
                 activeTab.value = 'basic';
             }

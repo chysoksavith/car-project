@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Collection;
 class InspectionItemService
 {
     // # Retrieve Paginated With Search
-    public function getPaginatedWithSearch(?string $search, int $perPage = 10): LengthAwarePaginator
+    public function getPaginatedWithSearch(?string $search, ?string $categoryFilter = null, ?string $statusFilter = null, int $perPage = 10): LengthAwarePaginator
     {
         return InspectionItem::with('parent')
             ->when($search, function ($query, $search) {
@@ -18,6 +18,12 @@ class InspectionItemService
                       ->orWhereHas('parent', function ($q) use ($search) {
                           $q->where('name_kh', 'like', "%{$search}%");
                       });
+            })
+            ->when($categoryFilter, function ($query, $categoryFilter) {
+                $query->where('parent_id', $categoryFilter);
+            })
+            ->when($statusFilter !== null, function ($query) use ($statusFilter) {
+                $query->where('is_active', $statusFilter === '1');
             })
             ->latest()
             ->paginate($perPage);

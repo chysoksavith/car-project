@@ -19,8 +19,9 @@
 import DashboardLayout from "@/Layouts/DashboardLayout.vue";
 import PageHeader from "@/Components/PageHeader.vue";
 import InspectionItemForm from "./InspectionItemForm.vue";
+import type { InspectionItemCategory } from "@/Types/inspection-item";
 
 defineProps<{
-    categories: any[];
+    categories: InspectionItemCategory[];
 }>();
 </script>

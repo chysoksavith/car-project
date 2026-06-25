@@ -26,11 +26,15 @@ class InspectionItemController extends Controller
     public function index(Request $request): Response
     {
         $search = $request->input('search');
-        $items = $this->inspectionItemService->getPaginatedWithSearch($search, 10);
+        $categoryFilter = $request->input('category');
+        $statusFilter = $request->input('status');
+        $items = $this->inspectionItemService->getPaginatedWithSearch($search, $categoryFilter, $statusFilter, 10);
+        $categories = $this->inspectionItemService->getMainCategories();
 
         return Inertia::render('Admin/InspectionItems/Index', [
             'inspectionItems' => InspectionItemResource::collection($items),
-            'filters' => ['search' => $search],
+            'filters' => ['search' => $search, 'category' => $categoryFilter, 'status' => $statusFilter],
+            'categories' => InspectionItemResource::collection($categories)->resolve(),
         ]);
     }
 
@@ -40,7 +44,7 @@ class InspectionItemController extends Controller
         $categories = $this->inspectionItemService->getMainCategories();
 
         return Inertia::render('Admin/InspectionItems/Create', [
-            'categories' => InspectionItemResource::collection($categories),
+            'categories' => InspectionItemResource::collection($categories)->resolve(),
         ]);
     }
 
@@ -59,8 +63,8 @@ class InspectionItemController extends Controller
         $categories = $this->inspectionItemService->getMainCategories();
 
         return Inertia::render('Admin/InspectionItems/Edit', [
-            'inspectionItem' => new InspectionItemResource($inspectionItem),
-            'categories'     => InspectionItemResource::collection($categories),
+            'inspectionItem' => (new InspectionItemResource($inspectionItem))->resolve(),
+            'categories'     => InspectionItemResource::collection($categories)->resolve(),
         ]);
     }
 

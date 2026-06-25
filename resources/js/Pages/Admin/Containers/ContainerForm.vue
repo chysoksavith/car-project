@@ -33,7 +33,7 @@
                 required
             />
 
-            
+
             <SelectInput
                 label="Status"
                 v-model="form.status"
@@ -74,76 +74,77 @@
         />
 
         <div class="divider text-xl font-bold">Cars in Container</div>
-        
+
         <div class="flex flex-col gap-4">
             <div v-for="(car, index) in form.cars" :key="index" class="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box shadow-sm">
                 <!-- Checkbox to control collapse state -->
-                <input type="checkbox" :checked="true" /> 
-                
+                <input type="checkbox" :checked="true" />
+
                 <div class="collapse-title text-lg font-medium bg-base-200/50 flex items-center justify-between">
                     <span class="flex items-center gap-2">
-                        <span class="badge badge-primary">Car #{{ index + 1 }}</span> 
+                        <span class="badge badge-primary">Car #{{ index + 1 }}</span>
                         {{ car.name || 'New Car' }}
                     </span>
                 </div>
-                
+
                 <div class="collapse-content pt-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <TextInput
                             label="Name"
                             v-model="car.name"
                             required
-                            :error="form.errors[`cars.${index}.name`]"
+                            :error="form.errors[`cars.${index}.name` as keyof typeof form.errors]"
                         />
-                        
+
                         <SelectInput
-                            label="Make"
+                            label="Maker"
                             v-model="car.maker_id"
                             :options="makerOptions"
-                            :error="form.errors[`cars.${index}.maker_id`]"
+                            :error="form.errors[`cars.${index}.maker_id` as keyof typeof form.errors]"
                         />
 
                         <SelectInput
                             label="Model"
                             v-model="car.car_model_id"
                             :options="getModelOptions(car.maker_id)"
-                            :error="form.errors[`cars.${index}.car_model_id`]"
+                            :error="form.errors[`cars.${index}.car_model_id` as keyof typeof form.errors]"
                         />
-                        
+
                         <SelectInput
                             label="Fuel"
                             v-model="car.fuel_id"
                             :options="fuelOptions"
-                            :error="form.errors[`cars.${index}.fuel_id`]"
+                            :error="form.errors[`cars.${index}.fuel_id` as keyof typeof form.errors]"
                         />
 
                         <TextInput
                             label="Year"
                             type="number"
                             v-model="car.year"
-                            :error="form.errors[`cars.${index}.year`]"
+                            :error="form.errors[`cars.${index}.year` as keyof typeof form.errors]"
                         />
-                        
+
                         <SelectInput
                             label="Color"
                             v-model="car.color_id"
                             :options="colorOptions"
-                            :error="form.errors[`cars.${index}.color_id`]"
+                            :error="form.errors[`cars.${index}.color_id` as keyof typeof form.errors]"
                         />
-                        
+
                         <TextInput
                             label="Body Number"
                             v-model="car.body_number"
-                            :error="form.errors[`cars.${index}.body_number`]"
+                            :error="form.errors[`cars.${index}.body_number` as keyof typeof form.errors]"
+                            required
                         />
-                        
+
                         <TextInput
                             label="Engine Capacity (CC)"
                             type="number"
                             v-model="car.engine_capacity_cc"
-                            :error="form.errors[`cars.${index}.engine_capacity_cc`]"
+                            :error="form.errors[`cars.${index}.engine_capacity_cc` as keyof typeof form.errors]"
                         />
-                        
+
                         <SelectInput
                             label="Registration Type"
                             v-model="car.registration_type"
@@ -151,63 +152,63 @@
                                 { value: 'TAX_PAPER', label: 'Tax Paper' },
                                 { value: 'PLATE_NUMBER', label: 'Plate Number' },
                             ]"
-                            :error="form.errors[`cars.${index}.registration_type`]"
+                            :error="form.errors[`cars.${index}.registration_type` as keyof typeof form.errors]"
                         />
-                        
+
                         <TextInput
                             label="CIF Price"
                             type="number"
                             step="0.01"
                             v-model="car.cif_price"
-                            :error="form.errors[`cars.${index}.cif_price`]"
+                            :error="form.errors[`cars.${index}.cif_price` as keyof typeof form.errors]"
                         />
-                        
+
                         <TextInput
                             label="Transport Cost"
                             type="number"
                             step="0.01"
                             v-model="car.transport_cost"
-                            :error="form.errors[`cars.${index}.transport_cost`]"
+                            :error="form.errors[`cars.${index}.transport_cost` as keyof typeof form.errors]"
                         />
-                        
+
                         <TextInput
                             label="Expected Profit"
                             type="number"
                             step="0.01"
                             v-model="car.expected_profit"
-                            :error="form.errors[`cars.${index}.expected_profit`]"
+                            :error="form.errors[`cars.${index}.expected_profit` as keyof typeof form.errors]"
                         />
                     </div>
-                    
+
                     <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                         <TextareaInput
                             label="Description"
                             v-model="car.description"
-                            :error="form.errors[`cars.${index}.description`]"
+                            :error="form.errors[`cars.${index}.description` as keyof typeof form.errors]"
                         />
                         <TextareaInput
                             label="Options"
                             v-model="car.options"
-                            :error="form.errors[`cars.${index}.options`]"
+                            :error="form.errors[`cars.${index}.options` as keyof typeof form.errors]"
                         />
                     </div>
-                    
+
                     <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
                         <div class="col-span-1">
-                            <ImageUploader 
-                                v-model="car.images" 
+                            <ImageUploader
+                                v-model="car.images"
                                 v-model:deleted-images="car.deleted_images"
                                 v-model:existing-image-order="car.existing_image_order"
-                                :existing-images="car.existing_images" 
+                                :existing-images="car.existing_images"
                                 :error="getCarImageError(index)"
                             />
                         </div>
                     </div>
 
                     <div class="mt-6 flex justify-end border-t border-base-200 pt-4">
-                        <button 
-                            type="button" 
-                            @click="removeCar(index)" 
+                        <button
+                            type="button"
+                            @click="removeCar(index)"
                             class="btn btn-error btn-sm"
                         >
                             <i class="fa-solid fa-trash-can mr-1"></i>
@@ -217,7 +218,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="mt-4">
             <Button type="button" variant="secondary" @click="addCar" class="w-full md:w-auto">
                 <i class="fa-solid fa-plus mr-1"></i>
@@ -325,7 +326,7 @@ const form = useForm({
     expected_date: props.container?.expected_date || today,
     note: props.container?.note || '',
     total_shipping_cost: props.container?.total_shipping_cost || '',
-    cars: (props.container?.cars && props.container.cars.length > 0) 
+    cars: (props.container?.cars && props.container.cars.length > 0)
         ? props.container.cars.map((car: any) => ({
             ...car,
             existing_images: car.images || [],
@@ -344,11 +345,11 @@ const removeCar = (index: number) => {
 
 const getCarImageError = (index: number) => {
     if (form.errors[`cars.${index}.images`]) return form.errors[`cars.${index}.images`];
-    
+
     const keys = Object.keys(form.errors);
     const prefix = `cars.${index}.images.`;
     const specificErrorKey = keys.find(key => key.startsWith(prefix));
-    
+
     return specificErrorKey ? form.errors[specificErrorKey as keyof typeof form.errors] : undefined;
 };
 
@@ -364,7 +365,7 @@ const submit = () => {
             const { existing_images, ...rest } = car;
             return rest;
         });
-        
+
         return {
             ...data,
             cars: transformedCars,

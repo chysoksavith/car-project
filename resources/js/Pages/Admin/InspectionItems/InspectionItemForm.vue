@@ -64,36 +64,51 @@
 
 <script setup lang="ts">
 import { useForm } from "@inertiajs/vue3";
-import { computed } from "vue";
+import { computed, watch } from "vue";
 import TextInput from "@/Components/Form/TextInput.vue";
 import SelectInput from "@/Components/Form/SelectInput.vue";
 import Toggle from "@/Components/Form/Toggle.vue";
 import Button from "@/Components/Button.vue";
+import type { InspectionItem, InspectionItemFormData, InspectionItemCategory } from "@/Types/inspection-item";
 
 const props = defineProps<{
-    inspectionItem?: any;
-    categories: any[];
+    inspectionItem?: InspectionItem;
+    categories: InspectionItemCategory[];
 }>();
 
 const isEdit = computed(() => !!props.inspectionItem);
 
-const item = computed(() => props.inspectionItem?.data || props.inspectionItem || {});
+const item = computed(() => props.inspectionItem);
 
-const form = useForm({
-    parent_id: item.value.parent_id ?? "",
-    name_kh: item.value.name_kh ?? "",
-    name_en: item.value.name_en ?? "",
-    default_price: item.value.default_price ?? 0,
-    is_active: item.value.is_active ?? true,
+const form = useForm<InspectionItemFormData>({
+    parent_id: item.value?.parent_id ?? "",
+    name_kh: item.value?.name_kh ?? "",
+    name_en: item.value?.name_en ?? "",
+    default_price: item.value?.default_price ?? 0,
+    is_active: item.value?.is_active ?? true,
 });
 
 const categoryOptions = computed(() => {
-    const list = Array.isArray(props.categories) ? props.categories : (props.categories?.data || []);
-    return list.map((c: any) => ({
+    return props.categories.map((c) => ({
         value: c.id,
         label: c.name_kh + (c.name_en ? ` (${c.name_en})` : ""),
     }));
 });
+
+// # Watch for inspectionItem changes to update form
+watch(
+    () => props.inspectionItem,
+    (newItem) => {
+        if (newItem) {
+            form.parent_id = newItem.parent_id ?? "";
+            form.name_kh = newItem.name_kh ?? "";
+            form.name_en = newItem.name_en ?? "";
+            form.default_price = newItem.default_price ?? 0;
+            form.is_active = newItem.is_active ?? true;
+        }
+    },
+    { immediate: true }
+);
 
 // # Submit
 const submit = () => {
@@ -102,10 +117,10 @@ const submit = () => {
         form.parent_id = null;
     }
 
-    if (isEdit.value) {
-        form.put(route("admin.inspection-items.update", item.value.id));
+    if (isEdit.value && item.value) {
+        form.put((window as any).route("admin.inspection-items.update", item.value.id));
     } else {
-        form.post(route("admin.inspection-items.store"));
+        form.post((window as any).route("admin.inspection-items.store"));
     }
 };
 </script>

@@ -22,6 +22,8 @@
             searchRoute="/admin/inspection-items"
             :searchQuery="filters.search"
             searchPlaceholder="Search items or categories..."
+            :filterConfig="filterConfig"
+            :activeFilters="activeFilters"
         >
             <template #cell(name)="{ item }">
                 <div class="flex flex-col">
@@ -89,7 +91,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { router, useForm } from "@inertiajs/vue3";
 import DashboardLayout from "@/Layouts/DashboardLayout.vue";
 import PageHeader from "@/Components/PageHeader.vue";
@@ -98,11 +100,40 @@ import DataTable from "@/Components/DataTable.vue";
 import Badge from "@/Components/Badge.vue";
 import TableActionButtons from "@/Components/TableActionButtons.vue";
 import Modal from "@/Components/Modal.vue";
+import type { InspectionItem, InspectionItemCategory } from "@/Types/inspection-item";
+import { useAuth } from "@/Composables/useAuth";
 
 const props = defineProps<{
-    inspectionItems: any;
-    filters: any;
+    inspectionItems: { data: InspectionItem[] };
+    filters: { search: string | null | undefined; category: string | null | undefined; status: string | null | undefined };
+    categories: InspectionItemCategory[];
 }>();
+
+const { can } = useAuth();
+
+const filterConfig = computed(() => ({
+    category: {
+        label: 'Category',
+        placeholder: 'All Categories',
+        options: props.categories.map((c) => ({
+            value: c.id,
+            label: c.name_kh + (c.name_en ? ` (${c.name_en})` : ""),
+        })),
+    },
+    status: {
+        label: 'Status',
+        placeholder: 'All Status',
+        options: [
+            { value: '1', label: 'Active' },
+            { value: '0', label: 'Inactive' },
+        ],
+    },
+}));
+
+const activeFilters = computed(() => ({
+    category: props.filters.category,
+    status: props.filters.status,
+}));
 
 const columns = [
     { key: "no", label: "No.",  },
@@ -113,12 +144,12 @@ const columns = [
     { key: "actions", label: "Actions", class: "text-right" },
 ];
 
-const deleteModalRef = ref<any>(null);
-const deletingItem = ref<any>(null);
+const deleteModalRef = ref<{ showModal: () => void; close: () => void } | null>(null);
+const deletingItem = ref<InspectionItem | null>(null);
 const deleteForm = useForm({});
 
 // # Confirm Delete
-const confirmDelete = (item: any) => {
+const confirmDelete = (item: InspectionItem) => {
     deletingItem.value = item;
     deleteModalRef.value?.showModal();
 };

@@ -34,6 +34,13 @@
             />
 
             <TextInput
+                label="National ID"
+                v-model="form.national_id"
+                placeholder="Enter national ID"
+                :error="form.errors.national_id"
+            />
+
+            <TextInput
                 label="Birth Date"
                 type="date"
                 v-model="form.birth_date"
@@ -75,6 +82,7 @@
                 :options="companies.map(c => ({ value: c.id, label: c.name }))"
                 :error="form.errors.company_id"
                 placeholder="Select a company..."
+                required
             />
 
             <!-- Department -->
@@ -217,6 +225,7 @@ const form = useForm({
     last_name: props.user?.last_name || '',
     email: props.user?.email || '',
     phone_number: props.user?.phone_number || '',
+    national_id: props.user?.national_id || '',
     birth_date: props.user?.birth_date ? new Date(props.user.birth_date).toISOString().split('T')[0] : '',
     password: '',
     password_confirmation: '',
