@@ -126,6 +126,11 @@ const menuGroups = computed(() => {
                     permission: "inspection_items.view",
                 },
                 {
+                    name: "Car Inspections",
+                    icon: "fa-solid fa-clipboard-check",
+                    href: "/admin/car-inspections",
+                },
+                {
                     name: "Fuels",
                     icon: "fa-solid fa-gas-pump",
                     href: "/admin/fuels",

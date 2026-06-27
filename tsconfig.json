@@ -5,6 +5,7 @@
         "moduleResolution": "Node",
         "strict": true,
         "jsx": "preserve",
+        "jsxImportSource": "vue",
         "resolveJsonModule": true,
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,

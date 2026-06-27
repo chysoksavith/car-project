@@ -23,4 +23,9 @@ class CarInspection extends Model
     {
         return $this->belongsTo(InspectionItem::class, 'inspection_item_id');
     }
+
+    public function car()
+    {
+        return $this->belongsTo(Car::class, 'car_id');
+    }
 }

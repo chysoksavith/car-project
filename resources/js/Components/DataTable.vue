@@ -3,30 +3,16 @@
         <div class="card-body p-0">
             <!-- Toolbar -->
             <div
-                class="p-4 border-b border-base-200/80 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-base-50"
+                class="p-4 border-b border-base-200/80 flex flex-col sm:flex-row justify-end items-start sm:items-center gap-3 bg-base-50"
             >
-                <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-                    <div class="relative w-full sm:w-72">
-                        <div
-                            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-base-content/40"
-                        >
-                            <i class="fa-solid fa-search"></i>
-                        </div>
-                        <input
-                            type="text"
-                            v-model="internalSearch"
-                            :placeholder="searchPlaceholder || 'Search...'"
-                            class="input input-sm input-bordered w-full pl-9 bg-base-200/50 focus:bg-base-100 transition-all rounded-lg"
-                        />
-                    </div>
-                    <TableFilterDropdown
-                        v-if="filterConfig"
-                        :filters="filterConfig"
-                        :route="searchRoute"
-                        :activeFilters="activeFilters"
-                    />
-                </div>
                 <slot name="toolbar-actions"></slot>
+                <TableFilterDropdown
+                    :filters="filterConfig"
+                    :route="searchRoute"
+                    :activeFilters="activeFilters"
+                    :searchQuery="searchQuery"
+                    :searchPlaceholder="searchPlaceholder"
+                />
             </div>
 
             <!-- Table -->
@@ -119,8 +105,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue";
-import { router } from "@inertiajs/vue3";
 import Pagination from "./Pagination.vue";
 import TableFilterDropdown from "./TableFilterDropdown.vue";
 
@@ -141,22 +125,4 @@ const props = defineProps<{
     };
     activeFilters?: { [key: string]: string | number | null };
 }>();
-
-const internalSearch = ref(props.searchQuery || "");
-
-let searchTimeout: any;
-watch(internalSearch, (value) => {
-    clearTimeout(searchTimeout);
-    searchTimeout = setTimeout(() => {
-        router.get(
-            props.searchRoute,
-            { search: value },
-            {
-                preserveState: true,
-                preserveScroll: true,
-                replace: true,
-            },
-        );
-    }, 300);
-});
 </script>
